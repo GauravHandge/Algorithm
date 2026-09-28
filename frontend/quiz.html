@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Mode - AlgoVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html">Home</a></li>
+        <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/practice.html">Practice</a></li>
+        <li><a href="/static/quiz.html" class="active">Quiz</a></li>
+        <li><a href="/static/dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <div style="margin-bottom:2rem; text-align:center;">
+      <h1 style="font-size:2.2rem; margin-bottom:0.5rem;">Subject Assessment Quiz</h1>
+      <p style="color:var(--text-muted);">Answer questions to test your overall Computer Science mastery.</p>
+    </div>
+
+    <!-- Quiz Form -->
+    <div class="glass-panel" style="max-width:800px; margin:0 auto; padding:2rem;">
+      <form id="quiz-form">
+        <div id="quiz-questions-container" style="display:flex; flex-direction:column; gap:2rem;">
+          <!-- Dynamically loaded -->
+        </div>
+
+        <div style="margin-top:2rem; border-top:1px solid var(--border-color); padding-top:1.5rem; text-align:right;">
+          <button type="submit" class="btn btn-primary" style="font-size:1rem; padding:0.75rem 2rem;">Submit Quiz</button>
+        </div>
+      </form>
+
+      <div id="quiz-result-card" style="display:none; margin-top:2rem; padding:1.5rem; border-radius:12px; background:rgba(99,102,241,0.15); border:1px solid var(--accent-primary); text-align:center;">
+        <h2 style="color:var(--accent-secondary); margin-bottom:0.5rem;">Quiz Summary</h2>
+        <div id="quiz-score-text" style="font-size:1.8rem; font-weight:bold; margin-bottom:1rem;"></div>
+        <a href="/static/dashboard.html" class="btn btn-primary">View Full Dashboard →</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { API } from '/static/js/api.js';
+
+    let loadedQuestions = [];
+
+    async function initQuiz() {
+      const container = document.getElementById("quiz-questions-container");
+      try {
+        const data = await API.getQuestions(null, null);
+        if (data.success && data.questions.length > 0) {
+          loadedQuestions = data.questions;
+          container.innerHTML = loadedQuestions.map((q, idx) => `
+            <div>
+              <h3 style="font-size:1.1rem; margin-bottom:1rem;">${idx + 1}. ${q.question_text}</h3>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                ${q.options.map(opt => `
+                  <label style="display:flex; align-items:center; gap:0.75rem; background:rgba(0,0,0,0.2); padding:0.65rem 1rem; border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="q_${q.id}" value="${opt}" required />
+                    <span>${opt}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.error("Quiz init error:", e);
+      }
+    }
+
+    document.getElementById("quiz-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const answers = {};
+      loadedQuestions.forEach(q => {
+        const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+        if (selected) answers[q.id] = selected.value;
+      });
+
+      try {
+        const res = await API.submitQuiz("all", answers);
+        const card = document.getElementById("quiz-result-card");
+        const scoreText = document.getElementById("quiz-score-text");
+        card.style.display = "block";
+        scoreText.textContent = `Score: ${res.score} / ${res.total} (${res.percentage}%)`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      } catch (e) {
+        console.error("Quiz submit error:", e);
+      }
+    });
+
+    initQuiz();
+  </script>
+</body>
+</html>

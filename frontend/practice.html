@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice System - AlgoVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html">Home</a></li>
+        <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/practice.html" class="active">Practice</a></li>
+        <li><a href="/static/quiz.html">Quiz</a></li>
+        <li><a href="/static/dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <div style="margin-bottom:2rem;">
+      <h1 style="font-size:2.2rem; margin-bottom:0.5rem;">Practice Questions</h1>
+      <p style="color:var(--text-muted);">Test your knowledge with instant feedback questions across all subjects.</p>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="questions-list" style="display:flex; flex-direction:column; gap:1.5rem; max-width:900px; margin:0 auto;">
+      <!-- Dynamically rendered -->
+    </div>
+  </main>
+
+  <script type="module">
+    import { API } from '/static/js/api.js';
+
+    async function loadPractice() {
+      const container = document.getElementById("questions-list");
+      try {
+        const data = await API.getQuestions();
+        if (data.success && data.questions.length > 0) {
+          container.innerHTML = data.questions.map((q, idx) => `
+            <div class="glass-panel" style="padding:1.75rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <span class="badge badge-category">Question ${idx + 1}</span>
+                <span class="badge badge-easy">${q.difficulty}</span>
+              </div>
+              <h3 style="font-size:1.15rem; margin-bottom:1.25rem;">${q.question_text}</h3>
+              <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.25rem;">
+                ${q.options ? q.options.map(opt => `
+                  <button class="btn btn-secondary opt-btn" data-qid="${q.id}" data-opt="${opt}" style="justify-content:flex-start; text-align:left; padding:0.75rem 1.25rem;">
+                    ${opt}
+                  </button>
+                `).join('') : ''}
+              </div>
+              <div id="result-${q.id}" style="display:none; padding:1rem; border-radius:8px; font-size:0.95rem;"></div>
+            </div>
+          `).join('');
+
+          // Option click listener
+          document.querySelectorAll('.opt-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+              const qid = btn.getAttribute('data-qid');
+              const opt = btn.getAttribute('data-opt');
+              const resBox = document.getElementById(`result-${qid}`);
+
+              // Submit answer
+              const subRes = await API.submitQuiz(null, { [qid]: opt });
+              if (subRes.details && subRes.details.length > 0) {
+                const detail = subRes.details[0];
+                resBox.style.display = 'block';
+                if (detail.correct) {
+                  resBox.style.background = 'rgba(16,185,129,0.15)';
+                  resBox.style.border = '1px solid #10b981';
+                  resBox.style.color = '#34d399';
+                  resBox.innerHTML = `<strong>✓ Correct!</strong> ${detail.explanation || ''}`;
+                } else {
+                  resBox.style.background = 'rgba(239,68,68,0.15)';
+                  resBox.style.border = '1px solid #ef4444';
+                  resBox.style.color = '#f87171';
+                  resBox.innerHTML = `<strong>✗ Incorrect.</strong> Correct answer: <strong>${detail.correct_answer}</strong>. ${detail.explanation || ''}`;
+                }
+              }
+            });
+          });
+        }
+      } catch (e) {
+        console.error("Practice load error:", e);
+      }
+    }
+
+    loadPractice();
+  </script>
+</body>
+</html>

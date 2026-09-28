@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress Dashboard - AlgoVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html">Home</a></li>
+        <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/practice.html">Practice</a></li>
+        <li><a href="/static/quiz.html">Quiz</a></li>
+        <li><a href="/static/dashboard.html" class="active">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <div style="margin-bottom:2rem;">
+      <h1 style="font-size:2.2rem; margin-bottom:0.5rem;">User Progress Dashboard</h1>
+      <p style="color:var(--text-muted);">Track your algorithm visualizations, subject completion, and quiz history.</p>
+    </div>
+
+    <!-- Summary Metrics Bar -->
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1.25rem; margin-bottom:2rem;">
+      <div class="glass-panel" style="padding:1.25rem; border-left:4px solid var(--accent-primary);">
+        <div style="color:var(--text-muted); font-size:0.85rem;">Total Catalog Algorithms</div>
+        <div id="stat-total-algos" style="font-size:2rem; font-weight:bold; color:var(--text-main);">0</div>
+      </div>
+      <div class="glass-panel" style="padding:1.25rem; border-left:4px solid var(--accent-secondary);">
+        <div style="color:var(--text-muted); font-size:0.85rem;">Algorithms Explored</div>
+        <div id="stat-viewed-algos" style="font-size:2rem; font-weight:bold; color:var(--text-main);">0</div>
+      </div>
+      <div class="glass-panel" style="padding:1.25rem; border-left:4px solid var(--accent-success);">
+        <div style="color:var(--text-muted); font-size:0.85rem;">Completion Percentage</div>
+        <div id="stat-completion-pct" style="font-size:2rem; font-weight:bold; color:var(--accent-success);">0%</div>
+      </div>
+    </div>
+
+    <!-- Subject Completion Progress -->
+    <div class="glass-panel" style="padding:1.5rem; margin-bottom:2rem;">
+      <h3 style="font-size:1.2rem; margin-bottom:1.25rem;">Subject Completion Breakdown</h3>
+      <div id="subject-progress-bars" style="display:flex; flex-direction:column; gap:1rem;">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+
+    <!-- Recent Quiz Attempts Table -->
+    <div class="glass-panel" style="padding:1.5rem;">
+      <h3 style="font-size:1.2rem; margin-bottom:1rem;">Recent Quiz Attempts</h3>
+      <div id="quiz-history-container" style="overflow-x:auto;">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { API } from '/static/js/api.js';
+
+    async function loadDashboard() {
+      try {
+        const data = await API.getProgress();
+        if (data.success) {
+          const p = data.progress;
+          document.getElementById("stat-total-algos").textContent = p.total_algorithms;
+          document.getElementById("stat-viewed-algos").textContent = p.viewed_algorithms;
+          document.getElementById("stat-completion-pct").textContent = `${p.completion_percentage}%`;
+
+          // Render subject progress
+          const barsContainer = document.getElementById("subject-progress-bars");
+          barsContainer.innerHTML = Object.entries(p.subject_progress).map(([subj, pct]) => `
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; font-size:0.9rem;">
+                <strong style="color:var(--text-main);">${subj}</strong>
+                <span style="color:var(--accent-secondary); font-weight:600;">${pct}%</span>
+              </div>
+              <div style="height:10px; background:rgba(255,255,255,0.1); border-radius:6px; overflow:hidden;">
+                <div style="height:100%; width:${pct}%; background:linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));"></div>
+              </div>
+            </div>
+          `).join('');
+
+          // Render quiz history table
+          const historyContainer = document.getElementById("quiz-history-container");
+          if (p.recent_quizzes.length === 0) {
+            historyContainer.innerHTML = `<div style="color:var(--text-muted); font-style:italic;">No quiz attempts recorded yet. Take a quiz to view results here!</div>`;
+          } else {
+            historyContainer.innerHTML = `
+              <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--border-color); text-align:left; color:var(--text-muted); font-size:0.85rem;">
+                    <th style="padding:0.75rem;">Date</th>
+                    <th style="padding:0.75rem;">Subject</th>
+                    <th style="padding:0.75rem;">Score</th>
+                    <th style="padding:0.75rem;">Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${p.recent_quizzes.map(q => `
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                      <td style="padding:0.75rem; color:var(--text-muted); font-size:0.9rem;">${q.date}</td>
+                      <td style="padding:0.75rem; color:var(--text-main); font-weight:600;">${q.subject_id || 'General'}</td>
+                      <td style="padding:0.75rem; color:var(--text-main);">${q.score} / ${q.total}</td>
+                      <td style="padding:0.75rem; color:var(--accent-success); font-weight:bold;">${q.percentage}%</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `;
+          }
+        }
+      } catch (e) {
+        console.error("Dashboard load error:", e);
+      }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

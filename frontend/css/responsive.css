@@ -1,0 +1,34 @@
+/* Responsive Layout Adaptations for Tablet & Mobile */
+@media (max-width: 1024px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header {
+    padding: 0 1rem;
+  }
+
+  .visualizer-viewport {
+    height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-links {
+    display: none; /* Collapsible or mobile drawer */
+  }
+
+  .control-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .progress-track {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .visualizer-viewport {
+    height: 340px;
+  }
+}

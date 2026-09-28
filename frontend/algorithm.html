@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algorithm Visualizer Workspace - AlgoVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html">Home</a></li>
+        <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/practice.html">Practice</a></li>
+        <li><a href="/static/quiz.html">Quiz</a></li>
+        <li><a href="/static/dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <!-- Header info banner -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+      <div>
+        <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:0.5rem;">
+          <span id="algo-category" class="badge badge-category">Category</span>
+          <span id="algo-difficulty" class="badge badge-easy">Easy</span>
+        </div>
+        <h1 id="algo-title" style="font-size:2.2rem;">Algorithm Visualizer</h1>
+        <p id="algo-desc" style="color:var(--text-muted); max-width:800px;">Step-by-step interactive algorithm execution simulation.</p>
+      </div>
+
+      <div class="glass-panel" style="padding:0.75rem 1.25rem; display:flex; gap:1.5rem; font-size:0.9rem;">
+        <div>Time: <strong id="algo-time" style="color:var(--accent-secondary);">O(N)</strong></div>
+        <div>Space: <strong id="algo-space" style="color:var(--accent-primary);">O(1)</strong></div>
+      </div>
+    </div>
+
+    <!-- Custom Input Configuration Bar -->
+    <div class="glass-panel" style="padding:1rem 1.25rem; margin-bottom:1.5rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+      <label style="font-weight:600; font-size:0.9rem; color:var(--text-main);">Algorithm Input:</label>
+      <input type="text" id="input-config" placeholder="Custom input parameters..." style="flex:1; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.5rem 0.85rem; border-radius:6px; font-family:var(--font-mono); font-size:0.9rem;" />
+      <button id="btn-run" class="btn btn-primary" style="padding:0.5rem 1.25rem;">▶ Run Algorithm</button>
+    </div>
+
+    <!-- Workspace Main Split Layout -->
+    <div class="workspace-layout">
+      <!-- Left Column: Visualizer Viewport + Player Controls Toolbar -->
+      <div class="visualizer-column">
+        <div id="visualizer-container" class="visualizer-viewport glass-panel">
+          <!-- Visualizer dynamic render -->
+        </div>
+
+        <div id="player-controls-container">
+          <!-- PlayerControls dynamic render -->
+        </div>
+      </div>
+
+      <!-- Right Column: Step Panel, Pseudocode, AI Tutor Drawer -->
+      <div class="sidebar-column">
+        <div id="step-panel-container">
+          <!-- StepPanel dynamic render -->
+        </div>
+
+        <!-- Pseudocode Viewer -->
+        <div class="glass-panel" style="padding:1rem;">
+          <h4 style="font-size:0.95rem; margin-bottom:0.5rem; color:var(--text-muted);">Pseudocode</h4>
+          <div id="pseudocode-container" class="pseudocode-block">
+            // Loading pseudocode...
+          </div>
+        </div>
+
+        <div id="ai-tutor-container">
+          <!-- AITutor dynamic render -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { API } from '/static/js/api.js';
+    import { globalPlayer } from '/static/js/state.js';
+    import { GraphVisualizer } from '/static/js/visualizations/graphVisualizer.js';
+    import { ArrayVisualizer } from '/static/js/visualizations/arrayVisualizer.js';
+    import { GridVisualizer } from '/static/js/visualizations/gridVisualizer.js';
+    import { MLVisualizer } from '/static/js/visualizations/mlVisualizer.js';
+    import { CryptoVisualizer } from '/static/js/visualizations/cryptoVisualizer.js';
+    import { PlayerControls } from '/static/js/components/playerControls.js';
+
+    import { StepPanel } from '/static/js/components/stepPanel.js';
+    import { AITutor } from '/static/js/components/aiTutor.js';
+    import { showToast } from '/static/js/components/toast.js';
+
+    // Get algorithm ID from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const algorithmId = urlParams.get("id") || "bfs";
+
+    let currentVisualizer = null;
+    let currentAlgoDetail = null;
+
+    async function initWorkspace() {
+      // 1. Mount Components
+      const controls = new PlayerControls(document.getElementById("player-controls-container"));
+      controls.render();
+
+      const stepPanel = new StepPanel(document.getElementById("step-panel-container"));
+      stepPanel.render();
+
+      const aiTutor = new AITutor(document.getElementById("ai-tutor-container"));
+      aiTutor.render();
+
+      // 2. Fetch Algorithm Detail
+      try {
+        const detailRes = await API.getAlgorithmDetail(algorithmId);
+        if (detailRes.success) {
+          currentAlgoDetail = detailRes.algorithm;
+          document.getElementById("algo-title").textContent = currentAlgoDetail.name;
+          document.getElementById("algo-desc").textContent = currentAlgoDetail.full_description || currentAlgoDetail.short_description || "";
+          document.getElementById("algo-category").textContent = currentAlgoDetail.category;
+          document.getElementById("algo-time").textContent = currentAlgoDetail.time_complexity || "O(N)";
+          document.getElementById("algo-space").textContent = currentAlgoDetail.space_complexity || "O(1)";
+
+          const diffBadge = document.getElementById("algo-difficulty");
+          diffBadge.textContent = currentAlgoDetail.difficulty;
+          diffBadge.className = `badge badge-${currentAlgoDetail.difficulty.toLowerCase()}`;
+
+          document.getElementById("pseudocode-container").textContent = currentAlgoDetail.pseudocode || "// Pseudocode available during execution";
+
+          // Select visualizer engine by category, algorithm ID, or visualizer_type
+          const container = document.getElementById("visualizer-container");
+          const catLower = (currentAlgoDetail.category || "").toLowerCase();
+          const algoId = (algorithmId || "").toLowerCase();
+          const visType = (currentAlgoDetail.visualizer_type || "").toLowerCase();
+
+          if (visType === "crypto" || catLower.includes("crypto") || algoId.includes("rsa") || algoId.includes("cipher") || algoId.includes("aes") || algoId.includes("sha")) {
+            currentVisualizer = new CryptoVisualizer(container);
+          } else if (visType === "graph" || catLower.includes("graph") || catLower.includes("path") || algoId.includes("bfs") || algoId.includes("dfs") || algoId.includes("dijkstra") || algoId.includes("bst")) {
+            currentVisualizer = new GraphVisualizer(container);
+          } else if (visType === "grid" || catLower.includes("os") || catLower.includes("network") || catLower.includes("dbms") || algoId.includes("cpu") || algoId.includes("page") || algoId.includes("tcp") || algoId.includes("sql")) {
+            currentVisualizer = new GridVisualizer(container);
+          } else if (visType === "ml" || catLower.includes("machine") || catLower.includes("deep") || algoId.includes("neural") || algoId.includes("regression")) {
+            currentVisualizer = new MLVisualizer(container);
+          } else {
+            currentVisualizer = new ArrayVisualizer(container);
+          }
+
+
+
+          // Populate input box
+          const defaultIn = currentAlgoDetail.default_input || {};
+          document.getElementById("input-config").value = JSON.stringify(defaultIn);
+
+          // Subscribe visualizer to player state changes
+          globalPlayer.subscribe((state) => {
+            if (currentVisualizer && state) {
+              currentVisualizer.render(state);
+            }
+          });
+
+          // Execute default algorithm steps
+          await runAlgorithmSimulation(defaultIn);
+        }
+      } catch (e) {
+        console.error("Workspace init error:", e);
+        showToast("Failed to initialize workspace", "error");
+      }
+    }
+
+    async function runAlgorithmSimulation(customInput = null) {
+      try {
+        let inputData = customInput;
+        if (!inputData) {
+          const rawStr = document.getElementById("input-config").value.trim();
+          try {
+            inputData = rawStr ? JSON.parse(rawStr) : {};
+          } catch (err) {
+            showToast("Invalid JSON input format. Using default parameters.", "error");
+            inputData = currentAlgoDetail.default_input || {};
+          }
+        }
+
+        const execRes = await API.executeAlgorithm(algorithmId, inputData);
+        if (execRes.success) {
+          globalPlayer.loadExecution(algorithmId, execRes.steps);
+          globalPlayer.play(); // Auto-start live step-by-step animation
+          showToast(`Executing ${algorithmId} (${execRes.totalSteps} steps live)`, "success");
+        } else {
+          showToast(`Execution error: ${execRes.error}`, "error");
+        }
+
+      } catch (e) {
+        console.error("Run simulation error:", e);
+        showToast("Simulation error occurred", "error");
+      }
+    }
+
+    document.getElementById("btn-run").addEventListener("click", () => runAlgorithmSimulation());
+
+    initWorkspace();
+  </script>
+</body>
+</html>

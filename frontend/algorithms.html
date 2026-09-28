@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algorithm Explorer - AlgoVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html">Home</a></li>
+        <li><a href="/static/algorithms.html" class="active">Explore Algorithms</a></li>
+        <li><a href="/static/practice.html">Practice</a></li>
+        <li><a href="/static/quiz.html">Quiz</a></li>
+        <li><a href="/static/dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <div style="margin-bottom:2rem;">
+      <h1 style="font-size:2.2rem; margin-bottom:0.5rem;">Algorithm Explorer</h1>
+      <p style="color:var(--text-muted);">Filter algorithms across DSA, Cybersecurity, OS, Computer Networks, DBMS, and AI/ML.</p>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="glass-panel" style="padding:1.25rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:2rem;">
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; flex:1;">
+        <input type="text" id="search-input" placeholder="Search algorithms by name, category, complexity..." style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.6rem 1rem; border-radius:8px; min-width:260px;" />
+
+        <select id="subject-select" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.6rem 1rem; border-radius:8px;">
+          <option value="">All Subjects</option>
+          <option value="dsa">Data Structures & Algorithms</option>
+          <option value="cybersecurity">Cybersecurity & Cryptography</option>
+          <option value="os">Operating Systems</option>
+          <option value="networks">Computer Networks</option>
+          <option value="dbms">DBMS Internals</option>
+          <option value="aiml">AI / ML & Deep Learning</option>
+        </select>
+
+        <select id="difficulty-select" style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; padding:0.6rem 1rem; border-radius:8px;">
+          <option value="">All Difficulties</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+
+      <button id="btn-filter" class="btn btn-primary">Filter Catalog</button>
+    </div>
+
+    <!-- Algorithms Catalog Grid -->
+    <div id="algorithms-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem;">
+      <!-- Dynamically rendered -->
+    </div>
+  </main>
+
+  <script type="module">
+    import { API } from '/static/js/api.js';
+
+    const searchInput = document.getElementById("search-input");
+    const subjectSelect = document.getElementById("subject-select");
+    const difficultySelect = document.getElementById("difficulty-select");
+    const btnFilter = document.getElementById("btn-filter");
+    const grid = document.getElementById("algorithms-grid");
+
+    // Check query params
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("subject_id")) {
+      subjectSelect.value = urlParams.get("subject_id");
+    }
+
+    async function loadAlgorithms() {
+      grid.innerHTML = `<div style="color:var(--text-muted); padding:2rem;">Loading algorithm catalog...</div>`;
+      try {
+        const filters = {
+          search: searchInput.value.trim(),
+          subject_id: subjectSelect.value,
+          difficulty: difficultySelect.value
+        };
+        const data = await API.getAlgorithms(filters);
+        if (data.success) {
+          if (data.algorithms.length === 0) {
+            grid.innerHTML = `<div style="color:var(--text-muted); padding:2rem;">No algorithms found matching your filter criteria.</div>`;
+            return;
+          }
+
+          grid.innerHTML = data.algorithms.map(a => {
+            const diffClass = a.difficulty.toLowerCase() === 'easy' ? 'badge-easy' : (a.difficulty.toLowerCase() === 'medium' ? 'badge-medium' : 'badge-hard');
+            return `
+              <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                    <span class="badge ${diffClass}">${a.difficulty}</span>
+                    <span style="font-size:0.8rem; color:var(--accent-secondary); font-weight:600;">${a.category}</span>
+                  </div>
+                  <h3 style="font-size:1.3rem; margin-bottom:0.5rem; color:var(--text-main);">${a.name}</h3>
+                  <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">${a.short_description || ''}</p>
+                  
+                  <div style="display:flex; gap:1rem; font-size:0.85rem; color:var(--text-dim); margin-bottom:1.25rem;">
+                    <span>Time: <strong style="color:var(--text-muted);">${a.time_complexity || 'O(N)'}</strong></span>
+                    <span>Space: <strong style="color:var(--text-muted);">${a.space_complexity || 'O(1)'}</strong></span>
+                  </div>
+                </div>
+
+                <a href="/static/algorithm.html?id=${a.id}" class="btn btn-primary" style="width:100%;">View Interactive Visualizer →</a>
+              </div>
+            `;
+          }).join('');
+        }
+      } catch (e) {
+        console.error("Load algorithms error:", e);
+        grid.innerHTML = `<div style="color:var(--accent-danger);">Failed to load algorithm catalog.</div>`;
+      }
+    }
+
+    btnFilter.addEventListener("click", loadAlgorithms);
+    searchInput.addEventListener("keypress", (e) => { if (e.key === "Enter") loadAlgorithms(); });
+    subjectSelect.addEventListener("change", loadAlgorithms);
+    difficultySelect.addEventListener("change", loadAlgorithms);
+
+    loadAlgorithms();
+  </script>
+</body>
+</html>

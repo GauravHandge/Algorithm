@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlgoVerse - CS Learning & Algorithm Visualization Platform</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html" class="active">Home</a></li>
+        <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/practice.html">Practice</a></li>
+        <li><a href="/static/quiz.html">Quiz</a></li>
+        <li><a href="/static/dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <!-- Hero Section -->
+    <section style="text-align:center; padding: 4rem 1rem 3rem 1rem; max-width: 900px; margin: 0 auto;">
+      <span class="badge badge-category" style="margin-bottom:1.25rem;">Interactive Computer Science Education</span>
+      <h1 style="font-size:3.2rem; line-height:1.25; margin-bottom:1.5rem; background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Master Computer Science Algorithms by Seeing Real Execution Step-by-Step
+      </h1>
+      <p style="font-size:1.2rem; color:var(--text-muted); margin-bottom:2rem; max-width:750px; margin-left:auto; margin-right:auto;">
+        From fundamental Data Structures & Algorithms to Cybersecurity, Operating Systems, Computer Networks, DBMS, and AI/ML Deep Learning.
+      </p>
+      <div style="display:flex; justify-content:center; gap:1.25rem; flex-wrap:wrap;">
+        <a href="/static/algorithms.html" class="btn btn-primary" style="font-size:1.05rem; padding:0.85rem 1.8rem;">Explore All Subjects →</a>
+        <a href="/static/algorithm.html?id=bfs" class="btn btn-secondary" style="font-size:1.05rem; padding:0.85rem 1.8rem;">Try Interactive Visualizer</a>
+      </div>
+    </section>
+
+    <!-- Subjects Matrix Grid -->
+    <section style="margin-top:3rem;">
+      <h2 style="font-size:1.8rem; margin-bottom:1.5rem; text-align:center;">Computer Science Learning Subjects</h2>
+      <div id="subjects-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem;">
+        <!-- Dynamically rendered via JS -->
+      </div>
+    </section>
+
+    <!-- MVP Featured Algorithms Showcase -->
+    <section style="margin-top:4rem;">
+      <h2 style="font-size:1.8rem; margin-bottom:1.5rem; text-align:center;">Featured Interactive Visualizers</h2>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+        
+        <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <span class="badge badge-medium">Medium</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">DSA - Graph</span>
+            </div>
+            <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">Breadth-First Search (BFS)</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">Visualize graph node queue additions, active node exploration, and traversal step-by-step.</p>
+          </div>
+          <a href="/static/algorithm.html?id=bfs" class="btn btn-primary" style="width:100%;">Launch Visualizer →</a>
+        </div>
+
+        <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <span class="badge badge-easy">Easy</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">DSA - Sorting</span>
+            </div>
+            <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">Bubble Sort</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">Watch element comparisons, swap animations, and pass progress across array bars.</p>
+          </div>
+          <a href="/static/algorithm.html?id=bubble_sort" class="btn btn-primary" style="width:100%;">Launch Visualizer →</a>
+        </div>
+
+        <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <span class="badge badge-easy">Easy</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Cybersecurity</span>
+            </div>
+            <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">Caesar Cipher</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">Step through mathematical character shifting and ciphertext generation in real-time.</p>
+          </div>
+          <a href="/static/algorithm.html?id=caesar_cipher" class="btn btn-primary" style="width:100%;">Launch Visualizer →</a>
+        </div>
+
+        <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <span class="badge badge-hard">Hard</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">AI / Deep Learning</span>
+            </div>
+            <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">Neural Network Backprop</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">Animate forward activation passes, loss computation, and backpropagation weight updates.</p>
+          </div>
+          <a href="/static/algorithm.html?id=neural_network" class="btn btn-primary" style="width:100%;">Launch Visualizer →</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { API } from '/static/js/api.js';
+
+    async function loadLandingPage() {
+      try {
+        const data = await API.getSubjects();
+        const grid = document.getElementById("subjects-grid");
+        if (data.success && grid) {
+          grid.innerHTML = data.subjects.map(s => `
+            <div class="glass-panel" style="padding:1.75rem; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h3 style="font-size:1.35rem; color:var(--text-main); margin-bottom:0.5rem;">${s.name}</h3>
+                <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.25rem;">${s.description}</p>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:1rem;">
+                <span style="font-size:0.85rem; color:var(--accent-secondary); font-weight:600;">${s.algorithmsCount} Algorithms & Concepts</span>
+                <a href="/static/algorithms.html?subject_id=${s.id}" class="btn btn-secondary" style="font-size:0.85rem; padding:0.4rem 0.85rem;">View Subject →</a>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.error("Landing page load error:", e);
+      }
+    }
+    loadLandingPage();
+  </script>
+</body>
+</html>
