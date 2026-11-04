@@ -21,6 +21,14 @@ from backend.algorithms.rag_engine import (
     CRAGEngine, AgenticRAGEngine, GraphRAGEngine,
     MultimodalRAGEngine, VectorlessRAGEngine
 )
+from backend.algorithms.ml_engines import (
+    KMeansEngine, KNNEngine, DecisionTreeEngine,
+    LogisticRegressionEngine, CNNConvolutionEngine, OptimizersEngine
+)
+from backend.algorithms.dsa_engines import (
+    MergeSortEngine, QuickSortEngine, Knapsack01Engine,
+    AStarEngine, TopologicalSortEngine, TrieEngine
+)
 from backend.schemas.algorithm import AlgorithmExecuteResponse
 
 class AlgorithmExecutionEngineRegistry:
@@ -53,7 +61,19 @@ class AlgorithmExecutionEngineRegistry:
             AgenticRAGEngine(),
             GraphRAGEngine(),
             MultimodalRAGEngine(),
-            VectorlessRAGEngine()
+            VectorlessRAGEngine(),
+            KMeansEngine(),
+            KNNEngine(),
+            DecisionTreeEngine(),
+            LogisticRegressionEngine(),
+            CNNConvolutionEngine(),
+            OptimizersEngine(),
+            MergeSortEngine(),
+            QuickSortEngine(),
+            Knapsack01Engine(),
+            AStarEngine(),
+            TopologicalSortEngine(),
+            TrieEngine()
         ]
         for engine in engines:
             self.engines[engine.get_id()] = engine

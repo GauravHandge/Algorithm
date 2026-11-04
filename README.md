@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python)](https://www.python.org)
 [![JavaScript](https://img.shields.io/badge/Frontend-Vanilla%20ES6-F7DF1E?style=flat&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-14%20Passing-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-16%20Passing-brightgreen.svg)]()
 
 AlgoVerse is a full-stack educational engineering platform designed to teach Computer Science concepts and Modern AI Architectures through **step-by-step, state-driven execution animations**, live graph traversals, and AI tutoring.
 
@@ -12,7 +12,7 @@ AlgoVerse is a full-stack educational engineering platform designed to teach Com
 
 ## 🌟 Key Features
 
-### 1. 🤖 RAG & LangGraph Architecture Studio (New!)
+### 1. 🤖 RAG & LangGraph Architecture Studio
 A dedicated, professional dark-mode interactive laboratory to explore, step through, and understand the 8 leading modern **Retrieval-Augmented Generation (RAG)** paradigms and LangGraph workflows:
 
 - **🟢 Simple RAG (Naive Linear Flow)**: Document chunking, vector embedding, similarity search, prompt synthesis, and final generation.
@@ -24,25 +24,35 @@ A dedicated, professional dark-mode interactive laboratory to explore, step thro
 - **🖼️ Multimodal RAG (ColPali Vision Late-Interaction)**: Patch-level visual embeddings for diagrams, schematics, and financial tables with MaxSim token-to-patch scoring.
 - **🌳 Vectorless RAG (AST & Hierarchical Summary Trees)**: Codebase and legal corpus navigation using Tree-sitter AST syntax trees and BM25 lexical scopes without vector databases.
 
-#### 💡 Features of the RAG Studio:
-- **Beginner-Friendly Definitions**: Jargon-free *"In Simple Words"* callouts for every architecture and every single execution step.
-- **Structured Specification Cards**: Clear breakdowns of *Why We Need This Step*, *Inputs*, *Under The Hood Algorithm*, *Outputs*, and *Key Gotchas*.
-- **Live LangGraph Memory Inspector**: Real-time visualization of the `TypedDict GraphState` dictionary as tokens flow.
-- **Production LangGraph Python Snippets**: Code for every node with a 1-click **"Copy Snippet"** action.
-- **Full Paradigm Comparison Matrix**: Side-by-side benchmark of topologies, latencies, accuracy, and best use cases.
-- **Interactive Keyboard Controls**: Spacebar for Play/Pause, Arrow keys for step navigation, and number keys (`1` through `8`) for rapid architecture switching.
-
 ---
 
-### 2. 📚 60+ Master Computer Science Algorithm Catalog
-Comprehensive interactive visualizers spanning 6 core CS subjects:
+### 2. 📚 Complete AI/ML & Master Computer Science Algorithm Catalog
+Comprehensive interactive visualizers spanning Machine Learning, Deep Learning, and Core Data Structures & Algorithms:
 
-- **Data Structures & Algorithms**: BFS, DFS, Dijkstra's Shortest Path, Bubble Sort, Selection Sort, Insertion Sort, Binary Search, Linear Search, Quick Sort, DP.
-- **Cybersecurity & Cryptography**: Caesar Cipher, RSA Public Key Encryption/Decryption, Hashing & Digital Signatures.
-- **Operating Systems**: FCFS/SJF/Round-Robin CPU Scheduling, LRU/FIFO Memory Page Replacement.
-- **Computer Networks**: TCP 3-Way Handshake, DNS Hierarchy Resolution.
-- **DBMS Internals**: SQL Query Execution Engine, Cost-Based Optimizer, and execution plan trees.
-- **Machine Learning & Deep Learning**: Linear Regression Gradient Descent, Neural Network Forward Propagation and Backpropagation.
+- **Machine Learning & Deep Learning Suite**:
+  - **K-Means Clustering**: 2D scatter plots with iterative centroid shifting and cluster boundaries.
+  - **K-Nearest Neighbors (KNN)**: Query point distance ranking, neighborhood radius circle, and majority voting.
+  - **Decision Tree Classifier**: Hierarchical tree branching based on Gini Impurity reduction and pure leaf nodes.
+  - **Logistic Regression**: S-shaped Sigmoid probability curve $\sigma(z) = 1/(1+e^{-z})$ with dynamic vertical decision boundary line.
+  - **CNN Feature Extraction**: 5x5 grayscale matrix with sliding 3x3 kernel, dot-product feature maps, and 2x2 Max-Pooling.
+  - **Optimizers Race**: Multi-ball race (SGD vs Momentum vs Adam) descending the parabolic loss surface $f(w) = w^2$ with live leaderboard.
+  - **Linear Regression**: Gradient descent slope $w$ and intercept $b$ optimization with MSE loss overlay.
+  - **Neural Network**: Multi-layer perceptron forward activation signals and backpropagation weight adjustments.
+
+- **Data Structures & Advanced Algorithms (DSA)**:
+  - **Merge Sort**: Divide-and-conquer recursive halving and two-pointer merging animation.
+  - **Quick Sort**: In-place Lomuto partitioning with end-element pivot and subarray tracking.
+  - **0/1 Knapsack Problem**: Dynamic programming 2D memoization matrix $DP[i][w]$ with optimal item backtracking.
+  - **A\* Search Algorithm**: Informed graph pathfinding combining path cost $g(n)$ and Manhattan heuristic $h(n)$.
+  - **Topological Sort**: Kahn's in-degree DAG traversal for task and course prerequisite scheduling.
+  - **Trie (Prefix Tree)**: Character-by-character dictionary insertions and prefix autocomplete lookups.
+  - **Classic Sorting**: Bubble Sort, Selection Sort, Insertion Sort.
+  - **Classic Searching**: Binary Search, Linear Search.
+  - **Graph Traversals**: BFS, DFS, Dijkstra's Shortest Path.
+  - **Cybersecurity & Cryptography**: Caesar Cipher, RSA Public Key Encryption/Decryption.
+  - **Operating Systems**: FCFS/SJF CPU Scheduling, LRU/FIFO Page Replacement.
+  - **Computer Networks**: TCP 3-Way Handshake.
+  - **DBMS Internals**: SQL Relational Query Filter & Row Scanning.
 
 ---
 
@@ -54,10 +64,11 @@ Comprehensive interactive visualizers spanning 6 core CS subjects:
 
 ### 4. 🎨 Modular Visualizer Canvas Suite (Vanilla JS + SVG/Canvas)
 - **RagGraphVisualizer**: SVG node-edge graph renderer with glowing active states, curved bezier connectors, dynamic badges, and particle animation.
-- **GraphVisualizer**: Node-link force layouts, visited paths, and queue/stack status containers.
+- **MLVisualizer**: Multi-mode visualizer supporting K-Means clusters, KNN radius circles, Decision Trees, Sigmoid S-curves, CNN 2D convolution grids, and Optimizer race curves.
+- **GridVisualizer**: 2D Dynamic Programming matrix (Knapsack), Gantt charts for CPU scheduling, and tabular relational views for DBMS.
+- **GraphVisualizer**: Node-link force layouts, A* search paths, Topological orders, and Trie trees.
 - **ArrayVisualizer**: Height-scaled bars and memory boxes with multi-pointer tracking (`low`, `mid`, `high`, `i`, `j`).
-- **GridVisualizer**: Gantt charts for CPU scheduling, tabular relational views for DBMS, and frame inspectors for OS page replacement.
-- **MLVisualizer**: Real-time 2D Cartesian coordinate plots with live regression lines and multi-layer neural network activation graphs.
+- **CryptoVisualizer**: Interactive cryptographic cipher animations (Caesar, RSA).
 
 ---
 
@@ -75,6 +86,8 @@ algorithm/
 ├── backend/
 │   ├── algorithms/              # Modular Algorithm Execution Engines
 │   │   ├── base.py              # BaseAlgorithmEngine abstract class
+│   │   ├── ml_engines.py        # KMeans, KNN, DecisionTree, LogisticRegression, CNN, Optimizers
+│   │   ├── dsa_engines.py       # MergeSort, QuickSort, Knapsack01, AStar, TopoSort, Trie
 │   │   ├── rag_engine.py        # All 8 RAG & LangGraph Architecture Engines
 │   │   ├── bfs.py, dfs.py       # Graph Search Algorithms
 │   │   ├── dijkstra.py          # Shortest Path Engine
@@ -86,7 +99,7 @@ algorithm/
 │   │   ├── sql_engine.py        # Relational DBMS Query Engine
 │   │   └── linear_regression.py, neural_network.py # ML & Neural Nets
 │   ├── api/                     # FastAPI REST API Routers
-│   │   ├── algorithms.py        # /api/algorithms & /api/execute/{id}
+│   │   ├── algorithms.py        # /api/algorithms & /api/algorithms/{id}/execute
 │   │   ├── subjects.py          # /api/subjects & topic groupings
 │   │   └── ai.py                # /api/ai/chat & /api/ai/hint
 │   ├── database/                # SQLAlchemy Models, SQLite DB, Seeding Script
@@ -94,11 +107,11 @@ algorithm/
 │   │   ├── models.py            # Subject, Topic, Algorithm, Quiz models
 │   │   └── init_db.py           # Master DB seeder (60+ algorithms)
 │   ├── engine/                  # Global Algorithm Execution Registry
-│   │   └── execution_engine.py  # Registry singleton dispatching engines
+│   │   └── execution_engine.py  # Master registry dispatching all engines
 │   ├── schemas/                 # Pydantic Schemas for API validation
 │   ├── services/                # Groq AI Service & Offline Fallback Tutor
-│   ├── tests/                   # Automated Unit Tests (14 passing tests)
-│   │   └── test_algorithms.py   # Unit tests for all engine executions
+│   ├── tests/                   # Automated Unit Tests (16 passing tests)
+│   │   └── test_algorithms.py   # Unit tests covering all engines
 │   └── main.py                  # FastAPI Application Entrypoint
 ├── frontend/
 │   ├── css/                     # Design System (Dark Glassmorphism)

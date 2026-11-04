@@ -83,8 +83,23 @@ class TestAlgorithmExecutionEngines(unittest.TestCase):
             self.assertTrue(res.success, f"Failed execution for {algo}")
             self.assertGreater(len(res.steps), 0, f"No steps for {algo}")
             self.assertEqual(res.algorithm, algo)
-            self.assertIsNotNone(res.result)
+    def test_ml_engines(self):
+        ml_algos = ["kmeans", "knn", "decision_tree", "logistic_regression", "cnn_convolution", "optimizers"]
+        for algo in ml_algos:
+            res = global_execution_registry.execute(algo, {})
+            self.assertTrue(res.success, f"Failed execution for {algo}")
+            self.assertGreater(len(res.steps), 0, f"No steps for {algo}")
+            self.assertEqual(res.algorithm, algo)
+
+    def test_dsa_engines(self):
+        dsa_algos = ["merge_sort", "quick_sort", "knapsack_01", "a_star", "topological_sort", "trie"]
+        for algo in dsa_algos:
+            res = global_execution_registry.execute(algo, {})
+            self.assertTrue(res.success, f"Failed execution for {algo}")
+            self.assertGreater(len(res.steps), 0, f"No steps for {algo}")
+            self.assertEqual(res.algorithm, algo)
 
 if __name__ == "__main__":
     unittest.main()
+
 

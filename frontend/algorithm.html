@@ -168,12 +168,12 @@
 
           if (visType === "crypto" || catLower.includes("crypto") || algoId.includes("rsa") || algoId.includes("cipher") || algoId.includes("aes") || algoId.includes("sha")) {
             currentVisualizer = new CryptoVisualizer(container);
-          } else if (visType === "graph" || catLower.includes("graph") || catLower.includes("path") || algoId.includes("bfs") || algoId.includes("dfs") || algoId.includes("dijkstra") || algoId.includes("bst") || algoId.includes("rag")) {
-            currentVisualizer = new GraphVisualizer(container);
-          } else if (visType === "grid" || catLower.includes("os") || catLower.includes("network") || catLower.includes("dbms") || algoId.includes("cpu") || algoId.includes("page") || algoId.includes("tcp") || algoId.includes("sql")) {
-            currentVisualizer = new GridVisualizer(container);
-          } else if (visType === "ml" || catLower.includes("machine") || catLower.includes("deep") || algoId.includes("neural") || algoId.includes("regression")) {
+          } else if (visType === "ml" || catLower.includes("machine") || catLower.includes("deep") || catLower.includes("learning") || algoId.includes("kmeans") || algoId.includes("knn") || algoId.includes("tree") || algoId.includes("logistic") || algoId.includes("cnn") || algoId.includes("optimizer") || algoId.includes("neural") || algoId.includes("regression")) {
             currentVisualizer = new MLVisualizer(container);
+          } else if (visType === "grid" || catLower.includes("os") || catLower.includes("network") || catLower.includes("dbms") || catLower.includes("dynamic") || algoId.includes("cpu") || algoId.includes("page") || algoId.includes("tcp") || algoId.includes("sql") || algoId.includes("knapsack")) {
+            currentVisualizer = new GridVisualizer(container);
+          } else if (visType === "graph" || catLower.includes("graph") || catLower.includes("path") || catLower.includes("trees") || algoId.includes("bfs") || algoId.includes("dfs") || algoId.includes("dijkstra") || algoId.includes("a_star") || algoId.includes("topological") || algoId.includes("trie") || algoId.includes("bst") || algoId.includes("rag")) {
+            currentVisualizer = new GraphVisualizer(container);
           } else {
             currentVisualizer = new ArrayVisualizer(container);
           }
