@@ -1,8 +1,8 @@
 /**
  * AlgoVerse AI Studio — Professional Workflow Graph Visualizer
- * Inspired by Linear, Vercel, FlowDrop, and SvelteFlow developer interfaces.
+ * Inspired by Linear, Vercel, FlowDrop, and SvelteFlow developer interfaces (Images 1 & 2).
  * Renders high-fidelity workflow node cards, input/output port handles,
- * smooth cubic bezier connectors, animated flow pulses, and interactive HUD.
+ * smooth cubic bezier connectors, animated flow pulses, interactive HUD, and minimap.
  */
 
 export class RagGraphVisualizer {
@@ -148,11 +148,11 @@ export class RagGraphVisualizer {
     const activeEdgeId = currentStep ? currentStep.activeEdgeId : null;
 
     // Viewport dimensions
-    const svgWidth = 1100;
+    const svgWidth = 1120;
     const svgHeight = 440;
 
-    // Professional node card dimensions
-    const nodeW = 138;
+    // FlowDrop Node dimensions
+    const nodeW = 142;
     const nodeH = 76;
     const portRadius = 4.5;
 
@@ -166,7 +166,7 @@ export class RagGraphVisualizer {
 
     const activeNodeOrder = activeNodeId && nodeOrderMap[activeNodeId] !== undefined ? nodeOrderMap[activeNodeId] : -1;
 
-    // 1. Build Edges (Smooth SvelteFlow / FlowDrop Bezier Curves)
+    // 1. Build Edges (Smooth FlowDrop / SvelteFlow Bezier Curves)
     let edgesSvg = "";
     let particlesSvg = "";
 
@@ -204,7 +204,7 @@ export class RagGraphVisualizer {
         const loopY2 = tgt.y;
         pathD = `M ${loopX1} ${loopY1} C ${loopX1 - 35} ${loopY1 - 50}, ${loopX2 + 35} ${loopY2 - 50}, ${loopX2} ${loopY2}`;
       } else if (src.y !== tgt.y) {
-        // Smooth cubic bezier branching curve (FlowDrop / React Flow style)
+        // Smooth cubic bezier branching curve (FlowDrop / SvelteFlow style)
         const dx = Math.max(Math.abs(x2 - x1) * 0.5, 45);
         pathD = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
       } else {
@@ -213,7 +213,7 @@ export class RagGraphVisualizer {
         pathD = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
       }
 
-      // Edge Styling: Linear / FlowDrop professional tokens
+      // Edge Styling
       let strokeColor = "#CBD5E1";
       let strokeWidth = 1.75;
       let strokeDash = isConditional ? "5,4" : (isLoop ? "6,3" : "none");
@@ -231,7 +231,7 @@ export class RagGraphVisualizer {
         <g class="graph-edge ${isEdgeActive ? 'active-edge' : ''}">
           <path id="${pathId}" d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDash}" marker-end="url(#${markerId})" />
           ${edge.label ? `
-            <text font-size="9.5" font-family="'Inter', sans-serif" fill="${isEdgeActive ? '#2563EB' : '#64748B'}" font-weight="600" dy="-5">
+            <text font-size="9" font-family="'Inter', sans-serif" fill="${isEdgeActive ? '#2563EB' : '#64748B'}" font-weight="600" dy="-5">
               <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">
                 ${edge.label}
               </textPath>
@@ -245,17 +245,18 @@ export class RagGraphVisualizer {
         const particleColor = isLoop ? "#DC2626" : "#2563EB";
         particlesSvg += `
           <circle r="4" fill="${particleColor}">
-            <animateMotion dur="1.4s" repeatCount="indefinite" path="${pathD}" keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
+            <animateMotion dur="1.3s" repeatCount="indefinite" path="${pathD}" keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
           </circle>
           <circle r="2" fill="#FFFFFF">
-            <animateMotion dur="1.4s" repeatCount="indefinite" path="${pathD}" keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
+            <animateMotion dur="1.3s" repeatCount="indefinite" path="${pathD}" keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
           </circle>
         `;
       }
     });
 
-    // 2. Build Nodes (Workflow Node Cards)
+    // 2. Build Nodes (Workflow Node Cards matching Images 1 & 2)
     let nodesSvg = "";
+    let minimapNodesSvg = "";
 
     arch.nodes.forEach(node => {
       const roleStyle = this.getRoleStyles(node.role);
@@ -338,7 +339,7 @@ export class RagGraphVisualizer {
 
           <!-- Node Title Label -->
           <text x="12" y="47" font-size="11" font-family="'Inter', sans-serif" font-weight="700" fill="#111827">
-            ${node.label.length > 17 ? node.label.substring(0, 16) + '…' : node.label}
+            ${node.label.length > 18 ? node.label.substring(0, 17) + '…' : node.label}
           </text>
 
           <!-- Node Footer Status -->
@@ -356,46 +357,22 @@ export class RagGraphVisualizer {
           <circle cx="${nodeW}" cy="${nodeH / 2}" r="${portRadius}" fill="#10B981" stroke="#FFFFFF" stroke-width="1.5" />
         </g>
       `;
+
+      // Minimap miniature node
+      minimapNodesSvg += `
+        <rect x="${node.x}" y="${node.y}" width="${nodeW}" height="${nodeH}" rx="8" fill="${isNodeActive ? '#2563EB' : (isCompleted ? '#16A34A' : '#E2E8F0')}" opacity="${isNodeActive ? '0.9' : '0.6'}" />
+      `;
     });
 
     // 3. Assemble Complete SVG Structure
     this.container.innerHTML = `
-      <div style="position:relative; width:100%; height:100%; min-height:480px; display:flex; flex-direction:column; background:#F8FAFC; border-radius:12px; overflow:hidden; border:1px solid #E5E7EB;">
+      <div style="position:relative; width:100%; height:100%; min-height:100%; display:flex; flex-direction:column; background:#F8FAFC; overflow:hidden;">
         
-        <!-- Top Visualizer HUD Bar (FlowDrop Clean Header) -->
-        <div style="background:#FFFFFF; border-bottom:1px solid #E5E7EB; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; z-index:10;">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span style="width:7px; height:7px; border-radius:50%; background:#16A34A; display:inline-block;"></span>
-              <span style="font-size:0.78rem; font-weight:700; color:#111827; text-transform:uppercase; letter-spacing:0.4px;">
-                ${arch.name}
-              </span>
-            </div>
-            <span style="color:#E5E7EB;">|</span>
-            <span style="color:#64748B; font-size:0.8rem; font-family:'JetBrains Mono', monospace;">
-              Topology: <strong style="color:#111827;">${arch.topology.split('(')[0].trim()}</strong>
-            </span>
-          </div>
-
-          <div style="display:flex; align-items:center; gap:14px; font-size:0.82rem;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span style="color:#64748B;">Stage</span>
-              <span style="background:#EFF6FF; color:#2563EB; font-weight:700; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-family:'JetBrains Mono', monospace;">
-                ${this.currentStepIndex + 1} / ${arch.steps.length}
-              </span>
-            </div>
-            <span style="color:#E5E7EB;">|</span>
-            <span style="color:#111827; font-size:0.8rem; font-weight:600; font-family:'JetBrains Mono', monospace;">
-              ${currentStep ? currentStep.action : 'READY'}
-            </span>
-          </div>
-        </div>
-
         <!-- SVG Interactive Canvas with Dotted Grid Background -->
         <div class="workflow-canvas-scroll" style="position:relative; flex:1; width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; background:#F8FAFC;">
-          <svg class="workflow-svg-canvas" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%; min-width:960px; min-height:430px; display:block;">
+          <svg class="workflow-svg-canvas" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%; min-width:980px; min-height:440px; display:block;">
             <defs>
-              <!-- Dotted Grid Pattern (Linear / FlowDrop Style) -->
+              <!-- Dotted Grid Pattern (FlowDrop Style) -->
               <pattern id="dot-grid" width="22" height="22" patternUnits="userSpaceOnUse">
                 <circle cx="2" cy="2" r="1.1" fill="#CBD5E1" opacity="0.75" />
               </pattern>
@@ -433,28 +410,30 @@ export class RagGraphVisualizer {
             <g id="nodes-layer">${nodesSvg}</g>
           </svg>
 
-          <!-- Floating Canvas Zoom Controls (Bottom Left) -->
-          <div style="position:absolute; bottom:14px; left:14px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:8px; display:flex; align-items:center; gap:2px; padding:3px; box-shadow:0 1px 3px rgba(0,0,0,0.06); z-index:10;">
+          <!-- Floating Canvas Zoom Controls (Bottom Left - Image 1/2 Style) -->
+          <div style="position:absolute; bottom:36px; left:16px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:8px; display:flex; align-items:center; gap:2px; padding:3px; box-shadow:0 1px 3px rgba(0,0,0,0.06); z-index:10;">
             <button id="btn-zoom-in" title="Zoom In" style="width:28px; height:28px; background:none; border:none; cursor:pointer; font-size:14px; font-weight:700; color:#374151; border-radius:4px; display:flex; align-items:center; justify-content:center;">+</button>
             <span class="zoom-indicator-text" style="font-size:11px; font-family:'JetBrains Mono', monospace; color:#64748B; padding:0 6px;">${Math.round(this.zoomLevel * 100)}%</span>
             <button id="btn-zoom-out" title="Zoom Out" style="width:28px; height:28px; background:none; border:none; cursor:pointer; font-size:14px; font-weight:700; color:#374151; border-radius:4px; display:flex; align-items:center; justify-content:center;">−</button>
             <button id="btn-zoom-reset" title="Fit to View" style="padding:0 8px; height:28px; background:none; border:none; cursor:pointer; font-size:11px; font-weight:600; color:#2563EB; border-radius:4px; display:flex; align-items:center; justify-content:center;">Fit</button>
           </div>
-        </div>
 
-        <!-- Bottom Step Banner Overlay -->
-        <div style="background:#FFFFFF; border-top:1px solid #E5E7EB; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; gap:15px; z-index:10;">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:5px; font-family:'JetBrains Mono', monospace;">
-              NODE EXECUTION
-            </span>
-            <span style="font-size:0.9rem; font-weight:700; color:#111827;">
-              ${currentStep ? currentStep.title : 'Ready'}
-            </span>
+          <!-- Bottom Left Canvas Stats Strip (FlowDrop Style) -->
+          <div style="position:absolute; bottom:10px; left:16px; font-size:11px; font-family:'Inter', sans-serif; color:#64748B; display:flex; gap:12px; z-index:9;">
+            <span>${arch.nodes.length} nodes</span>
+            <span>·</span>
+            <span>${arch.edges.length} connections</span>
           </div>
-          <span style="color:#64748B; font-size:0.84rem; max-width:600px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
-            ${currentStep ? currentStep.description : 'Select a step or click play to start visualization.'}
-          </span>
+
+          <!-- Svelte Flow / FlowDrop Minimap (Bottom Right - Matching Images 1 & 2!) -->
+          <div style="position:absolute; bottom:14px; right:16px; width:130px; height:85px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05); z-index:10; display:flex; flex-direction:column; justify-content:space-between;">
+            <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width:100%; height:68px; background:#F8FAFC;">
+              <g>${minimapNodesSvg}</g>
+            </svg>
+            <div style="background:#FFFFFF; border-top:1px solid #F1F5F9; padding:2px 6px; font-size:8.5px; color:#94A3B8; text-align:right; font-family:'Inter', sans-serif;">
+              Workflow Studio
+            </div>
+          </div>
         </div>
       </div>
     `;

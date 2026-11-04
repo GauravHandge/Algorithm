@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAG & LangGraph Studio - AlgoVerse</title>
+  <title>AI Workflow Studio - AlgoVerse</title>
   <link rel="stylesheet" href="/static/css/style.css?v=20261104" />
-  <link rel="stylesheet" href="/static/css/layout.css?v=20261104" />
-  <link rel="stylesheet" href="/static/css/components.css?v=20261104" />
-  <link rel="stylesheet" href="/static/css/responsive.css?v=20261104" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Scoped Professional Developer Workspace Tokens (Linear / Vercel Palette) */
+    /* Full-Screen Workflow Application Studio Layout (Matching Images 1 & 2) */
     :root {
       --bg-studio-main: #FFFFFF;
       --bg-studio-workspace: #F8FAFC;
@@ -20,158 +17,125 @@
       --text-studio-primary: #111827;
       --text-studio-secondary: #64748B;
       --border-studio: #E5E7EB;
+      --border-studio-subtle: #F1F5F9;
       --primary-blue: #2563EB;
       --primary-blue-hover: #1D4ED8;
       --primary-blue-subtle: #EFF6FF;
       --color-success: #16A34A;
       --color-error: #DC2626;
       --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-      --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 
-    body {
-      background-color: var(--bg-studio-main) !important;
-      color: var(--text-studio-primary) !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-studio-main);
+      color: var(--text-studio-primary);
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Compact Studio Header (Section 3) */
-    .studio-header-compact {
-      padding: 1.25rem 0 1rem 0;
-      border-bottom: 1px solid var(--border-studio);
-      margin-bottom: 1rem;
+    /* 1. TOP NAVIGATION / APP BAR (Images 1 & 2) */
+    .studio-app-bar {
+      height: 54px;
       background: #FFFFFF;
-    }
-
-    .studio-header-compact .title-row {
+      border-bottom: 1px solid var(--border-studio);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      padding: 0 1rem;
+      z-index: 20;
     }
 
-    .studio-header-compact h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
+    .app-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .studio-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
       color: var(--text-studio-primary);
-      margin: 0;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .studio-header-compact .studio-badge-pill {
-      font-size: 0.7rem;
       font-weight: 700;
-      background: var(--primary-blue-subtle);
-      color: var(--primary-blue);
+      font-size: 0.95rem;
+    }
+
+    .studio-brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: #EFF6FF;
       border: 1px solid #BFDBFE;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .studio-header-compact p {
-      color: var(--text-studio-secondary);
-      font-size: 0.88rem;
-      margin: 0.35rem 0 0 0;
-      line-height: 1.5;
-    }
-
-    /* Architecture Selector (Section 4) */
-    .arch-selector-bar {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      overflow-x: auto;
-      padding: 0.4rem;
-      background: var(--bg-studio-workspace);
-      border: 1px solid var(--border-studio);
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      scrollbar-width: thin;
+      justify-content: center;
+      color: var(--primary-blue);
     }
 
-    .arch-tab-btn {
-      padding: 0.45rem 0.85rem;
+    .studio-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-studio-secondary);
+      border-left: 1px solid var(--border-studio);
+      padding-left: 12px;
+    }
+
+    .workflow-selector-dropdown {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
       border-radius: 6px;
+      padding: 0.3rem 0.65rem;
       font-size: 0.82rem;
       font-weight: 600;
-      color: var(--text-studio-secondary);
-      background: transparent;
-      border: 1px solid transparent;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .arch-tab-btn:hover {
       color: var(--text-studio-primary);
-      background: #FFFFFF;
-      border-color: var(--border-studio);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      outline: none;
     }
 
-    .arch-tab-btn.active {
-      color: var(--primary-blue);
-      background: #FFFFFF;
-      border-color: var(--border-studio);
-      box-shadow: var(--shadow-subtle);
-      font-weight: 700;
-      position: relative;
+    .workflow-selector-dropdown:hover {
+      border-color: #CBD5E1;
+      background: #F8FAFC;
     }
 
-    .arch-tab-btn.active::after {
-      content: "";
-      position: absolute;
-      bottom: -1px;
-      left: 15%;
-      width: 70%;
-      height: 2px;
-      background: var(--primary-blue);
-      border-radius: 2px;
-    }
-
-    .arch-tab-btn .key-hint {
-      font-size: 0.68rem;
-      color: #94A3B8;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 1px 4px;
-      background: #F1F5F9;
-      border-radius: 3px;
-    }
-
-    /* Execution Toolbar (Section 5) */
-    .execution-toolbar {
-      background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      border-radius: 8px;
-      padding: 0.55rem 0.85rem;
-      margin-bottom: 1rem;
+    .connection-status-pill {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      box-shadow: var(--shadow-subtle);
+      gap: 5px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--color-success);
+      background: #F0FDF4;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      border: 1px solid #BBF7D0;
     }
 
-    .toolbar-btn-group {
+    .connection-status-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-success);
+    }
+
+    .app-bar-right {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 8px;
     }
 
-    .btn-tool {
+    .btn-studio-action {
       background: #FFFFFF;
       border: 1px solid var(--border-studio);
       color: var(--text-studio-primary);
@@ -187,838 +151,750 @@
       font-family: 'Inter', sans-serif;
     }
 
-    .btn-tool:hover {
-      background: var(--bg-studio-workspace);
+    .btn-studio-action:hover {
+      background: #F8FAFC;
       border-color: #CBD5E1;
     }
 
-    .btn-tool.btn-primary-flow {
+    .btn-studio-primary {
       background: var(--primary-blue);
       border-color: var(--primary-blue);
       color: #FFFFFF;
     }
 
-    .btn-tool.btn-primary-flow:hover {
+    .btn-studio-primary:hover {
       background: var(--primary-blue-hover);
     }
 
-    .stage-counter-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
-      color: var(--text-studio-secondary);
-      font-family: 'JetBrains Mono', monospace;
-      background: var(--bg-studio-workspace);
-      border: 1px solid var(--border-studio);
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
-    }
-
-    .stage-counter-badge strong {
-      color: var(--text-studio-primary);
-      font-weight: 700;
-    }
-
-    .stage-counter-badge .stage-blue {
-      color: var(--primary-blue);
-      font-weight: 700;
-    }
-
-    .speed-select-wrap {
+    /* 2. THREE-PANEL FULL-HEIGHT STUDIO BODY */
+    .studio-main-body {
       display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      color: var(--text-studio-secondary);
-      font-weight: 500;
+      height: calc(100vh - 54px);
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
     }
 
-    .speed-select-wrap select {
+    /* 3. LEFT PANEL: NODES LIBRARY & COMPONENTS (Image 1 & 2) */
+    .studio-sidebar-left {
+      width: 270px;
+      min-width: 270px;
       background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      color: var(--text-studio-primary);
-      border-radius: 6px;
-      padding: 0.35rem 0.55rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .keyboard-shortcut-pill {
-      font-size: 0.72rem;
-      color: var(--text-studio-secondary);
-      background: var(--bg-studio-workspace);
-      border: 1px solid var(--border-studio);
-      padding: 0.3rem 0.6rem;
-      border-radius: 5px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Main Workspace Two-Column Grid (Section 6) */
-    .studio-workspace-grid {
-      display: grid;
-      grid-template-columns: 72% 28%;
-      gap: 1.25rem;
-      align-items: stretch;
-      margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 1200px) {
-      .studio-workspace-grid {
-        grid-template-columns: 68% 32%;
-      }
-    }
-
-    @media (max-width: 992px) {
-      .studio-workspace-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Left Column Canvas Wrapper */
-    .canvas-column {
+      border-right: 1px solid var(--border-studio);
       display: flex;
       flex-direction: column;
-      min-height: 520px;
-    }
-
-    #rag-canvas-container {
-      flex: 1;
-      width: 100%;
       height: 100%;
-      min-height: 520px;
-    }
-
-    /* Right Column Inspector Panel (Section 6) */
-    .inspector-panel {
-      background: var(--bg-studio-panel);
-      border: 1px solid var(--border-studio);
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow-subtle);
       overflow: hidden;
-      min-height: 520px;
+      z-index: 10;
     }
 
-    /* Inspector Header Tabs */
-    .inspector-tab-header {
-      display: flex;
+    .sidebar-header {
+      padding: 0.85rem 1rem;
       border-bottom: 1px solid var(--border-studio);
-      background: #FFFFFF;
-      padding: 0 0.5rem;
-    }
-
-    .inspector-tab-btn {
-      flex: 1;
-      padding: 0.75rem 0.5rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-studio-secondary);
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-    }
-
-    .inspector-tab-btn:hover {
-      color: var(--text-studio-primary);
-    }
-
-    .inspector-tab-btn.active {
-      color: var(--primary-blue);
-      border-bottom-color: var(--primary-blue);
-      font-weight: 700;
-    }
-
-    .inspector-tab-body {
-      padding: 1.15rem;
-      overflow-y: auto;
-      flex: 1;
-      max-height: 600px;
-    }
-
-    /* Step Deep Dive Elements */
-    .step-header-card {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 0.85rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border-studio);
     }
 
-    .step-header-card h3 {
-      font-size: 1.05rem;
+    .sidebar-header h2 {
+      font-size: 0.88rem;
       font-weight: 700;
       color: var(--text-studio-primary);
-      margin: 0.25rem 0 0 0;
-      line-height: 1.35;
-    }
-
-    .step-action-tag {
-      font-size: 0.72rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      color: var(--primary-blue);
-      background: var(--primary-blue-subtle);
-      border: 1px solid #BFDBFE;
-      padding: 2px 7px;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-
-    /* What this step does box */
-    .step-explain-box {
-      background: #F8FAFC;
-      border: 1px solid var(--border-studio);
-      border-left: 3px solid var(--primary-blue);
-      border-radius: 6px;
-      padding: 0.75rem 0.9rem;
-      margin-bottom: 1rem;
-    }
-
-    .step-explain-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--primary-blue);
-      margin-bottom: 0.25rem;
-    }
-
-    .step-explain-text {
-      font-size: 0.86rem;
-      color: #334155;
-      line-height: 1.55;
-    }
-
-    /* Collapsible / Clean Specification Cards */
-    .spec-section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .spec-item {
-      background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      border-radius: 6px;
-      padding: 0.65rem 0.85rem;
-    }
-
-    .spec-item-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--text-studio-secondary);
-      margin-bottom: 0.2rem;
+      margin: 0;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .spec-item-content {
-      font-size: 0.84rem;
-      color: var(--text-studio-primary);
-      line-height: 1.5;
-    }
-
-    .spec-item-mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      background: var(--bg-studio-workspace);
-      padding: 4px 6px;
-      border-radius: 4px;
-      border: 1px solid #F1F5F9;
-      color: #1E293B;
-      display: block;
-      margin-top: 3px;
-    }
-
-    /* Python Code Box */
-    .code-box-wrapper {
-      background: #0F172A;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 0.75rem;
-    }
-
-    .code-box-header {
-      background: #1E293B;
-      padding: 0.45rem 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.74rem;
-      color: #94A3B8;
-      font-family: 'JetBrains Mono', monospace;
-      border-bottom: 1px solid #334155;
-    }
-
-    .code-copy-btn {
+    .sidebar-collapse-btn {
       background: transparent;
-      border: 1px solid #475569;
-      color: #E2E8F0;
-      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border-studio);
+      width: 24px;
+      height: 24px;
       border-radius: 4px;
-      font-size: 0.68rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      transition: all 0.15s ease;
+      color: var(--text-studio-secondary);
+      font-size: 11px;
     }
 
-    .code-copy-btn:hover {
-      background: #334155;
-      border-color: #64748B;
-    }
-
-    .code-content-block {
-      padding: 0.75rem;
-      margin: 0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      line-height: 1.5;
-      color: #E2E8F0;
-      white-space: pre-wrap;
-      overflow-x: auto;
-      max-height: 240px;
-    }
-
-    /* Structured GraphState JSON Inspector (Tab 2) */
-    .state-inspector-view {
+    .sidebar-search-box {
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid var(--border-studio);
       background: #F8FAFC;
+    }
+
+    .sidebar-search-input {
+      width: 100%;
+      background: #FFFFFF;
       border: 1px solid var(--border-studio);
       border-radius: 6px;
-      padding: 0.85rem;
-      font-family: 'JetBrains Mono', monospace;
+      padding: 0.35rem 0.6rem;
       font-size: 0.78rem;
-      line-height: 1.6;
-      max-height: 480px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      color: var(--text-studio-primary);
+    }
+
+    .sidebar-search-input:focus {
+      border-color: var(--primary-blue);
+    }
+
+    .sidebar-content-scroll {
+      flex: 1;
       overflow-y: auto;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .json-key { color: var(--primary-blue); font-weight: 600; }
-    .json-str { color: #059669; }
-    .json-num { color: #D97706; }
-    .json-bool { color: #7C3AED; font-weight: 600; }
-
-    /* Paradigm Comparison Table (Tab 3) */
-    .comparison-table-wrap {
-      overflow-x: auto;
-      max-height: 480px;
+    .sidebar-section-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-studio-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 0.4rem;
+      padding-left: 0.25rem;
     }
 
-    .matrix-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
+    /* Architecture List Items */
+    .arch-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .arch-nav-item {
+      padding: 0.5rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-studio-secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
       text-align: left;
     }
 
-    .matrix-table th {
+    .arch-nav-item:hover {
       background: #F8FAFC;
-      padding: 0.6rem 0.75rem;
-      color: var(--text-studio-secondary);
-      font-weight: 700;
-      border-bottom: 2px solid var(--border-studio);
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-
-    .matrix-table td {
-      padding: 0.6rem 0.75rem;
-      border-bottom: 1px solid var(--border-studio);
-      vertical-align: middle;
       color: var(--text-studio-primary);
     }
 
-    .matrix-table tr.active-arch-row {
+    .arch-nav-item.active {
       background: var(--primary-blue-subtle);
-      font-weight: 600;
+      color: var(--primary-blue);
+      border-color: #BFDBFE;
+      font-weight: 700;
     }
 
-    /* Educational Section Below Workspace (Section 7) */
-    .edu-content-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
+    .arch-nav-item .key-pill {
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #94A3B8;
+      background: #F1F5F9;
+      padding: 1px 5px;
+      border-radius: 4px;
     }
 
-    @media (max-width: 992px) {
-      .edu-content-grid {
-        grid-template-columns: 1fr;
-      }
+    /* Pipeline Nodes Cards (Image 1 Style) */
+    .node-component-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .edu-card {
+    .node-comp-card {
       background: #FFFFFF;
       border: 1px solid var(--border-studio);
-      border-radius: 10px;
-      padding: 1.25rem;
-      box-shadow: var(--shadow-subtle);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
 
-    .edu-card h3 {
-      font-size: 1rem;
+    .node-comp-card:hover {
+      border-color: #CBD5E1;
+      transform: translateX(2px);
+    }
+
+    .node-comp-card.active {
+      border-color: var(--primary-blue);
+      background: #F8FAFC;
+      box-shadow: 0 0 0 1px var(--primary-blue);
+    }
+
+    .node-comp-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-blue);
+    }
+
+    .node-comp-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .node-comp-title {
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--text-studio-primary);
-      margin: 0 0 0.5rem 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .edu-card p {
-      font-size: 0.88rem;
+    .node-comp-sub {
+      font-size: 0.68rem;
       color: var(--text-studio-secondary);
-      line-height: 1.6;
-      margin: 0 0 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .pros-cons-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+    .sidebar-footer {
+      padding: 0.75rem 1rem;
       border-top: 1px solid var(--border-studio);
-      padding-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-studio-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFFFFF;
     }
 
-    @media (max-width: 600px) {
-      .pros-cons-grid {
-        grid-template-columns: 1fr;
+    /* 4. CENTER WORKSPACE: MAIN CANVAS (Image 1 & 2) */
+    .studio-canvas-center {
+      flex: 1;
+      height: 100%;
+      background: var(--bg-studio-workspace);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #rag-canvas-container {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+    }
+
+    /* 5. RIGHT PANEL: WORKFLOW INSPECTOR / PROPERTIES (Image 1) */
+    .studio-inspector-right {
+      width: 340px;
+      min-width: 340px;
+      background: #FFFFFF;
+      border-left: 1px solid var(--border-studio);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .inspector-header {
+      padding: 0.85rem 1.15rem;
+      border-bottom: 1px solid var(--border-studio);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+    }
+
+    .inspector-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .inspector-node-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-blue);
+    }
+
+    .inspector-node-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-studio-primary);
+      margin: 0;
+    }
+
+    .inspector-node-type {
+      font-size: 0.68rem;
+      color: var(--text-studio-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .inspector-content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    /* Collapsible Accordion Sections (Image 1 Style) */
+    .accordion-section {
+      border: 1px solid var(--border-studio);
+      border-radius: 8px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      padding: 0.65rem 0.85rem;
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--border-studio);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-studio-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .accordion-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-studio-secondary);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
+      border-radius: 6px;
+      padding: 0.4rem 0.65rem;
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-studio-primary);
+      outline: none;
+      width: 100%;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary-blue);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 60px;
+      line-height: 1.5;
+    }
+
+    /* Structured I/O Badges */
+    .io-chip-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-studio);
+      border-radius: 6px;
+      padding: 0.5rem 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    /* Python Code Box */
+    .inspector-code-box {
+      background: #0F172A;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+
+    .inspector-code-header {
+      background: #1E293B;
+      padding: 0.35rem 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #94A3B8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .inspector-code-body {
+      padding: 0.65rem;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: #E2E8F0;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 180px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .studio-sidebar-left {
+        width: 240px;
+        min-width: 240px;
+      }
+      .studio-inspector-right {
+        width: 300px;
+        min-width: 300px;
       }
     }
 
-    .pros-list, .cons-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.82rem;
-      line-height: 1.55;
-      color: #334155;
-    }
-
-    .pros-list li {
-      padding-left: 1.25rem;
-      position: relative;
-      margin-bottom: 0.45rem;
-    }
-
-    .pros-list li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: var(--color-success);
-      font-weight: 700;
-    }
-
-    .cons-list li {
-      padding-left: 1.25rem;
-      position: relative;
-      margin-bottom: 0.45rem;
-    }
-
-    .cons-list li::before {
-      content: "✕";
-      position: absolute;
-      left: 0;
-      color: var(--color-error);
-      font-weight: 700;
-    }
-
-    .metrics-summary-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .mini-metric-box {
-      background: var(--bg-studio-workspace);
-      border: 1px solid var(--border-studio);
-      border-radius: 8px;
-      padding: 0.75rem;
-    }
-
-    .mini-metric-label {
-      font-size: 0.7rem;
-      color: var(--text-studio-secondary);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 0.25rem;
-    }
-
-    .mini-metric-val {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-studio-primary);
-      font-family: 'JetBrains Mono', monospace;
+    @media (max-width: 768px) {
+      .studio-main-body {
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .studio-sidebar-left, .studio-inspector-right {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+      }
+      .studio-canvas-center {
+        min-height: 480px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Standard Clean Header -->
-  <header class="app-header">
-    <a href="/static/index.html" class="brand-logo">
-      <div class="brand-icon">
-        <svg viewBox="0 0 32 32" fill="none">
-          <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="url(#brandGrad)" />
-          <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#ffffff" opacity="0.9" />
-          <defs>
-            <linearGradient id="brandGrad" x1="3" y1="2" x2="29" y2="28" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#2563EB" />
-              <stop offset="1" stop-color="#38BDF8" />
-            </linearGradient>
-          </defs>
-        </svg>
+
+  <!-- 1. TOP APP BAR (Images 1 & 2) -->
+  <header class="studio-app-bar">
+    <div class="app-bar-left">
+      <a href="/static/index.html" class="studio-brand-logo">
+        <div class="studio-brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+        <span>AlgoVerse Studio</span>
+      </a>
+
+      <div class="studio-breadcrumb">
+        <span>Workflows</span>
+        <span>/</span>
+        <select id="header-arch-select" class="workflow-selector-dropdown">
+          <option value="simple_rag" selected>Simple RAG (Naive Pipeline)</option>
+          <option value="advanced_rag">Advanced RAG (Modular Multi-Stage)</option>
+          <option value="self_rag">Self-RAG (LangGraph StateGraph)</option>
+          <option value="crag">CRAG (Corrective RAG)</option>
+          <option value="agentic_rag">Agentic RAG (Autonomous Multi-Tool)</option>
+          <option value="graph_rag">Graph RAG (Microsoft GraphRAG)</option>
+          <option value="multimodal_rag">Multimodal RAG (ColPali VLM)</option>
+          <option value="vectorless_rag">Vectorless RAG (Hierarchical AST)</option>
+        </select>
       </div>
-      <span>AlgoVerse</span>
-    </a>
 
-    <nav>
-      <ul class="nav-links">
-        <li><a href="/static/index.html">Home</a></li>
-        <li><a href="/static/algorithms.html">Explore</a></li>
-        <li><a href="/static/rag_visualizer.html" class="nav-link-active" style="color:#2563EB; font-weight:700;">AI Visualizations</a></li>
-        <li><a href="/static/practice.html">Practice</a></li>
-        <li><a href="/static/quiz.html">Roadmaps</a></li>
-        <li><a href="/static/dashboard.html">Resources</a></li>
-      </ul>
-    </nav>
+      <div class="connection-status-pill">
+        <span class="dot"></span>
+        <span>Connected</span>
+      </div>
+    </div>
 
-    <div class="header-actions">
-      <a href="/static/dashboard.html" class="btn btn-secondary" style="padding:0.45rem 1rem; font-size:0.85rem;">Sign In</a>
-      <a href="/static/algorithms.html" class="btn btn-primary" style="padding:0.45rem 1.15rem; font-size:0.85rem; background:#2563EB; border-color:#2563EB;">Get Started</a>
+    <div class="app-bar-right">
+      <!-- Execution Toolbar Buttons -->
+      <button id="btn-play-toggle" class="btn-studio-action btn-studio-primary">
+        <span id="play-icon">▶</span> <span id="play-text">Play Flow</span>
+      </button>
+      <button id="btn-prev" class="btn-studio-action" title="Previous Step">⏮ Prev</button>
+      <button id="btn-next" class="btn-studio-action" title="Next Step">Next ⏭</button>
+      <button id="btn-reset" class="btn-studio-action" title="Reset Flow">↺ Reset</button>
+
+      <!-- Stage Counter Badge -->
+      <div style="font-size:0.78rem; font-family:'JetBrains Mono', monospace; background:#F8FAFC; border:1px solid #E5E7EB; padding:3px 8px; border-radius:6px; color:#64748B;">
+        Stage <strong id="counter-current" style="color:#2563EB;">1</strong> of <strong id="counter-total">7</strong>
+      </div>
+
+      <!-- Speed Dropdown -->
+      <select id="speed-select" class="form-select" style="width:auto; padding:0.3rem 0.5rem; font-size:0.78rem;">
+        <option value="0.5">0.5x</option>
+        <option value="1.0" selected>1.0x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2.0">2.0x</option>
+      </select>
+
+      <a href="/static/index.html" class="btn-studio-action" style="text-decoration:none;">
+        Exit Studio ↗
+      </a>
     </div>
   </header>
 
-  <main class="main-container" style="max-width:1440px; padding:0.5rem 1.25rem 2rem 1.25rem;">
-    <!-- Compact Page Header (Section 3) -->
-    <div class="studio-header-compact">
-      <div class="title-row">
+  <!-- 2. MAIN 3-PANEL STUDIO BODY (Images 1 & 2) -->
+  <div class="studio-main-body">
+
+    <!-- LEFT PANEL: NODES LIBRARY & ARCHITECTURES -->
+    <aside class="studio-sidebar-left">
+      <div class="sidebar-header">
+        <h2>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Nodes Library
+        </h2>
+        <button id="btn-collapse-sidebar" class="sidebar-collapse-btn" title="Toggle Sidebar">◀</button>
+      </div>
+
+      <div class="sidebar-search-box">
+        <input type="text" id="node-search-input" class="sidebar-search-input" placeholder="Search components & nodes..." />
+      </div>
+
+      <div class="sidebar-content-scroll">
+        <!-- Section: Architectures -->
         <div>
-          <h1>
-            RAG & LangGraph Studio
-            <span class="studio-badge-pill">Interactive Workspace</span>
-          </h1>
-          <p>Explore, execute and understand modern AI architectures step by step.</p>
-        </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:0.75rem; color:#64748B;">Topology:</span>
-          <span id="header-topology-text" style="font-size:0.75rem; font-family:'JetBrains Mono', monospace; font-weight:700; color:#111827; background:#F1F5F9; padding:2px 8px; border-radius:4px;">
-            Linear Graph
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Architecture Selector (Section 4) -->
-    <div class="arch-selector-bar">
-      <button class="arch-tab-btn active" data-arch="simple_rag">
-        <span>Simple RAG</span>
-        <span class="key-hint">1</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="advanced_rag">
-        <span>Advanced RAG</span>
-        <span class="key-hint">2</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="self_rag">
-        <span>Self-RAG</span>
-        <span class="key-hint">3</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="crag">
-        <span>CRAG</span>
-        <span class="key-hint">4</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="agentic_rag">
-        <span>Agentic RAG</span>
-        <span class="key-hint">5</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="graph_rag">
-        <span>Graph RAG</span>
-        <span class="key-hint">6</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="multimodal_rag">
-        <span>Multimodal RAG</span>
-        <span class="key-hint">7</span>
-      </button>
-      <button class="arch-tab-btn" data-arch="vectorless_rag">
-        <span>Vectorless RAG</span>
-        <span class="key-hint">8</span>
-      </button>
-    </div>
-
-    <!-- Execution Toolbar (Section 5) -->
-    <div class="execution-toolbar">
-      <div class="toolbar-btn-group">
-        <button id="btn-play-toggle" class="btn-tool btn-primary-flow">
-          <span id="play-icon">▶</span> <span id="play-text">Play Flow</span>
-        </button>
-        <button id="btn-prev" class="btn-tool" title="Previous Step (Left Arrow)">Previous</button>
-        <button id="btn-next" class="btn-tool" title="Next Step (Right Arrow)">Next</button>
-        <button id="btn-reset" class="btn-tool" title="Reset Flow (R)">Reset</button>
-      </div>
-
-      <!-- Current Stage / Total Stages -->
-      <div class="stage-counter-badge">
-        <span>Stage</span>
-        <span id="counter-current" class="stage-blue">1</span>
-        <span>of</span>
-        <span id="counter-total">7</span>
-      </div>
-
-      <!-- Speed & Shortcuts -->
-      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <div class="speed-select-wrap">
-          <label>Speed:</label>
-          <select id="speed-select">
-            <option value="0.5">0.5x</option>
-            <option value="1.0" selected>1.0x</option>
-            <option value="1.5">1.5x</option>
-            <option value="2.0">2.0x</option>
-          </select>
-        </div>
-        <span class="keyboard-shortcut-pill">
-          Space: Play/Pause  ·  ← / →: Step
-        </span>
-      </div>
-    </div>
-
-    <!-- Main Visualization Workspace: 72% / 28% Two-Column (Section 6) -->
-    <div class="studio-workspace-grid">
-      <!-- LEFT/CENTER — 72% WIDTH: Interactive Graph Canvas -->
-      <div class="canvas-column">
-        <div id="rag-canvas-container">
-          <!-- Injected via RagGraphVisualizer -->
-        </div>
-      </div>
-
-      <!-- RIGHT PANEL — 28% WIDTH: 3 Tabs (Step Deep Dive, GraphState, Paradigm Comparison) -->
-      <div class="inspector-panel">
-        <!-- Tab Navigation Bar -->
-        <div class="inspector-tab-header">
-          <button id="tab-btn-step" class="inspector-tab-btn active" data-tab="step">Step Deep Dive</button>
-          <button id="tab-btn-state" class="inspector-tab-btn" data-tab="state">GraphState Memory</button>
-          <button id="tab-btn-comparison" class="inspector-tab-btn" data-tab="comparison">Paradigm Comparison</button>
-        </div>
-
-        <!-- Tab 1: Step Deep Dive Content -->
-        <div id="tab-content-step" class="inspector-tab-body">
-          <div class="step-header-card">
-            <div>
-              <span id="detail-stage-badge" style="font-size:0.7rem; font-family:'JetBrains Mono', monospace; font-weight:700; color:#64748B;">STAGE 1 OF 7</span>
-              <h3 id="detail-step-title">Step Details</h3>
-            </div>
-            <span id="detail-action-tag" class="step-action-tag">ACTION</span>
-          </div>
-
-          <!-- What this step does (in simple English) -->
-          <div class="step-explain-box">
-            <div class="step-explain-label">What This Step Does</div>
-            <div id="detail-simple-definition" class="step-explain-text">
-              Loading plain English description...
-            </div>
-          </div>
-
-          <!-- Structured Specifications Breakdown -->
-          <div class="spec-section">
-            <div class="spec-item">
-              <div class="spec-item-label">Why This Step Is Needed</div>
-              <div id="detail-role-text" class="spec-item-content">...</div>
-            </div>
-
-            <div class="spec-item">
-              <div class="spec-item-label">Input</div>
-              <div id="detail-input-text" class="spec-item-content spec-item-mono">...</div>
-            </div>
-
-            <div class="spec-item">
-              <div class="spec-item-label">Internal Process (Algorithm)</div>
-              <div id="detail-mechanics-text" class="spec-item-content">...</div>
-            </div>
-
-            <div class="spec-item">
-              <div class="spec-item-label">Output</div>
-              <div id="detail-output-text" class="spec-item-content spec-item-mono">...</div>
-            </div>
-
-            <div class="spec-item">
-              <div class="spec-item-label">Real-World Pitfalls & Gotchas</div>
-              <div id="detail-pitfalls-text" class="spec-item-content">...</div>
-            </div>
-          </div>
-
-          <!-- Python LangGraph Node Implementation -->
-          <div class="code-box-wrapper">
-            <div class="code-box-header">
-              <span>LangGraph Node Implementation</span>
-              <button id="btn-copy-code" class="code-copy-btn">Copy Snippet</button>
-            </div>
-            <pre id="detail-code-content" class="code-content-block"># Loading node snippet...</pre>
+          <div class="sidebar-section-title">Pipelines & Paradigms (1-8)</div>
+          <div class="arch-nav-list">
+            <button class="arch-nav-item active" data-arch="simple_rag">
+              <span>Simple RAG</span>
+              <span class="key-pill">1</span>
+            </button>
+            <button class="arch-nav-item" data-arch="advanced_rag">
+              <span>Advanced RAG</span>
+              <span class="key-pill">2</span>
+            </button>
+            <button class="arch-nav-item" data-arch="self_rag">
+              <span>Self-RAG</span>
+              <span class="key-pill">3</span>
+            </button>
+            <button class="arch-nav-item" data-arch="crag">
+              <span>CRAG</span>
+              <span class="key-pill">4</span>
+            </button>
+            <button class="arch-nav-item" data-arch="agentic_rag">
+              <span>Agentic RAG</span>
+              <span class="key-pill">5</span>
+            </button>
+            <button class="arch-nav-item" data-arch="graph_rag">
+              <span>Graph RAG</span>
+              <span class="key-pill">6</span>
+            </button>
+            <button class="arch-nav-item" data-arch="multimodal_rag">
+              <span>Multimodal RAG</span>
+              <span class="key-pill">7</span>
+            </button>
+            <button class="arch-nav-item" data-arch="vectorless_rag">
+              <span>Vectorless RAG</span>
+              <span class="key-pill">8</span>
+            </button>
           </div>
         </div>
 
-        <!-- Tab 2: GraphState Memory Content -->
-        <div id="tab-content-state" class="inspector-tab-body" style="display:none;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-            <span style="font-size:0.78rem; font-weight:700; color:#111827;">Active StateGraph Memory</span>
-            <span style="font-size:0.7rem; font-family:'JetBrains Mono', monospace; color:#2563EB; background:#EFF6FF; padding:2px 6px; border-radius:4px;">TypedDict Schema</span>
-          </div>
-          <div id="json-inspector-view" class="state-inspector-view">
-            // Loading state JSON...
-          </div>
-        </div>
-
-        <!-- Tab 3: Paradigm Comparison Content -->
-        <div id="tab-content-comparison" class="inspector-tab-body" style="display:none;">
-          <div style="margin-bottom:0.75rem;">
-            <span style="font-size:0.82rem; font-weight:700; color:#111827;">8-Architecture Paradigm Matrix</span>
-          </div>
-          <div class="comparison-table-wrap">
-            <table class="matrix-table">
-              <thead>
-                <tr>
-                  <th>Architecture</th>
-                  <th>Core Paradigm</th>
-                  <th>Quality Guarantee</th>
-                  <th>Routing</th>
-                  <th>Latency</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr id="row-simple_rag">
-                  <td style="font-weight:700; color:#2563EB;">Simple RAG</td>
-                  <td>Linear Chunk-and-Vector</td>
-                  <td>None (Direct Pass)</td>
-                  <td>Linear</td>
-                  <td>~400-800ms</td>
-                </tr>
-                <tr id="row-advanced_rag">
-                  <td style="font-weight:700; color:#2563EB;">Advanced RAG</td>
-                  <td>Expansion + Cross-Encoder</td>
-                  <td>Score Cutoff Filter</td>
-                  <td>Branch & Rerank</td>
-                  <td>~800-1500ms</td>
-                </tr>
-                <tr id="row-self_rag">
-                  <td style="font-weight:700; color:#2563EB;">Self-RAG</td>
-                  <td>Evaluative Self-Reflection</td>
-                  <td>Hallucination Grader</td>
-                  <td>Loop-back</td>
-                  <td>~1200-2500ms</td>
-                </tr>
-                <tr id="row-crag">
-                  <td style="font-weight:700; color:#2563EB;">CRAG</td>
-                  <td>Corrective Fallback Search</td>
-                  <td>Confidence Threshold</td>
-                  <td>Fallback Web</td>
-                  <td>~1200-2800ms</td>
-                </tr>
-                <tr id="row-agentic_rag">
-                  <td style="font-weight:700; color:#2563EB;">Agentic RAG</td>
-                  <td>Multi-Tool Autonomous Agent</td>
-                  <td>Self-Reflection</td>
-                  <td>ReAct Loop</td>
-                  <td>~1500-3500ms</td>
-                </tr>
-                <tr id="row-graph_rag">
-                  <td style="font-weight:700; color:#2563EB;">Graph RAG</td>
-                  <td>Knowledge Graph Communities</td>
-                  <td>Entity-Relation Triples</td>
-                  <td>Leiden Subgraphs</td>
-                  <td>~1000-2000ms</td>
-                </tr>
-                <tr id="row-multimodal_rag">
-                  <td style="font-weight:700; color:#2563EB;">Multimodal RAG</td>
-                  <td>ColPali Vision Multi-Vectors</td>
-                  <td>MaxSim Late-Interaction</td>
-                  <td>Vision Attention</td>
-                  <td>~1100-2200ms</td>
-                </tr>
-                <tr id="row-vectorless_rag">
-                  <td style="font-weight:700; color:#2563EB;">Vectorless RAG</td>
-                  <td>Hierarchical Summary Tree</td>
-                  <td>Exact AST Code Scopes</td>
-                  <td>Tree Pruning</td>
-                  <td>~500-900ms</td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Section: Active Pipeline Nodes List (Image 1 Style) -->
+        <div>
+          <div class="sidebar-section-title" id="pipeline-nodes-header">Pipeline Nodes</div>
+          <div id="pipeline-nodes-list" class="node-component-cards">
+            <!-- Dynamically populated from active architecture's nodes -->
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Educational Content Below Workspace (Section 7) -->
-    <div class="edu-content-grid">
-      <!-- Architecture Overview & Trade-offs -->
-      <div class="edu-card">
-        <h3 id="arch-overview-title">Architecture Overview</h3>
-        <p id="arch-overview-desc">Loading architecture description...</p>
+      <div class="sidebar-footer">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:0.7rem;">Space = Play/Pause</span>
+        <span style="font-weight:600; color:#2563EB;">8 Paradigms</span>
+      </div>
+    </aside>
 
-        <div class="pros-cons-grid">
-          <div>
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--color-success); margin-bottom:0.5rem; letter-spacing:0.5px;">
-              Key Advantages
-            </div>
-            <ul id="arch-pros-list" class="pros-list"></ul>
+    <!-- CENTER CANVAS: MAIN WORKSPACE -->
+    <main class="studio-canvas-center">
+      <div id="rag-canvas-container">
+        <!-- Injected via RagGraphVisualizer -->
+      </div>
+    </main>
+
+    <!-- RIGHT PANEL: WORKFLOW INSPECTOR / PROPERTIES (Image 1) -->
+    <aside class="studio-inspector-right">
+      <div class="inspector-header">
+        <div class="inspector-header-left">
+          <div id="inspector-node-icon" class="inspector-node-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            </svg>
           </div>
           <div>
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--color-error); margin-bottom:0.5rem; letter-spacing:0.5px;">
-              Trade-offs & Limitations
+            <h3 id="inspector-node-title" class="inspector-node-title">Trigger</h3>
+            <div id="inspector-node-type" class="inspector-node-type">Time-based Trigger</div>
+          </div>
+        </div>
+        <span style="font-size:0.72rem; color:#64748B; cursor:pointer;" title="Options">•••</span>
+      </div>
+
+      <div class="inspector-content-scroll">
+
+        <!-- Accordion 1: General information (Image 1) -->
+        <div class="accordion-section">
+          <div class="accordion-header">
+            <span>General Information</span>
+            <span>▾</span>
+          </div>
+          <div class="accordion-body">
+            <div class="form-group">
+              <label class="form-label">Stage Type</label>
+              <input type="text" id="inspector-field-type" class="form-input" readonly value="TRIGGER" />
             </div>
-            <ul id="arch-cons-list" class="cons-list"></ul>
+
+            <div class="form-group">
+              <label class="form-label">Node Title</label>
+              <input type="text" id="inspector-field-title" class="form-input" readonly value="Document Ingestion" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <div style="display:flex; align-items:center; gap:6px; background:#F8FAFC; border:1px solid #E5E7EB; padding:6px 10px; border-radius:6px;">
+                <span id="inspector-status-dot" style="width:7px; height:7px; border-radius:50%; background:#2563EB;"></span>
+                <span id="inspector-status-text" style="font-size:0.8rem; font-weight:600; color:#2563EB;">Active</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What This Step Does</label>
+              <textarea id="inspector-field-desc" class="form-textarea" readonly></textarea>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Computational Complexity & Profile -->
-      <div class="edu-card">
-        <h3>Computational Complexity & Profile</h3>
-        <p style="margin-bottom:0.85rem;">Hardware footprint, latency characteristics, and accuracy expectations.</p>
+        <!-- Accordion 2: Execution Details & I/O -->
+        <div class="accordion-section">
+          <div class="accordion-header">
+            <span>Execution Details & I/O</span>
+            <span>▾</span>
+          </div>
+          <div class="accordion-body">
+            <div class="form-group">
+              <label class="form-label">Why This Step Is Needed</label>
+              <div id="inspector-role-text" style="font-size:0.8rem; color:#334155; line-height:1.5;">...</div>
+            </div>
 
-        <div class="metrics-summary-strip">
-          <div class="mini-metric-box">
-            <div class="mini-metric-label">Execution Stages</div>
-            <div id="metric-stages-val" class="mini-metric-val">7 Nodes</div>
-          </div>
-          <div class="mini-metric-box">
-            <div class="mini-metric-label">Latency Profile</div>
-            <div id="metric-latency-val" class="mini-metric-val" style="color:#2563EB;">~400-800ms</div>
-          </div>
-          <div class="mini-metric-box">
-            <div class="mini-metric-label">Accuracy Baseline</div>
-            <div id="metric-accuracy-val" class="mini-metric-val" style="color:#16A34A;">60-70%</div>
-          </div>
-          <div class="mini-metric-box">
-            <div class="mini-metric-label">Hallucination Risk</div>
-            <div id="metric-risk-val" class="mini-metric-val" style="color:#D97706;">Moderate</div>
+            <div class="form-group">
+              <label class="form-label">Input Data</label>
+              <div id="inspector-input-box" class="io-chip-box">...</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Internal Process (Algorithm)</label>
+              <div id="inspector-mechanics-text" style="font-size:0.8rem; color:#334155; line-height:1.5;">...</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Output Data</label>
+              <div id="inspector-output-box" class="io-chip-box">...</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Watch Out For (Pitfalls)</label>
+              <div id="inspector-pitfalls-text" style="font-size:0.8rem; color:#DC2626; line-height:1.5;">...</div>
+            </div>
           </div>
         </div>
+
+        <!-- Accordion 3: GraphState Memory (TypedDict) -->
+        <div class="accordion-section">
+          <div class="accordion-header">
+            <span>GraphState Memory</span>
+            <span>▾</span>
+          </div>
+          <div class="accordion-body">
+            <div id="inspector-json-viewer" class="io-chip-box" style="max-height:220px; overflow-y:auto; line-height:1.6;">
+              // Loading state variables...
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion 4: LangGraph Python Code -->
+        <div class="accordion-section">
+          <div class="accordion-header">
+            <span>LangGraph Node Code</span>
+            <span>▾</span>
+          </div>
+          <div class="accordion-body" style="padding:0;">
+            <div class="inspector-code-box">
+              <div class="inspector-code-header">
+                <span>python (langgraph)</span>
+                <button id="btn-copy-snippet" class="code-copy-btn" style="background:#334155; border:none; color:#fff; padding:2px 6px; border-radius:4px; cursor:pointer;">Copy</button>
+              </div>
+              <pre id="inspector-code-snippet" class="inspector-code-body"># Loading node implementation...</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion 5: Architecture Overview & Trade-offs -->
+        <div class="accordion-section">
+          <div class="accordion-header">
+            <span>Pipeline Specs & Trade-offs</span>
+            <span>▾</span>
+          </div>
+          <div class="accordion-body">
+            <div id="inspector-arch-desc" style="font-size:0.8rem; color:#475569; line-height:1.5;">...</div>
+            
+            <div style="margin-top:4px;">
+              <div style="font-size:0.72rem; font-weight:700; color:#16A34A; text-transform:uppercase; margin-bottom:4px;">Key Advantages</div>
+              <ul id="inspector-pros-list" style="padding-left:14px; margin:0; font-size:0.78rem; color:#334155; line-height:1.5;"></ul>
+            </div>
+
+            <div style="margin-top:4px;">
+              <div style="font-size:0.72rem; font-weight:700; color:#DC2626; text-transform:uppercase; margin-bottom:4px;">Trade-offs</div>
+              <ul id="inspector-cons-list" style="padding-left:14px; margin:0; font-size:0.78rem; color:#334155; line-height:1.5;"></ul>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
-  </main>
+    </aside>
+
+  </div>
 
   <script type="module">
     import { RAG_ARCHITECTURES } from '/static/js/visualizations/ragData.js';
     import { RagGraphVisualizer } from '/static/js/visualizations/ragGraphVisualizer.js';
 
-    // State
+    // Studio State
     let currentArchKey = "simple_rag";
     let currentStepIndex = 0;
     let isPlaying = false;
     let playbackSpeed = 1.0;
     let playTimer = null;
 
-    // Visualizer instance
+    // Canvas visualizer instance
     const canvasContainer = document.getElementById("rag-canvas-container");
     const visualizer = new RagGraphVisualizer(canvasContainer, (nodeId) => {
       const arch = RAG_ARCHITECTURES[currentArchKey];
@@ -1038,49 +914,58 @@
       currentArchKey = archKey;
       currentStepIndex = 0;
 
-      // Update Switcher Buttons
-      document.querySelectorAll(".arch-tab-btn").forEach(btn => {
-        btn.classList.remove("active");
-        if (btn.getAttribute("data-arch") === archKey) {
-          btn.classList.add("active");
+      // Update Header Dropdown
+      const dropdown = document.getElementById("header-arch-select");
+      if (dropdown) dropdown.value = archKey;
+
+      // Update Left Sidebar Nav items
+      document.querySelectorAll(".arch-nav-item").forEach(item => {
+        item.classList.remove("active");
+        if (item.getAttribute("data-arch") === archKey) {
+          item.classList.add("active");
         }
       });
 
       const arch = getArch();
 
-      // Update Header Topology
-      const topolText = document.getElementById("header-topology-text");
-      if (topolText) {
-        topolText.textContent = arch.topology.split('(')[0].trim();
-      }
-
-      // Update Overview Card
-      document.getElementById("arch-overview-title").textContent = arch.name;
-      document.getElementById("arch-overview-desc").textContent = arch.description;
-
-      const prosList = document.getElementById("arch-pros-list");
-      prosList.innerHTML = arch.pros.map(p => `<li>${p}</li>`).join('');
-
-      const consList = document.getElementById("arch-cons-list");
-      consList.innerHTML = arch.cons.map(c => `<li>${c}</li>`).join('');
-
-      // Update Complexity Metrics Strip
-      document.getElementById("metric-stages-val").textContent = `${arch.summaryMetrics.stages} Nodes`;
-      document.getElementById("metric-latency-val").textContent = arch.summaryMetrics.latency;
-      document.getElementById("metric-accuracy-val").textContent = arch.summaryMetrics.accuracy;
-      document.getElementById("metric-risk-val").textContent = arch.summaryMetrics.hallucinationRisk;
-
-      // Highlight row in comparison table
-      document.querySelectorAll(".matrix-table tbody tr").forEach(tr => tr.classList.remove("active-arch-row"));
-      const matchRow = document.getElementById(`row-${archKey}`);
-      if (matchRow) matchRow.classList.add("active-arch-row");
+      // Render Left Sidebar Pipeline Nodes List (Image 1 Style)
+      renderPipelineNodesList(arch);
 
       // Mount into Visualizer
       visualizer.setArchitecture(arch);
       goToStep(0);
     }
 
-    // Go to specific step
+    // Render Left Sidebar Pipeline Nodes List
+    function renderPipelineNodesList(arch) {
+      const listContainer = document.getElementById("pipeline-nodes-list");
+      const headerTitle = document.getElementById("pipeline-nodes-header");
+      if (headerTitle) headerTitle.textContent = `${arch.nodes.length} Pipeline Nodes`;
+
+      listContainer.innerHTML = arch.nodes.map((node, idx) => `
+        <div class="node-comp-card ${idx === currentStepIndex ? 'active' : ''}" data-node-id="${node.id}" data-node-idx="${idx}">
+          <div class="node-comp-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              ${visualizer.getIconSvg(node.icon)}
+            </svg>
+          </div>
+          <div class="node-comp-info">
+            <div class="node-comp-title">${node.label}</div>
+            <div class="node-comp-sub">${node.role} · Stage ${idx + 1}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Click listener to select node from sidebar
+      listContainer.querySelectorAll(".node-comp-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const idx = parseInt(card.getAttribute("data-node-idx"), 10);
+          goToStep(idx);
+        });
+      });
+    }
+
+    // Step Execution
     function goToStep(idx) {
       const arch = getArch();
       if (idx < 0) idx = 0;
@@ -1091,75 +976,71 @@
       document.getElementById("counter-current").textContent = currentStepIndex + 1;
       document.getElementById("counter-total").textContent = arch.steps.length;
 
-      // Update Visualizer
+      // Update Sidebar Node Card active class
+      document.querySelectorAll(".node-comp-card").forEach((card, i) => {
+        card.classList.toggle("active", i === currentStepIndex);
+      });
+
+      // Update Canvas
       visualizer.setStep(currentStepIndex);
 
-      // Update Step Deep Dive Tab
-      renderStepDetails();
-
-      // Update State Inspector Tab
-      renderStateJson();
+      // Update Right Inspector Panel (Properties)
+      renderInspectorProperties();
     }
 
-    // Render Step Details Tab
-    function renderStepDetails() {
+    // Render Right Inspector Panel (Matching Image 1 Properties)
+    function renderInspectorProperties() {
       const arch = getArch();
       const step = arch.steps[currentStepIndex];
       if (!step) return;
 
-      document.getElementById("detail-step-title").textContent = step.title;
-      document.getElementById("detail-action-tag").textContent = step.action;
-      document.getElementById("detail-stage-badge").textContent = `STAGE ${currentStepIndex + 1} OF ${arch.steps.length}`;
+      const activeNode = arch.nodes.find(n => n.id === step.activeNodeId) || arch.nodes[currentStepIndex] || {};
 
-      // Plain English definition
-      const plainDefEl = document.getElementById("detail-simple-definition");
-      if (plainDefEl) {
-        plainDefEl.textContent = step.simpleDefinition || step.description;
+      // Header
+      document.getElementById("inspector-node-title").textContent = activeNode.label || step.title;
+      document.getElementById("inspector-node-type").textContent = `${activeNode.role || 'STAGE'} · Step ${currentStepIndex + 1} of ${arch.steps.length}`;
+
+      // Update Icon
+      const iconBox = document.getElementById("inspector-node-icon");
+      if (iconBox && activeNode.icon) {
+        iconBox.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            ${visualizer.getIconSvg(activeNode.icon)}
+          </svg>
+        `;
       }
 
-      const dd = step.deepDive;
-      document.getElementById("detail-role-text").textContent = dd.why ? dd.why : dd.role;
-      document.getElementById("detail-input-text").textContent = dd.inputs;
-      document.getElementById("detail-mechanics-text").textContent = dd.mechanics;
-      
-      const outEl = document.getElementById("detail-output-text");
-      if (outEl) outEl.textContent = dd.output || "Verified output for downstream nodes.";
+      // General Info Fields
+      document.getElementById("inspector-field-type").value = activeNode.role || step.action;
+      document.getElementById("inspector-field-title").value = activeNode.label || step.title;
+      document.getElementById("inspector-field-desc").value = step.simpleDefinition || step.description;
 
-      document.getElementById("detail-pitfalls-text").textContent = dd.pitfalls;
-      document.getElementById("detail-code-content").textContent = dd.langgraphCode;
+      // Execution Details & I/O
+      const dd = step.deepDive || {};
+      document.getElementById("inspector-role-text").textContent = dd.why || dd.role || step.description;
+      document.getElementById("inspector-input-box").textContent = dd.inputs || "Standard GraphState context";
+      document.getElementById("inspector-mechanics-text").textContent = dd.mechanics || "Executes internal state logic";
+      document.getElementById("inspector-output-box").textContent = dd.output || "Verified state output";
+      document.getElementById("inspector-pitfalls-text").textContent = dd.pitfalls || "None reported";
+
+      // GraphState JSON viewer
+      const stateObj = step.state || {};
+      const formattedJson = Object.entries(stateObj).map(([k, v]) => {
+        let valStr = typeof v === 'string' ? `"${v}"` : JSON.stringify(v);
+        return `"${k}": ${valStr}`;
+      }).join(',\n  ');
+      document.getElementById("inspector-json-viewer").textContent = `{\n  ${formattedJson}\n}`;
+
+      // Python snippet
+      document.getElementById("inspector-code-snippet").textContent = dd.langgraphCode || "# Python node code";
+
+      // Architecture Specs
+      document.getElementById("inspector-arch-desc").textContent = arch.description;
+      document.getElementById("inspector-pros-list").innerHTML = arch.pros.map(p => `<li>${p}</li>`).join('');
+      document.getElementById("inspector-cons-list").innerHTML = arch.cons.map(c => `<li>${c}</li>`).join('');
     }
 
-    // Render State JSON Tab
-    function renderStateJson() {
-      const arch = getArch();
-      const step = arch.steps[currentStepIndex];
-      if (!step) return;
-
-      const jsonViewer = document.getElementById("json-inspector-view");
-      const stateObj = step.state;
-
-      // Format JSON with syntax styling
-      const formatted = Object.entries(stateObj).map(([k, v]) => {
-        let valHtml;
-        if (typeof v === 'string') valHtml = `<span class="json-str">"${escapeHtml(v)}"</span>`;
-        else if (typeof v === 'number') valHtml = `<span class="json-num">${v}</span>`;
-        else if (typeof v === 'boolean') valHtml = `<span class="json-bool">${v}</span>`;
-        else valHtml = `<span class="json-str">${escapeHtml(JSON.stringify(v))}</span>`;
-
-        return `  <span class="json-key">"${k}"</span>: ${valHtml}`;
-      }).join(',\n');
-
-      jsonViewer.innerHTML = `<pre style="margin:0;">{\n${formatted}\n}</pre>`;
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    // Play / Pause Flow
+    // Playback Controls
     function togglePlayback() {
       if (isPlaying) {
         pausePlayback();
@@ -1224,37 +1105,51 @@
       playbackSpeed = parseFloat(e.target.value);
     });
 
-    // Architecture tab selector buttons (All 8 Architectures)
-    document.querySelectorAll(".arch-tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const archKey = btn.getAttribute("data-arch");
+    // Architecture dropdown
+    document.getElementById("header-arch-select").addEventListener("change", (e) => {
+      switchArchitecture(e.target.value);
+    });
+
+    // Architecture sidebar list items
+    document.querySelectorAll(".arch-nav-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const archKey = item.getAttribute("data-arch");
         if (archKey) switchArchitecture(archKey);
       });
     });
 
     // Copy code button
-    document.getElementById("btn-copy-code").addEventListener("click", () => {
-      const code = document.getElementById("detail-code-content").textContent;
+    document.getElementById("btn-copy-snippet").addEventListener("click", () => {
+      const code = document.getElementById("inspector-code-snippet").textContent;
       navigator.clipboard.writeText(code).then(() => {
-        const btn = document.getElementById("btn-copy-code");
+        const btn = document.getElementById("btn-copy-snippet");
         btn.textContent = "Copied! ✓";
-        setTimeout(() => { btn.textContent = "Copy Snippet"; }, 2000);
+        setTimeout(() => { btn.textContent = "Copy"; }, 2000);
       });
     });
 
-    // Right Inspector Tabs
-    const tabButtons = document.querySelectorAll(".inspector-tab-btn");
-    tabButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        tabButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        const tabKey = btn.getAttribute("data-tab");
-        document.getElementById("tab-content-step").style.display = (tabKey === "step" ? "block" : "none");
-        document.getElementById("tab-content-state").style.display = (tabKey === "state" ? "block" : "none");
-        document.getElementById("tab-content-comparison").style.display = (tabKey === "comparison" ? "block" : "none");
+    // Toggle Left Sidebar
+    const collapseBtn = document.getElementById("btn-collapse-sidebar");
+    const leftSidebar = document.querySelector(".studio-sidebar-left");
+    if (collapseBtn && leftSidebar) {
+      collapseBtn.addEventListener("click", () => {
+        const isHidden = leftSidebar.style.display === "none";
+        leftSidebar.style.display = isHidden ? "flex" : "none";
+        collapseBtn.textContent = isHidden ? "◀" : "▶";
       });
-    });
+    }
+
+    // Node Search Filtering
+    const searchInput = document.getElementById("node-search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll(".node-comp-card").forEach(card => {
+          const title = card.querySelector(".node-comp-title").textContent.toLowerCase();
+          card.style.display = title.includes(query) ? "flex" : "none";
+        });
+      });
+    }
 
     // Keyboard Shortcuts (Space for Play/Pause, Arrows for Steps, Keys 1-8 for Architectures)
     window.addEventListener("keydown", (e) => {
@@ -1282,7 +1177,7 @@
       }
     });
 
-    // Initial architecture from URL param or default
+    // Initial architecture
     const urlParams = new URLSearchParams(window.location.search);
     const requestedArch = urlParams.get("arch");
     if (requestedArch && RAG_ARCHITECTURES[requestedArch]) {
