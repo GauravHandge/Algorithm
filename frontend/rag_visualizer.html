@@ -3,432 +3,311 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Workflow Studio - AlgoVerse</title>
-  <link rel="stylesheet" href="/static/css/style.css?v=20261104" />
+  <title>RAG & LangGraph Studio - AlgoVerse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Full-Screen Workflow Application Studio Layout (Matching Images 1 & 2) */
+    /* AlgoVerse AI Studio — Pixel-Perfect Light SaaS Design (Matching Reference Image 2) */
     :root {
-      --bg-studio-main: #FFFFFF;
-      --bg-studio-workspace: #F8FAFC;
-      --bg-studio-panel: #FFFFFF;
-      --text-studio-primary: #111827;
-      --text-studio-secondary: #64748B;
-      --border-studio: #E5E7EB;
-      --border-studio-subtle: #F1F5F9;
+      --bg-body: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F8FAFC;
+      --border-color: #E5E7EB;
+      --border-subtle: #F1F5F9;
+      --text-main: #111827;
+      --text-secondary: #64748B;
       --primary-blue: #2563EB;
       --primary-blue-hover: #1D4ED8;
       --primary-blue-subtle: #EFF6FF;
       --color-success: #16A34A;
-      --color-error: #DC2626;
-      --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
     }
 
     * {
       box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
+    }
+
+    body {
+      background: var(--bg-body);
+      color: var(--text-main);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-studio-main);
-      color: var(--text-studio-primary);
+      height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 1. TOP NAVIGATION / APP BAR (Images 1 & 2) */
-    .studio-app-bar {
-      height: 54px;
-      background: #FFFFFF;
-      border-bottom: 1px solid var(--border-studio);
+    /* 1. TOP NAVBAR (Matching Image 2) */
+    .top-navbar {
+      height: 56px;
+      min-height: 56px;
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1rem;
-      z-index: 20;
+      padding: 0 1.25rem;
+      background: #FFFFFF;
+      z-index: 30;
     }
 
-    .app-bar-left {
+    .navbar-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .studio-brand-logo {
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 8px;
       text-decoration: none;
-      color: var(--text-studio-primary);
-      font-weight: 700;
-      font-size: 0.95rem;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.1rem;
     }
 
-    .studio-brand-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
-      background: #EFF6FF;
-      border: 1px solid #BFDBFE;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .brand-icon-a {
+      width: 24px;
+      height: 24px;
       color: var(--primary-blue);
     }
 
-    .studio-breadcrumb {
+    .studio-pill-tag {
+      background: var(--primary-blue-subtle);
+      color: var(--primary-blue);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #BFDBFE;
+    }
+
+    .breadcrumb-trail {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.82rem;
-      color: var(--text-studio-secondary);
-      border-left: 1px solid var(--border-studio);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border-left: 1px solid var(--border-color);
       padding-left: 12px;
     }
 
-    .workflow-selector-dropdown {
-      background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      border-radius: 6px;
-      padding: 0.3rem 0.65rem;
-      font-size: 0.82rem;
+    .breadcrumb-trail strong {
+      color: var(--text-main);
       font-weight: 600;
-      color: var(--text-studio-primary);
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      outline: none;
     }
 
-    .workflow-selector-dropdown:hover {
-      border-color: #CBD5E1;
-      background: #F8FAFC;
-    }
-
-    .connection-status-pill {
+    .navbar-right {
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.76rem;
+      gap: 10px;
+    }
+
+    .status-connected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--color-success);
       background: #F0FDF4;
-      padding: 2px 8px;
-      border-radius: 9999px;
       border: 1px solid #BBF7D0;
+      padding: 3px 10px;
+      border-radius: 9999px;
     }
 
-    .connection-status-pill .dot {
-      width: 6px;
-      height: 6px;
+    .status-connected-pill .dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--color-success);
     }
 
-    .app-bar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-studio-action {
+    .btn-nav-icon {
       background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      color: var(--text-studio-primary);
-      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 9px;
       border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 5px;
+      text-decoration: none;
       transition: all 0.15s ease;
-      font-family: 'Inter', sans-serif;
     }
 
-    .btn-studio-action:hover {
-      background: #F8FAFC;
-      border-color: #CBD5E1;
+    .btn-nav-icon:hover {
+      background: var(--bg-subtle);
+      color: var(--text-main);
     }
 
-    .btn-studio-primary {
-      background: var(--primary-blue);
-      border-color: var(--primary-blue);
-      color: #FFFFFF;
-    }
-
-    .btn-studio-primary:hover {
-      background: var(--primary-blue-hover);
-    }
-
-    /* 2. THREE-PANEL FULL-HEIGHT STUDIO BODY */
-    .studio-main-body {
+    /* 2. APP MAIN LAYOUT (3 Columns matching Image 2) */
+    .app-main-layout {
       display: flex;
-      height: calc(100vh - 54px);
-      width: 100vw;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* 3. LEFT PANEL: NODES LIBRARY & COMPONENTS (Image 1 & 2) */
-    .studio-sidebar-left {
-      width: 270px;
-      min-width: 270px;
-      background: #FFFFFF;
-      border-right: 1px solid var(--border-studio);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-      z-index: 10;
-    }
-
-    .sidebar-header {
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid var(--border-studio);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .sidebar-header h2 {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-studio-primary);
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sidebar-collapse-btn {
-      background: transparent;
-      border: 1px solid var(--border-studio);
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--text-studio-secondary);
-      font-size: 11px;
-    }
-
-    .sidebar-search-box {
-      padding: 0.65rem 0.85rem;
-      border-bottom: 1px solid var(--border-studio);
-      background: #F8FAFC;
-    }
-
-    .sidebar-search-input {
-      width: 100%;
-      background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      border-radius: 6px;
-      padding: 0.35rem 0.6rem;
-      font-size: 0.78rem;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-      color: var(--text-studio-primary);
-    }
-
-    .sidebar-search-input:focus {
-      border-color: var(--primary-blue);
-    }
-
-    .sidebar-content-scroll {
       flex: 1;
-      overflow-y: auto;
-      padding: 0.75rem;
+      height: calc(100vh - 56px);
+      overflow: hidden;
+    }
+
+    /* 3. LEFT SIDEBAR: ARCHITECTURES & NODES (Image 2) */
+    .left-sidebar {
+      width: 230px;
+      min-width: 230px;
+      border-right: 1px solid var(--border-color);
+      background: #FFFFFF;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      overflow-y: auto;
+      padding: 1rem 0.65rem;
+      gap: 1.25rem;
     }
 
     .sidebar-section-title {
-      font-size: 0.68rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      color: var(--text-studio-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 0.4rem;
-      padding-left: 0.25rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 0.5rem;
+      padding-left: 0.5rem;
     }
 
-    /* Architecture List Items */
-    .arch-nav-list {
+    .sidebar-list-nav {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
 
-    .arch-nav-item {
-      padding: 0.5rem 0.65rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-studio-secondary);
-      background: transparent;
-      border: 1px solid transparent;
-      cursor: pointer;
+    .sidebar-nav-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.15s ease;
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #374151;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
       text-align: left;
+      transition: all 0.15s ease;
+      text-decoration: none;
     }
 
-    .arch-nav-item:hover {
+    .sidebar-nav-item:hover {
       background: #F8FAFC;
-      color: var(--text-studio-primary);
+      color: var(--text-main);
     }
 
-    .arch-nav-item.active {
+    .sidebar-nav-item.active {
       background: var(--primary-blue-subtle);
       color: var(--primary-blue);
       border-color: #BFDBFE;
       font-weight: 700;
     }
 
-    .arch-nav-item .key-pill {
-      font-size: 0.68rem;
-      font-family: 'JetBrains Mono', monospace;
+    .sidebar-nav-item .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-nav-item .chevron {
+      font-size: 0.75rem;
       color: #94A3B8;
-      background: #F1F5F9;
-      padding: 1px 5px;
-      border-radius: 4px;
     }
 
-    /* Pipeline Nodes Cards (Image 1 Style) */
-    .node-component-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .node-comp-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      border-radius: 8px;
-      padding: 0.55rem 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-    }
-
-    .node-comp-card:hover {
-      border-color: #CBD5E1;
-      transform: translateX(2px);
-    }
-
-    .node-comp-card.active {
-      border-color: var(--primary-blue);
-      background: #F8FAFC;
-      box-shadow: 0 0 0 1px var(--primary-blue);
-    }
-
-    .node-comp-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .sidebar-nav-item.active .chevron {
       color: var(--primary-blue);
     }
 
-    .node-comp-info {
-      flex: 1;
-      min-width: 0;
+    /* Pipeline Nodes Sub-list */
+    .pipeline-nodes-sublist {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .node-comp-title {
-      font-size: 0.78rem;
+    .pipeline-sub-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #374151;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .pipeline-sub-item:hover {
+      background: #F8FAFC;
+    }
+
+    .pipeline-sub-item.active {
+      background: var(--primary-blue-subtle);
+      color: var(--primary-blue);
+      border-color: #BFDBFE;
       font-weight: 700;
-      color: var(--text-studio-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .node-comp-sub {
-      font-size: 0.68rem;
-      color: var(--text-studio-secondary);
+    .pipeline-sub-item .num-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #F1F5F9;
+      color: #64748B;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
       font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
     }
 
-    .sidebar-footer {
-      padding: 0.75rem 1rem;
-      border-top: 1px solid var(--border-studio);
-      font-size: 0.75rem;
-      color: var(--text-studio-secondary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #FFFFFF;
+    .pipeline-sub-item.active .num-badge {
+      background: var(--primary-blue);
+      color: #FFFFFF;
     }
 
-    /* 4. CENTER WORKSPACE: MAIN CANVAS (Image 1 & 2) */
-    .studio-canvas-center {
+    /* 4. CENTER WORKSPACE (Matching Image 2) */
+    .center-workspace {
       flex: 1;
-      height: 100%;
-      background: var(--bg-studio-workspace);
-      position: relative;
-      overflow: hidden;
+      overflow-y: auto;
+      padding: 1.25rem 1.5rem;
+      background: #FFFFFF;
       display: flex;
       flex-direction: column;
+      gap: 1.25rem;
     }
 
-    #rag-canvas-container {
-      width: 100%;
-      height: 100%;
-      flex: 1;
-    }
-
-    /* 5. RIGHT PANEL: WORKFLOW INSPECTOR / PROPERTIES (Image 1) */
-    .studio-inspector-right {
-      width: 340px;
-      min-width: 340px;
-      background: #FFFFFF;
-      border-left: 1px solid var(--border-studio);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-      z-index: 10;
-    }
-
-    .inspector-header {
-      padding: 0.85rem 1.15rem;
-      border-bottom: 1px solid var(--border-studio);
+    /* Page Header */
+    .workspace-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: #FFFFFF;
+      gap: 12px;
     }
 
-    .inspector-header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .inspector-node-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 7px;
-      background: #EFF6FF;
+    .header-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: var(--primary-blue-subtle);
       border: 1px solid #BFDBFE;
       display: flex;
       align-items: center;
@@ -436,473 +315,1091 @@
       color: var(--primary-blue);
     }
 
-    .inspector-node-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-studio-primary);
-      margin: 0;
+    .workspace-header h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 2px;
     }
 
-    .inspector-node-type {
-      font-size: 0.68rem;
-      color: var(--text-studio-secondary);
+    .workspace-header p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    /* Horizontal Architecture Pills (Image 2) */
+    .arch-pill-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .arch-pill-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      color: var(--text-main);
+    }
+
+    .arch-pill-btn:hover {
+      background: var(--bg-subtle);
+      border-color: #CBD5E1;
+    }
+
+    .arch-pill-btn.active {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #FFFFFF;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Controls Bar (Image 2) */
+    .controls-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .controls-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-control {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s ease;
+    }
+
+    .btn-control:hover {
+      background: var(--bg-subtle);
+      border-color: #CBD5E1;
+    }
+
+    .btn-control.primary {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #FFFFFF;
+    }
+
+    .btn-control.primary:hover {
+      background: var(--primary-blue-hover);
+    }
+
+    .controls-meta-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stage-indicator-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+    }
+
+    .stage-indicator-box strong {
+      color: var(--primary-blue);
+      font-weight: 700;
+    }
+
+    .speed-dropdown {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* 5. CANVAS WORKFLOW CARD (Pure White Card matching Image 2) */
+    .canvas-workflow-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .canvas-card-top-bar {
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+    }
+
+    .pill-green-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #F0FDF4;
+      color: var(--color-success);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      border: 1px solid #BBF7D0;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .topology-desc-text {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Canvas Nodes Horizontal Container (Image 2) */
+    .canvas-nodes-viewport {
+      padding: 2.25rem 1.5rem;
+      overflow-x: auto;
+      display: flex;
+      align-items: center;
+      min-height: 220px;
+      background: #FFFFFF;
+      scroll-behavior: smooth;
+    }
+
+    .canvas-nodes-viewport::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .canvas-nodes-viewport::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+
+    .canvas-nodes-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 0 auto;
+      flex-wrap: nowrap;
+      min-width: max-content;
+      padding: 0 0.5rem;
+    }
+
+    /* Node Card (Pure White with Crisp Gray Border matching Image 2) */
+    .workflow-node-box {
+      width: 124px;
+      min-width: 124px;
+      flex-shrink: 0;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.85rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .workflow-node-box:hover {
+      border-color: #CBD5E1;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .workflow-node-box.active {
+      border: 2px solid var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .workflow-node-icon {
+      width: 28px;
+      height: 28px;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .workflow-node-box.active .workflow-node-icon {
+      color: var(--primary-blue);
+    }
+
+    .workflow-node-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .workflow-node-status {
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-secondary);
+    }
+
+    .workflow-node-box.active .workflow-node-status {
+      color: var(--primary-blue);
+    }
+
+    .workflow-node-status .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #94A3B8;
+    }
+
+    .workflow-node-box.active .workflow-node-status .status-dot {
+      background: var(--primary-blue);
+    }
+
+    .workflow-node-box.completed .workflow-node-status .status-dot {
+      background: var(--color-success);
+    }
+
+    /* Connecting Arrow */
+    .node-arrow-connector {
+      width: 34px;
+      min-width: 34px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94A3B8;
+      font-size: 1.15rem;
+      font-weight: 300;
+      user-select: none;
+    }
+
+    /* Canvas Legend at Bottom */
+    .canvas-legend-bar {
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* 6. METRICS STRIP (5 Cards in a Row matching Image 2) */
+    .metrics-5-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 1100px) {
+      .metrics-5-strip {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .metric-card-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .metric-card-icon {
+      font-size: 1.25rem;
+      color: var(--primary-blue);
+    }
+
+    .metric-card-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-card-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .metric-card-val {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* 7. BOTTOM 3-CARD SUMMARY GRID (Matching Image 2) */
+    .summary-3-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 1000px) {
+      .summary-3-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .summary-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.15rem;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .summary-card-header {
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .summary-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: #374151;
+      line-height: 1.45;
+    }
+
+    .bullet-list li {
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .bullet-list.pros li::before {
+      content: "•";
+      color: var(--color-success);
+      font-size: 1.2rem;
+      position: absolute;
+      left: 0;
+      top: -3px;
+    }
+
+    .bullet-list.cons li::before {
+      content: "•";
+      color: var(--color-danger);
+      font-size: 1.2rem;
+      position: absolute;
+      left: 0;
+      top: -3px;
+    }
+
+    /* 8. RIGHT INSPECTOR PANEL (Image 2) */
+    .right-inspector {
+      width: 330px;
+      min-width: 330px;
+      border-left: 1px solid var(--border-color);
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 1.15rem;
+      gap: 1rem;
+    }
+
+    /* Top Tabs (Step Deep Dive | GraphState | Comparison) */
+    .inspector-top-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      gap: 1.25rem;
+      padding-bottom: 0.65rem;
+    }
+
+    .inspector-tab-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding-bottom: 4px;
+      position: relative;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .inspector-tab-link:hover {
+      color: var(--text-main);
+    }
+
+    .inspector-tab-link.active {
+      color: var(--primary-blue);
+      font-weight: 700;
+    }
+
+    .inspector-tab-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: -11px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary-blue);
+      border-radius: 2px;
+    }
+
+    /* Stage Badge & Action Header */
+    .stage-action-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.25rem;
+    }
+
+    .stage-blue-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary-blue);
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .inspector-content-scroll {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.15rem;
+    .action-subtle-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      background: var(--primary-blue-subtle);
+      border: 1px solid #BFDBFE;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Collapsible Accordion Sections (Image 1 Style) */
-    .accordion-section {
-      border: 1px solid var(--border-studio);
+    /* Step Title in Inspector */
+    .inspector-step-title-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .inspector-step-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--primary-blue-subtle);
+      border: 1px solid #BFDBFE;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .inspector-step-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    /* Accordion Sections (Matching Image 2) */
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       background: #FFFFFF;
       overflow: hidden;
     }
 
-    .accordion-header {
+    .accordion-trigger {
       padding: 0.65rem 0.85rem;
-      background: #F8FAFC;
-      border-bottom: 1px solid var(--border-studio);
+      background: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-studio-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .accordion-body {
-      padding: 0.85rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
       font-size: 0.82rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .form-label {
-      font-size: 0.72rem;
       font-weight: 600;
-      color: var(--text-studio-secondary);
-    }
-
-    .form-input, .form-select, .form-textarea {
-      background: #FFFFFF;
-      border: 1px solid var(--border-studio);
-      border-radius: 6px;
-      padding: 0.4rem 0.65rem;
-      font-size: 0.8rem;
-      font-family: 'Inter', sans-serif;
-      color: var(--text-studio-primary);
-      outline: none;
+      color: var(--text-main);
+      border: none;
       width: 100%;
+      text-align: left;
     }
 
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--primary-blue);
+    .accordion-trigger:hover {
+      background: var(--bg-subtle);
     }
 
-    .form-textarea {
-      resize: vertical;
-      min-height: 60px;
-      line-height: 1.5;
-    }
-
-    /* Structured I/O Badges */
-    .io-chip-box {
-      background: #F8FAFC;
-      border: 1px solid var(--border-studio);
-      border-radius: 6px;
-      padding: 0.5rem 0.7rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.74rem;
-      color: #334155;
-      line-height: 1.45;
-    }
-
-    /* Python Code Box */
-    .inspector-code-box {
-      background: #0F172A;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #334155;
-    }
-
-    .inspector-code-header {
-      background: #1E293B;
-      padding: 0.35rem 0.65rem;
+    .accordion-trigger .left-title {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      color: #94A3B8;
-      font-family: 'JetBrains Mono', monospace;
+      gap: 6px;
     }
 
-    .inspector-code-body {
+    .accordion-panel {
+      padding: 0.75rem 0.85rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+      color: #374151;
+      line-height: 1.55;
+      background: #FFFFFF;
+    }
+
+    /* Code Snippet Box inside Accordion */
+    .langgraph-code-pre {
+      background: #0F172A;
+      color: #E2E8F0;
       padding: 0.65rem;
-      margin: 0;
+      border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
-      line-height: 1.45;
-      color: #E2E8F0;
-      white-space: pre-wrap;
       overflow-x: auto;
       max-height: 180px;
+      line-height: 1.45;
+      margin-top: 6px;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 1024px) {
-      .studio-sidebar-left {
-        width: 240px;
-        min-width: 240px;
-      }
-      .studio-inspector-right {
-        width: 300px;
-        min-width: 300px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .studio-main-body {
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .app-main-layout {
         flex-direction: column;
         overflow-y: auto;
       }
-      .studio-sidebar-left, .studio-inspector-right {
+      .left-sidebar, .right-inspector {
         width: 100%;
         min-width: 100%;
         height: auto;
-      }
-      .studio-canvas-center {
-        min-height: 480px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. TOP APP BAR (Images 1 & 2) -->
-  <header class="studio-app-bar">
-    <div class="app-bar-left">
-      <a href="/static/index.html" class="studio-brand-logo">
-        <div class="studio-brand-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-        </div>
-        <span>AlgoVerse Studio</span>
+  <!-- 1. TOP NAVBAR (Matching Image 2) -->
+  <header class="top-navbar">
+    <div class="navbar-left">
+      <a href="/static/index.html" class="brand-group">
+        <svg class="brand-icon-a" viewBox="0 0 32 32" fill="none">
+          <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="url(#blueGrad)" />
+          <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#ffffff" opacity="0.9" />
+          <defs>
+            <linearGradient id="blueGrad" x1="3" y1="2" x2="29" y2="28" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#2563EB" />
+              <stop offset="1" stop-color="#38BDF8" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>AlgoVerse</span>
       </a>
+      <span class="studio-pill-tag">Studio</span>
 
-      <div class="studio-breadcrumb">
-        <span>Workflows</span>
-        <span>/</span>
-        <select id="header-arch-select" class="workflow-selector-dropdown">
-          <option value="simple_rag" selected>Simple RAG (Naive Pipeline)</option>
-          <option value="advanced_rag">Advanced RAG (Modular Multi-Stage)</option>
-          <option value="self_rag">Self-RAG (LangGraph StateGraph)</option>
-          <option value="crag">CRAG (Corrective RAG)</option>
-          <option value="agentic_rag">Agentic RAG (Autonomous Multi-Tool)</option>
-          <option value="graph_rag">Graph RAG (Microsoft GraphRAG)</option>
-          <option value="multimodal_rag">Multimodal RAG (ColPali VLM)</option>
-          <option value="vectorless_rag">Vectorless RAG (Hierarchical AST)</option>
-        </select>
+      <div class="breadcrumb-trail">
+        <span>AI Architectures</span>
+        <span>&gt;</span>
+        <strong>RAG &amp; LangGraph Studio</strong>
       </div>
+    </div>
 
-      <div class="connection-status-pill">
+    <div class="navbar-right">
+      <div class="status-connected-pill">
         <span class="dot"></span>
         <span>Connected</span>
       </div>
-    </div>
 
-    <div class="app-bar-right">
-      <!-- Execution Toolbar Buttons -->
-      <button id="btn-play-toggle" class="btn-studio-action btn-studio-primary">
-        <span id="play-icon">▶</span> <span id="play-text">Play Flow</span>
-      </button>
-      <button id="btn-prev" class="btn-studio-action" title="Previous Step">⏮ Prev</button>
-      <button id="btn-next" class="btn-studio-action" title="Next Step">Next ⏭</button>
-      <button id="btn-reset" class="btn-studio-action" title="Reset Flow">↺ Reset</button>
-
-      <!-- Stage Counter Badge -->
-      <div style="font-size:0.78rem; font-family:'JetBrains Mono', monospace; background:#F8FAFC; border:1px solid #E5E7EB; padding:3px 8px; border-radius:6px; color:#64748B;">
-        Stage <strong id="counter-current" style="color:#2563EB;">1</strong> of <strong id="counter-total">7</strong>
-      </div>
-
-      <!-- Speed Dropdown -->
-      <select id="speed-select" class="form-select" style="width:auto; padding:0.3rem 0.5rem; font-size:0.78rem;">
-        <option value="0.5">0.5x</option>
-        <option value="1.0" selected>1.0x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2.0">2.0x</option>
-      </select>
-
-      <a href="/static/index.html" class="btn-studio-action" style="text-decoration:none;">
-        Exit Studio ↗
+      <a href="/static/index.html" class="btn-nav-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <span>Docs</span>
       </a>
+
+      <button class="btn-nav-icon" title="Bookmark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+      </button>
+
+      <button class="btn-nav-icon" title="Fullscreen">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+      </button>
+
+      <button class="btn-nav-icon" title="Settings">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
     </div>
   </header>
 
-  <!-- 2. MAIN 3-PANEL STUDIO BODY (Images 1 & 2) -->
-  <div class="studio-main-body">
+  <!-- 2. MAIN 3-PANEL LAYOUT (Matching Image 2) -->
+  <div class="app-main-layout">
 
-    <!-- LEFT PANEL: NODES LIBRARY & ARCHITECTURES -->
-    <aside class="studio-sidebar-left">
-      <div class="sidebar-header">
-        <h2>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-          </svg>
-          Nodes Library
-        </h2>
-        <button id="btn-collapse-sidebar" class="sidebar-collapse-btn" title="Toggle Sidebar">◀</button>
-      </div>
-
-      <div class="sidebar-search-box">
-        <input type="text" id="node-search-input" class="sidebar-search-input" placeholder="Search components & nodes..." />
-      </div>
-
-      <div class="sidebar-content-scroll">
-        <!-- Section: Architectures -->
-        <div>
-          <div class="sidebar-section-title">Pipelines & Paradigms (1-8)</div>
-          <div class="arch-nav-list">
-            <button class="arch-nav-item active" data-arch="simple_rag">
+    <!-- LEFT SIDEBAR: ARCHITECTURES & NODES -->
+    <aside class="left-sidebar">
+      <div>
+        <div class="sidebar-section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          <span>Architectures</span>
+        </div>
+        <div class="sidebar-list-nav">
+          <button class="sidebar-nav-item active" data-arch="simple_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
               <span>Simple RAG</span>
-              <span class="key-pill">1</span>
-            </button>
-            <button class="arch-nav-item" data-arch="advanced_rag">
-              <span>Advanced RAG</span>
-              <span class="key-pill">2</span>
-            </button>
-            <button class="arch-nav-item" data-arch="self_rag">
-              <span>Self-RAG</span>
-              <span class="key-pill">3</span>
-            </button>
-            <button class="arch-nav-item" data-arch="crag">
-              <span>CRAG</span>
-              <span class="key-pill">4</span>
-            </button>
-            <button class="arch-nav-item" data-arch="agentic_rag">
-              <span>Agentic RAG</span>
-              <span class="key-pill">5</span>
-            </button>
-            <button class="arch-nav-item" data-arch="graph_rag">
-              <span>Graph RAG</span>
-              <span class="key-pill">6</span>
-            </button>
-            <button class="arch-nav-item" data-arch="multimodal_rag">
-              <span>Multimodal RAG</span>
-              <span class="key-pill">7</span>
-            </button>
-            <button class="arch-nav-item" data-arch="vectorless_rag">
-              <span>Vectorless RAG</span>
-              <span class="key-pill">8</span>
-            </button>
-          </div>
-        </div>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
 
-        <!-- Section: Active Pipeline Nodes List (Image 1 Style) -->
-        <div>
-          <div class="sidebar-section-title" id="pipeline-nodes-header">Pipeline Nodes</div>
-          <div id="pipeline-nodes-list" class="node-component-cards">
-            <!-- Dynamically populated from active architecture's nodes -->
-          </div>
+          <button class="sidebar-nav-item" data-arch="advanced_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              <span>Advanced RAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-arch="self_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+              <span>Self-RAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-arch="crag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>CRAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-arch="agentic_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path></svg>
+              <span>Agentic RAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-arch="graph_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              <span>Graph RAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-arch="multimodal_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <span>Multimodal RAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-arch="vectorless_rag">
+            <div class="nav-left">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+              <span>Vectorless RAG</span>
+            </div>
+            <span class="chevron">&gt;</span>
+          </button>
         </div>
       </div>
 
-      <div class="sidebar-footer">
-        <span style="font-family:'JetBrains Mono', monospace; font-size:0.7rem;">Space = Play/Pause</span>
-        <span style="font-weight:600; color:#2563EB;">8 Paradigms</span>
+      <!-- Pipeline Nodes (Image 2) -->
+      <div>
+        <div class="sidebar-section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          <span id="pipeline-nodes-count-label">Pipeline Nodes (7)</span>
+        </div>
+        <div id="pipeline-nodes-sublist" class="pipeline-nodes-sublist">
+          <!-- Dynamically populated from active arch nodes -->
+        </div>
       </div>
     </aside>
 
-    <!-- CENTER CANVAS: MAIN WORKSPACE -->
-    <main class="studio-canvas-center">
-      <div id="rag-canvas-container">
-        <!-- Injected via RagGraphVisualizer -->
+    <!-- CENTER WORKSPACE: WORKFLOW CANVAS & METRICS (Image 2) -->
+    <main class="center-workspace">
+
+      <!-- Workspace Top Title -->
+      <div class="workspace-header">
+        <div class="header-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        </div>
+        <div>
+          <h1>RAG &amp; LangGraph Studio</h1>
+          <p>Explore, execute and understand modern AI architectures step by step.</p>
+        </div>
       </div>
+
+      <!-- Horizontal Architecture Pills Row (Image 2) -->
+      <div class="arch-pill-row">
+        <button class="arch-pill-btn active" data-arch="simple_rag">Simple RAG</button>
+        <button class="arch-pill-btn" data-arch="advanced_rag">Advanced RAG</button>
+        <button class="arch-pill-btn" data-arch="self_rag">Self-RAG</button>
+        <button class="arch-pill-btn" data-arch="crag">CRAG</button>
+        <button class="arch-pill-btn" data-arch="agentic_rag">Agentic RAG</button>
+        <button class="arch-pill-btn" data-arch="graph_rag">Graph RAG</button>
+        <button class="arch-pill-btn" data-arch="multimodal_rag">Multimodal RAG</button>
+        <button class="arch-pill-btn" data-arch="vectorless_rag">Vectorless RAG</button>
+      </div>
+
+      <!-- Execution Controls Strip (Image 2) -->
+      <div class="controls-strip">
+        <div class="controls-btn-group">
+          <button id="btn-play-flow" class="btn-control primary">
+            <span id="play-icon">▶</span> <span id="play-text">Play Flow</span>
+          </button>
+          <button id="btn-pause-flow" class="btn-control">⏸ Pause</button>
+          <button id="btn-prev-step" class="btn-control">⏮ Prev</button>
+          <button id="btn-next-step" class="btn-control">Next ⏭</button>
+          <button id="btn-reset-flow" class="btn-control">↺ Reset</button>
+        </div>
+
+        <div class="controls-meta-group">
+          <div class="stage-indicator-box">
+            <span>Stage: </span><strong id="stage-current-num">1</strong> / <span id="stage-total-num">7</span>
+          </div>
+
+          <select id="playback-speed-select" class="speed-dropdown">
+            <option value="0.5">Speed: 0.5x</option>
+            <option value="1.0" selected>Speed: 1.0x</option>
+            <option value="1.5">Speed: 1.5x</option>
+            <option value="2.0">Speed: 2.0x</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PURE WHITE CANVAS CARD (Matching Image 2) -->
+      <div class="canvas-workflow-card">
+        <div class="canvas-card-top-bar">
+          <span class="pill-green-badge">
+            <span>●</span> <span id="canvas-arch-badge-name">SIMPLE RAG (NAIVE PIPELINE)</span>
+          </span>
+          <span class="topology-desc-text" id="canvas-topology-text">
+            Topology: Linear Graph (Start ➔ End, No Loops)
+          </span>
+        </div>
+
+        <!-- Horizontal Nodes Track (Image 2) -->
+        <div class="canvas-nodes-viewport">
+          <div id="canvas-nodes-track" class="canvas-nodes-track">
+            <!-- Dynamically populated pure white cards with arrows -->
+          </div>
+        </div>
+
+        <!-- Legend at Bottom of Canvas (Image 2) -->
+        <div class="canvas-legend-bar">
+          <div class="legend-item">
+            <span class="dot" style="background:#2563EB;"></span>
+            <span>Active (Current Step)</span>
+          </div>
+          <div class="legend-item">
+            <span class="dot" style="background:#16A34A;"></span>
+            <span>Completed</span>
+          </div>
+          <div class="legend-item">
+            <span class="dot" style="border:1px solid #94A3B8; background:#FFFFFF;"></span>
+            <span>Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 METRICS STRIP (Matching Image 2) -->
+      <div class="metrics-5-strip">
+        <div class="metric-card-box">
+          <div class="metric-card-icon" style="color:#2563EB;">☍</div>
+          <div class="metric-card-info">
+            <span class="metric-card-label">Topology</span>
+            <span id="metric-topol-val" class="metric-card-val" style="color:#2563EB;">Linear</span>
+          </div>
+        </div>
+
+        <div class="metric-card-box">
+          <div class="metric-card-icon" style="color:#2563EB;">≡</div>
+          <div class="metric-card-info">
+            <span class="metric-card-label">Total Stages</span>
+            <span id="metric-stages-val" class="metric-card-val">7 Nodes</span>
+          </div>
+        </div>
+
+        <div class="metric-card-box">
+          <div class="metric-card-icon" style="color:#D97706;">⚡</div>
+          <div class="metric-card-info">
+            <span class="metric-card-label">Latency Profile</span>
+            <span id="metric-latency-val" class="metric-card-val" style="color:#D97706;">Fast (~400–800ms)</span>
+          </div>
+        </div>
+
+        <div class="metric-card-box">
+          <div class="metric-card-icon" style="color:#16A34A;">🎯</div>
+          <div class="metric-card-info">
+            <span class="metric-card-label">Accuracy</span>
+            <span id="metric-accuracy-val" class="metric-card-val" style="color:#16A34A;">Baseline (60–70%)</span>
+          </div>
+        </div>
+
+        <div class="metric-card-box">
+          <div class="metric-card-icon" style="color:#DC2626;">🛡</div>
+          <div class="metric-card-info">
+            <span class="metric-card-label">Hallucination Risk</span>
+            <span id="metric-risk-val" class="metric-card-val" style="color:#DC2626;">Moderate to High</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM 3-CARD SUMMARY GRID (Matching Image 2) -->
+      <div class="summary-3-grid">
+        <!-- Card 1: Architecture Overview -->
+        <div class="summary-card">
+          <div class="summary-card-header" style="color:#2563EB;">
+            <span>≡</span> <span id="summary-arch-name">Simple RAG (Naive Pipeline)</span>
+          </div>
+          <p id="summary-arch-desc" class="summary-card-desc">
+            The foundational baseline for Retrieval-Augmented Generation. Easy to set up, but has no feedback loops, relevance checks, or re-ranking.
+          </p>
+        </div>
+
+        <!-- Card 2: Key Advantages -->
+        <div class="summary-card">
+          <div class="summary-card-header" style="color:#16A34A;">
+            <span>✓</span> <span>Key Advantages</span>
+          </div>
+          <ul id="summary-pros-list" class="bullet-list pros">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+
+        <!-- Card 3: Trade-offs & Limitations -->
+        <div class="summary-card">
+          <div class="summary-card-header" style="color:#DC2626;">
+            <span>⚠</span> <span>Trade-offs &amp; Limitations</span>
+          </div>
+          <ul id="summary-cons-list" class="bullet-list cons">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+      </div>
+
     </main>
 
-    <!-- RIGHT PANEL: WORKFLOW INSPECTOR / PROPERTIES (Image 1) -->
-    <aside class="studio-inspector-right">
-      <div class="inspector-header">
-        <div class="inspector-header-left">
-          <div id="inspector-node-icon" class="inspector-node-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            </svg>
-          </div>
-          <div>
-            <h3 id="inspector-node-title" class="inspector-node-title">Trigger</h3>
-            <div id="inspector-node-type" class="inspector-node-type">Time-based Trigger</div>
-          </div>
-        </div>
-        <span style="font-size:0.72rem; color:#64748B; cursor:pointer;" title="Options">•••</span>
+    <!-- RIGHT INSPECTOR PANEL: STEP DEEP DIVE (Image 2) -->
+    <aside class="right-inspector">
+      <!-- Top 3 Tabs -->
+      <div class="inspector-top-tabs">
+        <button id="tab-link-deepdive" class="inspector-tab-link active" data-tab="deepdive">Step Deep Dive</button>
+        <button id="tab-link-graphstate" class="inspector-tab-link" data-tab="graphstate">GraphState</button>
+        <button id="tab-link-comparison" class="inspector-tab-link" data-tab="comparison">Comparison</button>
       </div>
 
-      <div class="inspector-content-scroll">
+      <!-- Tab 1: Step Deep Dive Content -->
+      <div id="inspector-tab-deepdive-body" style="display:flex; flex-direction:column; gap:1rem;">
+        <!-- Stage & Action Badge -->
+        <div class="stage-action-header">
+          <span id="inspector-stage-tag" class="stage-blue-pill">Stage 1 of 7</span>
+          <span id="inspector-action-tag" class="action-subtle-badge">FILE_READING</span>
+        </div>
 
-        <!-- Accordion 1: General information (Image 1) -->
-        <div class="accordion-section">
-          <div class="accordion-header">
-            <span>General Information</span>
-            <span>▾</span>
+        <!-- Step Title Box -->
+        <div class="inspector-step-title-box">
+          <div class="inspector-step-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           </div>
-          <div class="accordion-body">
-            <div class="form-group">
-              <label class="form-label">Stage Type</label>
-              <input type="text" id="inspector-field-type" class="form-input" readonly value="TRIGGER" />
-            </div>
+          <h2 id="inspector-step-heading" class="inspector-step-title">
+            Step 1: Document Ingestion (Reading Files)
+          </h2>
+        </div>
 
-            <div class="form-group">
-              <label class="form-label">Node Title</label>
-              <input type="text" id="inspector-field-title" class="form-input" readonly value="Document Ingestion" />
+        <!-- Accordions List (Matching Image 2) -->
+        <div class="accordion-list">
+          <!-- Accordion 1: What this step does (Open by default) -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-what">
+              <span class="left-title">
+                <span style="color:#2563EB;">ℹ</span>
+                <span>What this step does</span>
+              </span>
+              <span class="acc-chevron">▲</span>
+            </button>
+            <div id="acc-what" class="accordion-panel">
+              <p id="acc-what-text">Loads raw files from disk, cloud, or URLs and converts them into clean, readable text with basic metadata (e.g., filename, page number, size).</p>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label">Status</label>
-              <div style="display:flex; align-items:center; gap:6px; background:#F8FAFC; border:1px solid #E5E7EB; padding:6px 10px; border-radius:6px;">
-                <span id="inspector-status-dot" style="width:7px; height:7px; border-radius:50%; background:#2563EB;"></span>
-                <span id="inspector-status-text" style="font-size:0.8rem; font-weight:600; color:#2563EB;">Active</span>
-              </div>
+          <!-- Accordion 2: Why we need this step -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-why">
+              <span class="left-title">
+                <span style="color:#16A34A;">🎯</span>
+                <span>Why we need this step</span>
+              </span>
+              <span class="acc-chevron">▼</span>
+            </button>
+            <div id="acc-why" class="accordion-panel" style="display:none;">
+              <p id="acc-why-text">LLMs don't know your private documents. Reading the files is the first step to teaching the AI your company's data.</p>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label">What This Step Does</label>
-              <textarea id="inspector-field-desc" class="form-textarea" readonly></textarea>
+          <!-- Accordion 3: Input -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-input">
+              <span class="left-title">
+                <span style="color:#2563EB;">↔</span>
+                <span>Input</span>
+              </span>
+              <span class="acc-chevron">▼</span>
+            </button>
+            <div id="acc-input" class="accordion-panel" style="display:none;">
+              <code id="acc-input-text" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#1E293B;">PDFs, Word documents, Markdown files, or web pages.</code>
+            </div>
+          </div>
+
+          <!-- Accordion 4: Internal process -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-process">
+              <span class="left-title">
+                <span style="color:#D97706;">⚙</span>
+                <span>Internal process</span>
+              </span>
+              <span class="acc-chevron">▼</span>
+            </button>
+            <div id="acc-process" class="accordion-panel" style="display:none;">
+              <p id="acc-process-text">A file loader reads the bytes, strips junk formatting, and produces a list of clean text documents.</p>
+            </div>
+          </div>
+
+          <!-- Accordion 5: Output -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-output">
+              <span class="left-title">
+                <span style="color:#2563EB;">📤</span>
+                <span>Output</span>
+              </span>
+              <span class="acc-chevron">▼</span>
+            </button>
+            <div id="acc-output" class="accordion-panel" style="display:none;">
+              <code id="acc-output-text" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#1E293B;">Clean plain-text documents with metadata tags.</code>
+            </div>
+          </div>
+
+          <!-- Accordion 6: Real-world example & Pitfalls -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-pitfalls">
+              <span class="left-title">
+                <span style="color:#DC2626;">📖</span>
+                <span>Real-world example</span>
+              </span>
+              <span class="acc-chevron">▼</span>
+            </button>
+            <div id="acc-pitfalls" class="accordion-panel" style="display:none;">
+              <p id="acc-pitfalls-text">Scanned image PDFs without OCR will produce empty blank text.</p>
+            </div>
+          </div>
+
+          <!-- Accordion 7: LangGraph Python Code -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" data-target="acc-code">
+              <span class="left-title">
+                <span style="color:#2563EB;">🐍</span>
+                <span>LangGraph Python Code</span>
+              </span>
+              <span class="acc-chevron">▼</span>
+            </button>
+            <div id="acc-code" class="accordion-panel" style="display:none; padding:0.4rem;">
+              <pre id="acc-code-content" class="langgraph-code-pre"># Python node code...</pre>
             </div>
           </div>
         </div>
-
-        <!-- Accordion 2: Execution Details & I/O -->
-        <div class="accordion-section">
-          <div class="accordion-header">
-            <span>Execution Details & I/O</span>
-            <span>▾</span>
-          </div>
-          <div class="accordion-body">
-            <div class="form-group">
-              <label class="form-label">Why This Step Is Needed</label>
-              <div id="inspector-role-text" style="font-size:0.8rem; color:#334155; line-height:1.5;">...</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Input Data</label>
-              <div id="inspector-input-box" class="io-chip-box">...</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Internal Process (Algorithm)</label>
-              <div id="inspector-mechanics-text" style="font-size:0.8rem; color:#334155; line-height:1.5;">...</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Output Data</label>
-              <div id="inspector-output-box" class="io-chip-box">...</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Watch Out For (Pitfalls)</label>
-              <div id="inspector-pitfalls-text" style="font-size:0.8rem; color:#DC2626; line-height:1.5;">...</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Accordion 3: GraphState Memory (TypedDict) -->
-        <div class="accordion-section">
-          <div class="accordion-header">
-            <span>GraphState Memory</span>
-            <span>▾</span>
-          </div>
-          <div class="accordion-body">
-            <div id="inspector-json-viewer" class="io-chip-box" style="max-height:220px; overflow-y:auto; line-height:1.6;">
-              // Loading state variables...
-            </div>
-          </div>
-        </div>
-
-        <!-- Accordion 4: LangGraph Python Code -->
-        <div class="accordion-section">
-          <div class="accordion-header">
-            <span>LangGraph Node Code</span>
-            <span>▾</span>
-          </div>
-          <div class="accordion-body" style="padding:0;">
-            <div class="inspector-code-box">
-              <div class="inspector-code-header">
-                <span>python (langgraph)</span>
-                <button id="btn-copy-snippet" class="code-copy-btn" style="background:#334155; border:none; color:#fff; padding:2px 6px; border-radius:4px; cursor:pointer;">Copy</button>
-              </div>
-              <pre id="inspector-code-snippet" class="inspector-code-body"># Loading node implementation...</pre>
-            </div>
-          </div>
-        </div>
-
-        <!-- Accordion 5: Architecture Overview & Trade-offs -->
-        <div class="accordion-section">
-          <div class="accordion-header">
-            <span>Pipeline Specs & Trade-offs</span>
-            <span>▾</span>
-          </div>
-          <div class="accordion-body">
-            <div id="inspector-arch-desc" style="font-size:0.8rem; color:#475569; line-height:1.5;">...</div>
-            
-            <div style="margin-top:4px;">
-              <div style="font-size:0.72rem; font-weight:700; color:#16A34A; text-transform:uppercase; margin-bottom:4px;">Key Advantages</div>
-              <ul id="inspector-pros-list" style="padding-left:14px; margin:0; font-size:0.78rem; color:#334155; line-height:1.5;"></ul>
-            </div>
-
-            <div style="margin-top:4px;">
-              <div style="font-size:0.72rem; font-weight:700; color:#DC2626; text-transform:uppercase; margin-bottom:4px;">Trade-offs</div>
-              <ul id="inspector-cons-list" style="padding-left:14px; margin:0; font-size:0.78rem; color:#334155; line-height:1.5;"></ul>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Tab 2: GraphState Memory Content -->
+      <div id="inspector-tab-graphstate-body" style="display:none;">
+        <div style="font-size:0.78rem; font-weight:700; color:#111827; margin-bottom:8px;">Active GraphState Memory</div>
+        <pre id="state-json-view" style="background:#F8FAFC; border:1px solid #E5E7EB; border-radius:8px; padding:0.75rem; font-family:'JetBrains Mono', monospace; font-size:0.75rem; line-height:1.55; color:#1E293B; overflow-x:auto;">// JSON state...</pre>
+      </div>
+
+      <!-- Tab 3: Comparison Content -->
+      <div id="inspector-tab-comparison-body" style="display:none;">
+        <div style="font-size:0.78rem; font-weight:700; color:#111827; margin-bottom:8px;">8-Architecture Overview</div>
+        <div style="font-size:0.78rem; color:#475569; line-height:1.5;">
+          Compare all 8 RAG architectures from Naive 1-way linear pipelines to Autonomous Multi-Tool Agentic flows. Use the left sidebar to inspect any paradigm.
+        </div>
+      </div>
+
     </aside>
 
   </div>
 
   <script type="module">
     import { RAG_ARCHITECTURES } from '/static/js/visualizations/ragData.js';
-    import { RagGraphVisualizer } from '/static/js/visualizations/ragGraphVisualizer.js';
 
-    // Studio State
+    // State
     let currentArchKey = "simple_rag";
     let currentStepIndex = 0;
     let isPlaying = false;
     let playbackSpeed = 1.0;
     let playTimer = null;
-
-    // Canvas visualizer instance
-    const canvasContainer = document.getElementById("rag-canvas-container");
-    const visualizer = new RagGraphVisualizer(canvasContainer, (nodeId) => {
-      const arch = RAG_ARCHITECTURES[currentArchKey];
-      const matchIdx = arch.steps.findIndex(s => s.activeNodeId === nodeId);
-      if (matchIdx !== -1) {
-        goToStep(matchIdx);
-      }
-    });
 
     function getArch() {
       return RAG_ARCHITECTURES[currentArchKey];
@@ -913,59 +1410,141 @@
       pausePlayback();
       currentArchKey = archKey;
       currentStepIndex = 0;
-
-      // Update Header Dropdown
-      const dropdown = document.getElementById("header-arch-select");
-      if (dropdown) dropdown.value = archKey;
+      try {
+        const url = new URL(window.location);
+        url.searchParams.set("arch", archKey);
+        window.history.replaceState({}, "", url);
+      } catch (e) {}
 
       // Update Left Sidebar Nav items
-      document.querySelectorAll(".arch-nav-item").forEach(item => {
-        item.classList.remove("active");
-        if (item.getAttribute("data-arch") === archKey) {
-          item.classList.add("active");
-        }
+      document.querySelectorAll(".sidebar-nav-item").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-arch") === archKey);
+      });
+
+      // Update Center Horizontal Pill Tabs
+      document.querySelectorAll(".arch-pill-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-arch") === archKey);
       });
 
       const arch = getArch();
 
-      // Render Left Sidebar Pipeline Nodes List (Image 1 Style)
-      renderPipelineNodesList(arch);
+      // Update Top Canvas Badge & Topology
+      document.getElementById("canvas-arch-badge-name").textContent = arch.name.toUpperCase();
+      document.getElementById("canvas-topology-text").textContent = `Topology: ${arch.topology}`;
 
-      // Mount into Visualizer
-      visualizer.setArchitecture(arch);
+      // Update Metrics Strip
+      document.getElementById("metric-topol-val").textContent = arch.topology.split('(')[0].trim();
+      document.getElementById("metric-stages-val").textContent = `${arch.summaryMetrics.stages} Nodes`;
+      document.getElementById("metric-latency-val").textContent = arch.summaryMetrics.latency;
+      document.getElementById("metric-accuracy-val").textContent = arch.summaryMetrics.accuracy;
+      document.getElementById("metric-risk-val").textContent = arch.summaryMetrics.hallucinationRisk;
+
+      // Update Summary 3-Grid
+      document.getElementById("summary-arch-name").textContent = arch.name;
+      document.getElementById("summary-arch-desc").textContent = arch.description;
+      document.getElementById("summary-pros-list").innerHTML = arch.pros.map(p => `<li>${p}</li>`).join('');
+      document.getElementById("summary-cons-list").innerHTML = arch.cons.map(c => `<li>${c}</li>`).join('');
+
+      // Populate Left Sidebar Pipeline Nodes Sublist
+      renderLeftSidebarNodes(arch);
+
+      // Render Horizontal Canvas Nodes (Pure White Cards matching Image 2!)
+      renderCanvasNodes(arch);
+
+      // Go to Step 0
       goToStep(0);
     }
 
-    // Render Left Sidebar Pipeline Nodes List
-    function renderPipelineNodesList(arch) {
-      const listContainer = document.getElementById("pipeline-nodes-list");
-      const headerTitle = document.getElementById("pipeline-nodes-header");
-      if (headerTitle) headerTitle.textContent = `${arch.nodes.length} Pipeline Nodes`;
+    // Render Left Sidebar Pipeline Nodes Sublist
+    function renderLeftSidebarNodes(arch) {
+      const container = document.getElementById("pipeline-nodes-sublist");
+      document.getElementById("pipeline-nodes-count-label").textContent = `Pipeline Nodes (${arch.nodes.length})`;
 
-      listContainer.innerHTML = arch.nodes.map((node, idx) => `
-        <div class="node-comp-card ${idx === currentStepIndex ? 'active' : ''}" data-node-id="${node.id}" data-node-idx="${idx}">
-          <div class="node-comp-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              ${visualizer.getIconSvg(node.icon)}
-            </svg>
+      container.innerHTML = arch.nodes.map((node, idx) => `
+        <button class="pipeline-sub-item ${idx === currentStepIndex ? 'active' : ''}" data-step-idx="${idx}">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="num-badge">${idx + 1}</span>
+            <span>${node.label.replace(/^\d+\.\s*/, '')}</span>
           </div>
-          <div class="node-comp-info">
-            <div class="node-comp-title">${node.label}</div>
-            <div class="node-comp-sub">${node.role} · Stage ${idx + 1}</div>
-          </div>
-        </div>
+          <span class="chevron">&gt;</span>
+        </button>
       `).join('');
 
-      // Click listener to select node from sidebar
-      listContainer.querySelectorAll(".node-comp-card").forEach(card => {
-        card.addEventListener("click", () => {
-          const idx = parseInt(card.getAttribute("data-node-idx"), 10);
+      container.querySelectorAll(".pipeline-sub-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const idx = parseInt(item.getAttribute("data-step-idx"), 10);
           goToStep(idx);
         });
       });
     }
 
-    // Step Execution
+    // Render Horizontal Canvas Workflow Nodes Track (Image 2)
+    function renderCanvasNodes(arch) {
+      const track = document.getElementById("canvas-nodes-track");
+      let html = "";
+
+      arch.nodes.forEach((node, idx) => {
+        const isActive = idx === currentStepIndex;
+        const isCompleted = idx < currentStepIndex;
+
+        let statusText = "Pending";
+        let statusDotClass = "";
+        if (isActive) {
+          statusText = "Active";
+        } else if (isCompleted) {
+          statusText = "Completed";
+          statusDotClass = "completed";
+        }
+
+        const iconSvg = getNodeIconSvg(node.icon);
+        const cleanLabel = node.label;
+
+        html += `
+          <div class="workflow-node-box ${isActive ? 'active' : ''} ${statusDotClass}" data-step-idx="${idx}">
+            <div class="workflow-node-icon">
+              ${iconSvg}
+            </div>
+            <div class="workflow-node-title">${cleanLabel}</div>
+            <div class="workflow-node-status">
+              <span class="status-dot"></span>
+              <span>${statusText}</span>
+            </div>
+          </div>
+        `;
+
+        // Arrow connector between nodes
+        if (idx < arch.nodes.length - 1) {
+          html += `<div class="node-arrow-connector">➔</div>`;
+        }
+      });
+
+      track.innerHTML = html;
+
+      // Click node to select step
+      track.querySelectorAll(".workflow-node-box").forEach(box => {
+        box.addEventListener("click", () => {
+          const idx = parseInt(box.getAttribute("data-step-idx"), 10);
+          goToStep(idx);
+        });
+      });
+    }
+
+    function getNodeIconSvg(iconName) {
+      const icons = {
+        "file-text": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+        "scissors": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>',
+        "cpu": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line></svg>',
+        "database": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>',
+        "search": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+        "layers": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
+        "sparkles": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.91 5.89L20 10.8l-4.59 4.11L16.47 21 12 17.65 7.53 21l1.06-6.09L4 10.8l6.09-1.91L12 3z"></path></svg>',
+        "refresh-cw": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>',
+        "shield-check": '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>'
+      };
+      return icons[iconName] || icons["layers"];
+    }
+
+    // Go to Step
     function goToStep(idx) {
       const arch = getArch();
       if (idx < 0) idx = 0;
@@ -973,71 +1552,62 @@
       currentStepIndex = idx;
 
       // Update Counters
-      document.getElementById("counter-current").textContent = currentStepIndex + 1;
-      document.getElementById("counter-total").textContent = arch.steps.length;
+      document.getElementById("stage-current-num").textContent = currentStepIndex + 1;
+      document.getElementById("stage-total-num").textContent = arch.steps.length;
 
-      // Update Sidebar Node Card active class
-      document.querySelectorAll(".node-comp-card").forEach((card, i) => {
-        card.classList.toggle("active", i === currentStepIndex);
+      // Update Left Sidebar sublist items
+      document.querySelectorAll(".pipeline-sub-item").forEach((item, i) => {
+        item.classList.toggle("active", i === currentStepIndex);
       });
 
-      // Update Canvas
-      visualizer.setStep(currentStepIndex);
+      // Update Canvas Node Cards active/completed state
+      document.querySelectorAll(".workflow-node-box").forEach((box, i) => {
+        box.classList.remove("active", "completed");
+        const statusSpan = box.querySelector(".workflow-node-status span:last-child");
+        if (i === currentStepIndex) {
+          box.classList.add("active");
+          if (statusSpan) statusSpan.textContent = "Active";
+        } else if (i < currentStepIndex) {
+          box.classList.add("completed");
+          if (statusSpan) statusSpan.textContent = "Completed";
+        } else {
+          if (statusSpan) statusSpan.textContent = "Pending";
+        }
+      });
 
-      // Update Right Inspector Panel (Properties)
-      renderInspectorProperties();
+      // Smooth scroll active node into center of viewport
+      const activeBox = document.querySelector(`.workflow-node-box[data-step-idx="${currentStepIndex}"]`);
+      if (activeBox) {
+        activeBox.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
+      // Update Right Inspector Panel
+      renderInspector();
     }
 
-    // Render Right Inspector Panel (Matching Image 1 Properties)
-    function renderInspectorProperties() {
+    // Render Right Inspector Panel (Matching Image 2)
+    function renderInspector() {
       const arch = getArch();
       const step = arch.steps[currentStepIndex];
       if (!step) return;
 
-      const activeNode = arch.nodes.find(n => n.id === step.activeNodeId) || arch.nodes[currentStepIndex] || {};
+      document.getElementById("inspector-stage-tag").textContent = `Stage ${currentStepIndex + 1} of ${arch.steps.length}`;
+      document.getElementById("inspector-action-tag").textContent = step.action || "STAGE";
+      document.getElementById("inspector-step-heading").textContent = step.title;
 
-      // Header
-      document.getElementById("inspector-node-title").textContent = activeNode.label || step.title;
-      document.getElementById("inspector-node-type").textContent = `${activeNode.role || 'STAGE'} · Step ${currentStepIndex + 1} of ${arch.steps.length}`;
+      // Accordion Texts
+      document.getElementById("acc-what-text").textContent = step.simpleDefinition || step.description;
 
-      // Update Icon
-      const iconBox = document.getElementById("inspector-node-icon");
-      if (iconBox && activeNode.icon) {
-        iconBox.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            ${visualizer.getIconSvg(activeNode.icon)}
-          </svg>
-        `;
-      }
-
-      // General Info Fields
-      document.getElementById("inspector-field-type").value = activeNode.role || step.action;
-      document.getElementById("inspector-field-title").value = activeNode.label || step.title;
-      document.getElementById("inspector-field-desc").value = step.simpleDefinition || step.description;
-
-      // Execution Details & I/O
       const dd = step.deepDive || {};
-      document.getElementById("inspector-role-text").textContent = dd.why || dd.role || step.description;
-      document.getElementById("inspector-input-box").textContent = dd.inputs || "Standard GraphState context";
-      document.getElementById("inspector-mechanics-text").textContent = dd.mechanics || "Executes internal state logic";
-      document.getElementById("inspector-output-box").textContent = dd.output || "Verified state output";
-      document.getElementById("inspector-pitfalls-text").textContent = dd.pitfalls || "None reported";
+      document.getElementById("acc-why-text").textContent = dd.why || dd.role || step.description;
+      document.getElementById("acc-input-text").textContent = dd.inputs || "Raw query & corpus files";
+      document.getElementById("acc-process-text").textContent = dd.mechanics || "Standard pipeline algorithm execution";
+      document.getElementById("acc-output-text").textContent = dd.output || "Clean embeddings & state variables";
+      document.getElementById("acc-pitfalls-text").textContent = dd.pitfalls || "None reported for this configuration.";
+      document.getElementById("acc-code-content").textContent = dd.langgraphCode || "# Python node code";
 
-      // GraphState JSON viewer
-      const stateObj = step.state || {};
-      const formattedJson = Object.entries(stateObj).map(([k, v]) => {
-        let valStr = typeof v === 'string' ? `"${v}"` : JSON.stringify(v);
-        return `"${k}": ${valStr}`;
-      }).join(',\n  ');
-      document.getElementById("inspector-json-viewer").textContent = `{\n  ${formattedJson}\n}`;
-
-      // Python snippet
-      document.getElementById("inspector-code-snippet").textContent = dd.langgraphCode || "# Python node code";
-
-      // Architecture Specs
-      document.getElementById("inspector-arch-desc").textContent = arch.description;
-      document.getElementById("inspector-pros-list").innerHTML = arch.pros.map(p => `<li>${p}</li>`).join('');
-      document.getElementById("inspector-cons-list").innerHTML = arch.cons.map(c => `<li>${c}</li>`).join('');
+      // GraphState JSON
+      document.getElementById("state-json-view").textContent = JSON.stringify(step.state || {}, null, 2);
     }
 
     // Playback Controls
@@ -1057,8 +1627,8 @@
       }
       isPlaying = true;
       document.getElementById("play-icon").textContent = "⏸";
-      document.getElementById("play-text").textContent = "Pause";
-      scheduleNextStep();
+      document.getElementById("play-text").textContent = "Pause Flow";
+      scheduleNext();
     }
 
     function pausePlayback() {
@@ -1071,15 +1641,14 @@
       document.getElementById("play-text").textContent = "Play Flow";
     }
 
-    function scheduleNextStep() {
+    function scheduleNext() {
       if (!isPlaying) return;
       const arch = getArch();
-      const delay = 2200 / playbackSpeed;
-
+      const delay = 2000 / playbackSpeed;
       playTimer = setTimeout(() => {
         if (currentStepIndex < arch.steps.length - 1) {
           goToStep(currentStepIndex + 1);
-          scheduleNextStep();
+          scheduleNext();
         } else {
           pausePlayback();
         }
@@ -1087,71 +1656,70 @@
     }
 
     // Event Listeners
-    document.getElementById("btn-play-toggle").addEventListener("click", togglePlayback);
-    document.getElementById("btn-next").addEventListener("click", () => {
+    document.getElementById("btn-play-flow").addEventListener("click", togglePlayback);
+    document.getElementById("btn-pause-flow").addEventListener("click", pausePlayback);
+    document.getElementById("btn-next-step").addEventListener("click", () => {
       pausePlayback();
       goToStep(currentStepIndex + 1);
     });
-    document.getElementById("btn-prev").addEventListener("click", () => {
+    document.getElementById("btn-prev-step").addEventListener("click", () => {
       pausePlayback();
       goToStep(currentStepIndex - 1);
     });
-    document.getElementById("btn-reset").addEventListener("click", () => {
+    document.getElementById("btn-reset-flow").addEventListener("click", () => {
       pausePlayback();
       goToStep(0);
     });
 
-    document.getElementById("speed-select").addEventListener("change", (e) => {
+    document.getElementById("playback-speed-select").addEventListener("change", (e) => {
       playbackSpeed = parseFloat(e.target.value);
     });
 
-    // Architecture dropdown
-    document.getElementById("header-arch-select").addEventListener("change", (e) => {
-      switchArchitecture(e.target.value);
-    });
-
-    // Architecture sidebar list items
-    document.querySelectorAll(".arch-nav-item").forEach(item => {
+    // Left Sidebar nav click
+    document.querySelectorAll(".sidebar-nav-item").forEach(item => {
       item.addEventListener("click", () => {
-        const archKey = item.getAttribute("data-arch");
-        if (archKey) switchArchitecture(archKey);
+        const arch = item.getAttribute("data-arch");
+        if (arch) switchArchitecture(arch);
       });
     });
 
-    // Copy code button
-    document.getElementById("btn-copy-snippet").addEventListener("click", () => {
-      const code = document.getElementById("inspector-code-snippet").textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        const btn = document.getElementById("btn-copy-snippet");
-        btn.textContent = "Copied! ✓";
-        setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+    // Center horizontal pills click
+    document.querySelectorAll(".arch-pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const arch = btn.getAttribute("data-arch");
+        if (arch) switchArchitecture(arch);
       });
     });
 
-    // Toggle Left Sidebar
-    const collapseBtn = document.getElementById("btn-collapse-sidebar");
-    const leftSidebar = document.querySelector(".studio-sidebar-left");
-    if (collapseBtn && leftSidebar) {
-      collapseBtn.addEventListener("click", () => {
-        const isHidden = leftSidebar.style.display === "none";
-        leftSidebar.style.display = isHidden ? "flex" : "none";
-        collapseBtn.textContent = isHidden ? "◀" : "▶";
-      });
-    }
+    // Inspector Tabs (Step Deep Dive | GraphState | Comparison)
+    const tabButtons = document.querySelectorAll(".inspector-tab-link");
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
 
-    // Node Search Filtering
-    const searchInput = document.getElementById("node-search-input");
-    if (searchInput) {
-      searchInput.addEventListener("input", (e) => {
-        const query = e.target.value.toLowerCase();
-        document.querySelectorAll(".node-comp-card").forEach(card => {
-          const title = card.querySelector(".node-comp-title").textContent.toLowerCase();
-          card.style.display = title.includes(query) ? "flex" : "none";
-        });
+        const tab = btn.getAttribute("data-tab");
+        document.getElementById("inspector-tab-deepdive-body").style.display = (tab === "deepdive" ? "flex" : "none");
+        document.getElementById("inspector-tab-graphstate-body").style.display = (tab === "graphstate" ? "block" : "none");
+        document.getElementById("inspector-tab-comparison-body").style.display = (tab === "comparison" ? "block" : "none");
       });
-    }
+    });
 
-    // Keyboard Shortcuts (Space for Play/Pause, Arrows for Steps, Keys 1-8 for Architectures)
+    // Accordions Toggle inside Inspector
+    document.querySelectorAll(".accordion-trigger").forEach(trigger => {
+      trigger.addEventListener("click", () => {
+        const targetId = trigger.getAttribute("data-target");
+        const panel = document.getElementById(targetId);
+        const chevron = trigger.querySelector(".acc-chevron");
+        if (panel) {
+          const isHidden = panel.style.display === "none";
+          panel.style.display = isHidden ? "block" : "none";
+          if (chevron) chevron.textContent = isHidden ? "▲" : "▼";
+        }
+      });
+    });
+
+    // Keyboard Shortcuts (Space for Play/Pause, Left/Right for Step, 1-8 for Arch)
     window.addEventListener("keydown", (e) => {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
       if (e.code === "Space") {
@@ -1177,11 +1745,11 @@
       }
     });
 
-    // Initial architecture
+    // Initial Load
     const urlParams = new URLSearchParams(window.location.search);
-    const requestedArch = urlParams.get("arch");
-    if (requestedArch && RAG_ARCHITECTURES[requestedArch]) {
-      switchArchitecture(requestedArch);
+    const initialArch = urlParams.get("arch");
+    if (initialArch && RAG_ARCHITECTURES[initialArch]) {
+      switchArchitecture(initialArch);
     } else {
       switchArchitecture("simple_rag");
     }
