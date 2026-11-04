@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG & LangGraph Architecture Visualizer - AlgoVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <link rel="stylesheet" href="/static/css/components.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-studio: #090d16;
+      --card-bg: rgba(15, 23, 42, 0.72);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-glow: rgba(99, 102, 241, 0.35);
+      --accent-glow: rgba(99, 102, 241, 0.2);
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #151d36 0%, #080c14 65%, #05070c 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    /* Top Studio Header */
+    .studio-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+
+    .studio-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.18) 100%);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #c084fc;
+      margin-bottom: 0.85rem;
+    }
+
+    .studio-title {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 45%, #c084fc 95%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .studio-subtitle {
+      color: #94a3b8;
+      font-size: 1rem;
+      max-width: 820px;
+      margin: 0 auto 1.5rem auto;
+      line-height: 1.55;
+    }
+
+    /* Architecture Switcher Container */
+    .arch-switch-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.45rem;
+      background: rgba(11, 17, 32, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 0.5rem;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      max-width: 1200px;
+      margin: 0 auto 1.25rem auto;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .arch-btn {
+      padding: 0.6rem 0.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .arch-btn .arch-icon {
+      font-size: 1.15rem;
+    }
+
+    .arch-btn .arch-key {
+      font-size: 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .arch-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .arch-btn.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.35) 0%, rgba(56, 189, 248, 0.25) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.75);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .arch-btn.active-self {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(244, 63, 94, 0.25) 100%);
+      border: 1px solid rgba(168, 85, 247, 0.75);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+    }
+
+    /* Highlight Banner: IN SIMPLE WORDS */
+    .arch-simple-banner {
+      max-width: 1200px;
+      margin: 0 auto 1.5rem auto;
+      background: linear-gradient(90deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-radius: 12px;
+      border-left: 4px solid #38bdf8;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      text-align: left;
+    }
+
+    .arch-simple-badge {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      color: #031427;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+    }
+
+    .arch-simple-text {
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    /* Quick Metrics Bar */
+    .metrics-grid {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .metric-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      padding: 0.55rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      min-width: 115px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .metric-pill .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      margin-bottom: 0.15rem;
+      font-weight: 600;
+    }
+
+    .metric-pill .val {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Control Bar */
+    .control-bar {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f1f5f9;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.18s ease;
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-action.btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-action.btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.55);
+    }
+
+    /* Step Timeline Scrubber */
+    .timeline-scrubber {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding: 0.65rem 0.85rem;
+      background: rgba(11, 17, 32, 0.7);
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 1.25rem;
+      scrollbar-width: thin;
+    }
+
+    .scrub-dot {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .scrub-dot:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+    }
+
+    .scrub-dot.active {
+      background: #6366f1;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 14px rgba(99, 102, 241, 0.6);
+      font-weight: 700;
+    }
+
+    .scrub-dot.passed {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    /* Main Two-Column Split Layout */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .split-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Canvas Panel */
+    .canvas-panel {
+      background: #090e1a;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      overflow: hidden;
+      min-height: 440px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    /* Details Panel */
+    .details-panel {
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 0.5rem;
+      padding-bottom: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-item {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: transparent;
+      color: #94a3b8;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-item:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-item.active {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+
+    /* Plain English Step Highlight Box */
+    .step-plain-box {
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.12) 0%, rgba(56, 189, 248, 0.08) 100%);
+      border: 1px solid rgba(20, 184, 166, 0.35);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .step-plain-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #2dd4bf;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-plain-text {
+      color: #f1f5f9;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    /* Structured Breakdown Grid */
+    .spec-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .spec-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .spec-body {
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    /* Code Block styling */
+    .code-editor-block {
+      background: #060911;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.85rem;
+    }
+
+    .code-editor-header {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.45rem 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .code-editor-content {
+      padding: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 280px;
+    }
+
+    /* JSON Inspector */
+    .json-tree-container {
+      background: #060911;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      max-height: 480px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    .json-key { color: #38bdf8; font-weight: 600; }
+    .json-str { color: #a7f3d0; }
+    .json-num { color: #fde047; }
+    .json-bool { color: #f472b6; font-weight: 600; }
+
+    /* Comparison Table */
+    .comparison-table-wrapper {
+      overflow-x: auto;
+      max-height: 520px;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    .comp-table th {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.65rem 0.75rem;
+      color: #94a3b8;
+      font-weight: 600;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+    }
+
+    .comp-table td {
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: middle;
+    }
+
+    .nav-rag-highlight {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%);
+      border: 1px solid rgba(168, 85, 247, 0.4) !important;
+      color: #c084fc !important;
+      padding: 0.35rem 0.85rem !important;
+      border-radius: 6px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ai-sparkle {
+      color: #f472b6;
+      animation: pulseSparkle 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSparkle {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <a href="/static/index.html" class="brand-logo">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      AlgoVerse
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/static/index.html">Home</a></li>
+        <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/rag_visualizer.html" class="nav-rag-highlight"><span class="ai-sparkle">✦</span> AI Architectures</a></li>
+        <li><a href="/static/practice.html">Practice</a></li>
+        <li><a href="/static/quiz.html">Quiz</a></li>
+        <li><a href="/static/dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-container" style="max-width:1440px; padding:1.5rem 1rem;">
+    <!-- Top Header -->
+    <div class="studio-header">
+      <span class="studio-badge">✦ Interactive AI Architecture Visualizer & StateGraph Studio</span>
+      <h1 class="studio-title">RAG & LangGraph Architecture Visualizer</h1>
+      <p class="studio-subtitle">
+        Explore how modern LLM pipelines retrieve knowledge, evaluate quality, self-correct hallucinations, and orchestrate autonomous tools — explained with crystal-clear plain English and interactive LangGraph flows.
+      </p>
+
+      <!-- 8-Way Paradigm Switcher -->
+      <div class="arch-switch-container">
+        <button class="arch-btn active" data-arch="simple_rag" title="Linear Baseline (Press 1)">
+          <span class="arch-icon">🟢</span>
+          <span>Simple RAG</span>
+          <span class="arch-key">Key [1]</span>
+        </button>
+        <button class="arch-btn" data-arch="advanced_rag" title="Pre & Post Retrieval (Press 2)">
+          <span class="arch-icon">🔵</span>
+          <span>Advanced RAG</span>
+          <span class="arch-key">Key [2]</span>
+        </button>
+        <button class="arch-btn" data-arch="self_rag" title="Self-Correction Loops (Press 3)">
+          <span class="arch-icon">🟣</span>
+          <span>Self-RAG</span>
+          <span class="arch-key">Key [3]</span>
+        </button>
+        <button class="arch-btn" data-arch="crag" title="Corrective Web Search (Press 4)">
+          <span class="arch-icon">🛡️</span>
+          <span>CRAG</span>
+          <span class="arch-key">Key [4]</span>
+        </button>
+        <button class="arch-btn" data-arch="agentic_rag" title="Autonomous Multi-Tool (Press 5)">
+          <span class="arch-icon">🤖</span>
+          <span>Agentic RAG</span>
+          <span class="arch-key">Key [5]</span>
+        </button>
+        <button class="arch-btn" data-arch="graph_rag" title="Knowledge Graph Network (Press 6)">
+          <span class="arch-icon">🕸️</span>
+          <span>Graph RAG</span>
+          <span class="arch-key">Key [6]</span>
+        </button>
+        <button class="arch-btn" data-arch="multimodal_rag" title="Vision ColPali Late-Interaction (Press 7)">
+          <span class="arch-icon">🖼️</span>
+          <span>Multimodal RAG</span>
+          <span class="arch-key">Key [7]</span>
+        </button>
+        <button class="arch-btn" data-arch="vectorless_rag" title="AST & Tree-Based (Press 8)">
+          <span class="arch-icon">🌳</span>
+          <span>Vectorless RAG</span>
+          <span class="arch-key">Key [8]</span>
+        </button>
+      </div>
+
+      <!-- Highlight Banner: IN SIMPLE WORDS -->
+      <div class="arch-simple-banner">
+        <span class="arch-simple-badge">💡 In Simple Words</span>
+        <div id="arch-simple-def" class="arch-simple-text">
+          Loading architecture plain-English explanation...
+        </div>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div id="arch-metrics-bar" class="metrics-grid">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+
+    <!-- Playback Control Toolbar -->
+    <div class="control-bar">
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+        <button id="btn-play-toggle" class="btn-action btn-primary">
+          <span id="play-icon">▶</span> <span id="play-text">Play Flow</span>
+        </button>
+        <button id="btn-prev" class="btn-action" title="Previous Step (Left Arrow)">⏮ Prev</button>
+        <button id="btn-next" class="btn-action" title="Next Step (Right Arrow)">Next ⏭</button>
+        <button id="btn-reset" class="btn-action" title="Reset Flow (R)">↺ Reset</button>
+      </div>
+
+      <!-- Center Step Progress Counter -->
+      <div style="display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size:0.9rem;">
+        <span style="color:#94a3b8;">Stage:</span>
+        <strong id="counter-current" style="color:#38bdf8; font-size:1.15rem;">1</strong>
+        <span style="color:#64748b;">/</span>
+        <strong id="counter-total" style="color:#ffffff;">7</strong>
+      </div>
+
+      <!-- Speed & Hints -->
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.82rem; color:#94a3b8;">
+          <label>Speed:</label>
+          <select id="speed-select" style="background:#0f172a; border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:6px; padding:0.35rem 0.6rem; font-size:0.8rem;">
+            <option value="0.5">0.5x Slow</option>
+            <option value="1.0" selected>1.0x Normal</option>
+            <option value="1.5">1.5x Fast</option>
+            <option value="2.0">2.0x Turbo</option>
+          </select>
+        </div>
+        <span style="font-size:0.75rem; color:#64748b; border:1px solid rgba(255,255,255,0.08); padding:0.25rem 0.5rem; border-radius:5px;">
+          Space = Play/Pause
+        </span>
+      </div>
+    </div>
+
+    <!-- Step Timeline Scrubber -->
+    <div id="timeline-scrubber" class="timeline-scrubber">
+      <!-- Dynamically filled with step buttons -->
+    </div>
+
+    <!-- Main Workspace Split Layout -->
+    <div class="split-layout">
+      
+      <!-- Left Column: Interactive LangGraph SVG Canvas & Architecture Notes -->
+      <div style="display:flex; flex-direction:column; gap:1.25rem;">
+        <div id="rag-canvas-container" class="canvas-panel">
+          <!-- Injected via RagGraphVisualizer -->
+        </div>
+
+        <!-- Architecture Deep Overview Card -->
+        <div style="background:rgba(15,23,42,0.7); backdrop-filter:blur(10px); border:1px solid var(--card-border); border-radius:12px; padding:1.25rem;">
+          <h3 id="arch-overview-title" style="font-size:1.15rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px;">
+            Architecture Overview
+          </h3>
+          <p id="arch-overview-desc" style="color:#94a3b8; font-size:0.9rem; line-height:1.6; margin-bottom:1rem;">
+            Loading architecture description...
+          </p>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; border-top:1px solid rgba(255,255,255,0.08); padding-top:0.85rem;">
+            <div>
+              <h4 style="font-size:0.82rem; color:#34d399; margin-bottom:0.4rem; display:flex; align-items:center; gap:5px; text-transform:uppercase; letter-spacing:0.4px;">
+                <span>✓</span> Key Advantages
+              </h4>
+              <ul id="arch-pros-list" style="font-size:0.8rem; color:#94a3b8; padding-left:1.1rem; line-height:1.55;">
+              </ul>
+            </div>
+            <div>
+              <h4 style="font-size:0.82rem; color:#f87171; margin-bottom:0.4rem; display:flex; align-items:center; gap:5px; text-transform:uppercase; letter-spacing:0.4px;">
+                <span>✗</span> Trade-offs & Limitations
+              </h4>
+              <ul id="arch-cons-list" style="font-size:0.8rem; color:#94a3b8; padding-left:1.1rem; line-height:1.55;">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Intelligence Panel -->
+      <div class="details-panel">
+        
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+          <button id="tab-btn-step" class="tab-item active" data-tab="step">Step Deep Dive</button>
+          <button id="tab-btn-state" class="tab-item" data-tab="state">GraphState (Memory)</button>
+          <button id="tab-btn-comparison" class="tab-item" data-tab="comparison">Paradigm Comparison</button>
+        </div>
+
+        <!-- Tab 1: Step Deep Dive Content -->
+        <div id="tab-content-step" class="tab-content">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+            <div>
+              <span id="detail-stage-badge" class="studio-badge" style="font-size:0.68rem; padding:0.2rem 0.6rem; margin-bottom:0.3rem;">STAGE</span>
+              <h3 id="detail-step-title" style="font-size:1.2rem; font-weight:700;">Step Details</h3>
+            </div>
+            <span id="detail-action-tag" style="background:rgba(99,102,241,0.2); color:#a5b4fc; font-family:'JetBrains Mono', monospace; font-size:0.72rem; padding:4px 8px; border-radius:5px; font-weight:700;">
+              ACTION
+            </span>
+          </div>
+
+          <!-- Highlight Box: IN SIMPLE WORDS -->
+          <div class="step-plain-box">
+            <span class="step-plain-badge">💡 What This Step Does (In Simple Words):</span>
+            <div id="detail-simple-definition" class="step-plain-text">
+              ...
+            </div>
+          </div>
+
+          <div id="detail-step-desc" style="background:rgba(0,0,0,0.3); padding:0.75rem 0.85rem; border-radius:8px; border-left:3px solid #38bdf8; color:#cbd5e1; font-size:0.85rem; line-height:1.5; margin-bottom:0.85rem;">
+            Step technical summary...
+          </div>
+
+          <!-- Structured Specifications Breakdown -->
+          <div style="display:flex; flex-direction:column; gap:0.45rem;">
+            <div class="spec-card">
+              <span class="spec-label" style="color:#38bdf8;">🎯 Why We Need This Step</span>
+              <div id="detail-role-text" class="spec-body">...</div>
+            </div>
+
+            <div class="spec-card">
+              <span class="spec-label" style="color:#fbbf24;">📥 What Goes In (Input)</span>
+              <div id="detail-input-text" class="spec-body" style="font-family:'JetBrains Mono', monospace; font-size:0.78rem;">...</div>
+            </div>
+
+            <div class="spec-card">
+              <span class="spec-label" style="color:#34d399;">⚙️ Under The Hood (Process & Algorithm)</span>
+              <div id="detail-mechanics-text" class="spec-body">...</div>
+            </div>
+
+            <div class="spec-card">
+              <span class="spec-label" style="color:#c084fc;">📤 What Comes Out (Output)</span>
+              <div id="detail-output-text" class="spec-body">...</div>
+            </div>
+
+            <div class="spec-card">
+              <span class="spec-label" style="color:#f87171;">⚠️ Watch Out For (Pitfalls & Gotchas)</span>
+              <div id="detail-pitfalls-text" class="spec-body">...</div>
+            </div>
+          </div>
+
+          <!-- LangGraph Python Code Block -->
+          <div class="code-editor-block">
+            <div class="code-editor-header">
+              <span>🐍 LangGraph Node Implementation</span>
+              <button id="btn-copy-code" class="btn-action" style="font-size:0.7rem; padding:0.2rem 0.5rem;">Copy Snippet</button>
+            </div>
+            <pre id="detail-code-content" class="code-editor-content"># Loading node implementation...</pre>
+          </div>
+        </div>
+
+        <!-- Tab 2: GraphState Inspector Content -->
+        <div id="tab-content-state" class="tab-content" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <h4 style="font-size:0.9rem; color:#e2e8f0; font-weight:600;">Active StateGraph Memory State:</h4>
+            <span style="font-size:0.72rem; font-family:'JetBrains Mono', monospace; color:#38bdf8;">LangGraph Schema: TypedDict</span>
+          </div>
+          <div id="json-inspector-view" class="json-tree-container">
+            // Loading state JSON...
+          </div>
+        </div>
+
+        <!-- Tab 3: Paradigm Comparison Content -->
+        <div id="tab-content-comparison" class="tab-content" style="display:none;">
+          <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#f8fafc; font-weight:700;">Complete 8-Architecture Comparison Matrix</h4>
+          <div class="comparison-table-wrapper">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Architecture</th>
+                  <th>Core Paradigm</th>
+                  <th>Retrieval Source</th>
+                  <th>Quality Guarantee</th>
+                  <th>Graph Routing</th>
+                  <th>Latency</th>
+                  <th>Best Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color:#34d399; font-weight:700;">🟢 Simple RAG</td>
+                  <td>Linear Chunk-and-Vector</td>
+                  <td>Single Dense Vector DB</td>
+                  <td>None (Direct Pass-through)</td>
+                  <td>Linear 1-Way Flow</td>
+                  <td style="color:#34d399;">~400-800ms</td>
+                  <td>Basic FAQs, small manuals</td>
+                </tr>
+                <tr>
+                  <td style="color:#38bdf8; font-weight:700;">🔵 Advanced RAG</td>
+                  <td>Expansion + Cross-Encoder</td>
+                  <td>Dense Vector + Re-Ranker</td>
+                  <td>Score Cutoff Filter</td>
+                  <td>Branch & Re-Rank Flow</td>
+                  <td>~800-1500ms</td>
+                  <td>Customer support, contracts</td>
+                </tr>
+                <tr>
+                  <td style="color:#c084fc; font-weight:700;">🟣 Self-RAG</td>
+                  <td>Evaluative Self-Reflection</td>
+                  <td>Vector DB + Self-Graders</td>
+                  <td>Hallucination Grader Loop</td>
+                  <td>Conditional Re-Write Loops</td>
+                  <td style="color:#fbbf24;">~1200-2500ms</td>
+                  <td>Medical QA, legal reasoning</td>
+                </tr>
+                <tr>
+                  <td style="color:#f59e0b; font-weight:700;">🛡️ CRAG (Corrective)</td>
+                  <td>Fallback Web Search</td>
+                  <td>Vector DB + Web Search</td>
+                  <td>Confidence Threshold Router</td>
+                  <td>Fallback Routing Branch</td>
+                  <td>~1200-2800ms</td>
+                  <td>Breaking news, live market research</td>
+                </tr>
+                <tr>
+                  <td style="color:#f472b6; font-weight:700;">🤖 Agentic RAG</td>
+                  <td>Autonomous Multi-Tool Agent</td>
+                  <td>Dynamic (SQL, Vector, Web)</td>
+                  <td>Self-Reflection & Code Sandbox</td>
+                  <td>Autonomous ReAct Loop</td>
+                  <td style="color:#fbbf24;">~1500-3500ms</td>
+                  <td>Multi-hop analytics, calculations</td>
+                </tr>
+                <tr>
+                  <td style="color:#2dd4bf; font-weight:700;">🕸️ Graph RAG</td>
+                  <td>Knowledge Graph Communities</td>
+                  <td>Subgraph Hops + Leiden</td>
+                  <td>Entity-Relation Triples</td>
+                  <td>Global / Local Graph Router</td>
+                  <td>~1000-2000ms</td>
+                  <td>Whole-corpus sensemaking</td>
+                </tr>
+                <tr>
+                  <td style="color:#ec4899; font-weight:700;">🖼️ Multimodal RAG</td>
+                  <td>ColPali Vision Multi-Vectors</td>
+                  <td>Patch-level Visual Embeddings</td>
+                  <td>MaxSim Late-Interaction</td>
+                  <td>Vision Cross-Attention</td>
+                  <td>~1100-2200ms</td>
+                  <td>PDFs with charts, blueprints</td>
+                </tr>
+                <tr>
+                  <td style="color:#60a5fa; font-weight:700;">🌳 Vectorless RAG</td>
+                  <td>Hierarchical Summary Tree</td>
+                  <td>Tree Navigation + BM25 AST</td>
+                  <td>Exact AST Code Scopes</td>
+                  <td>Branch-and-Bound Pruning</td>
+                  <td style="color:#34d399;">~500-900ms</td>
+                  <td>Code repos, legal statutes, RFCs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { RAG_ARCHITECTURES } from '/static/js/visualizations/ragData.js';
+    import { RagGraphVisualizer } from '/static/js/visualizations/ragGraphVisualizer.js';
+
+    // State
+    let currentArchKey = "simple_rag";
+    let currentStepIndex = 0;
+    let isPlaying = false;
+    let playbackSpeed = 1.0;
+    let playTimer = null;
+
+    // Visualizer instance
+    const canvasContainer = document.getElementById("rag-canvas-container");
+    const visualizer = new RagGraphVisualizer(canvasContainer, (nodeId) => {
+      // Find step matching this node
+      const arch = RAG_ARCHITECTURES[currentArchKey];
+      const matchIdx = arch.steps.findIndex(s => s.activeNodeId === nodeId);
+      if (matchIdx !== -1) {
+        goToStep(matchIdx);
+      }
+    });
+
+    function getArch() {
+      return RAG_ARCHITECTURES[currentArchKey];
+    }
+
+    // Switch Architecture
+    function switchArchitecture(archKey) {
+      pausePlayback();
+      currentArchKey = archKey;
+      currentStepIndex = 0;
+
+      // Update Switcher Buttons
+      document.querySelectorAll(".arch-btn").forEach(btn => {
+        btn.classList.remove("active", "active-self");
+        if (btn.getAttribute("data-arch") === archKey) {
+          btn.classList.add(archKey === "self_rag" ? "active-self" : "active");
+        }
+      });
+
+      const arch = getArch();
+
+      // Update Plain-English Banner
+      const simpleDefEl = document.getElementById("arch-simple-def");
+      if (simpleDefEl) {
+        simpleDefEl.textContent = arch.simpleDefinition || arch.description;
+      }
+
+      // Render Metrics Bar
+      const metricsBar = document.getElementById("arch-metrics-bar");
+      metricsBar.innerHTML = `
+        <div class="metric-pill">
+          <span class="label">Topology</span>
+          <span class="val" style="color:#38bdf8;">${arch.topology.split(' ')[0]}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="label">Total Stages</span>
+          <span class="val">${arch.summaryMetrics.stages} Nodes</span>
+        </div>
+        <div class="metric-pill">
+          <span class="label">Latency Profile</span>
+          <span class="val" style="color:#fbbf24;">${arch.summaryMetrics.latency}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="label">Accuracy</span>
+          <span class="val" style="color:#34d399;">${arch.summaryMetrics.accuracy}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="label">Hallucination Risk</span>
+          <span class="val" style="color:${arch.summaryMetrics.hallucinationRisk.includes('Near Zero') ? '#34d399' : (arch.summaryMetrics.hallucinationRisk.includes('Low') ? '#38bdf8' : '#f87171')};">
+            ${arch.summaryMetrics.hallucinationRisk}
+          </span>
+        </div>
+      `;
+
+      // Update Overview Card
+      document.getElementById("arch-overview-title").textContent = arch.name;
+      document.getElementById("arch-overview-desc").textContent = arch.description;
+
+      const prosList = document.getElementById("arch-pros-list");
+      prosList.innerHTML = arch.pros.map(p => `<li>${p}</li>`).join('');
+
+      const consList = document.getElementById("arch-cons-list");
+      consList.innerHTML = arch.cons.map(c => `<li>${c}</li>`).join('');
+
+      // Build Timeline Scrubber
+      renderScrubber();
+
+      // Mount into Visualizer
+      visualizer.setArchitecture(arch);
+      goToStep(0);
+    }
+
+    // Render Timeline Scrubber Dots
+    function renderScrubber() {
+      const arch = getArch();
+      const scrubber = document.getElementById("timeline-scrubber");
+      scrubber.innerHTML = arch.steps.map((step, idx) => `
+        <button class="scrub-dot ${idx === currentStepIndex ? 'active' : ''}" data-step-idx="${idx}">
+          <span>${idx + 1}.</span> ${step.action}
+        </button>
+      `).join('');
+
+      scrubber.querySelectorAll(".scrub-dot").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.getAttribute("data-step-idx"), 10);
+          goToStep(idx);
+        });
+      });
+    }
+
+    // Go to specific step
+    function goToStep(idx) {
+      const arch = getArch();
+      if (idx < 0) idx = 0;
+      if (idx >= arch.steps.length) idx = arch.steps.length - 1;
+      currentStepIndex = idx;
+
+      // Update Counter
+      document.getElementById("counter-current").textContent = currentStepIndex + 1;
+      document.getElementById("counter-total").textContent = arch.steps.length;
+
+      // Update Scrubber classes
+      document.querySelectorAll(".scrub-dot").forEach((dot, i) => {
+        dot.classList.remove("active", "passed");
+        if (i === currentStepIndex) dot.classList.add("active");
+        else if (i < currentStepIndex) dot.classList.add("passed");
+      });
+
+      // Update Visualizer
+      visualizer.setStep(currentStepIndex);
+
+      // Update Step Deep Dive Tab
+      renderStepDetails();
+
+      // Update State Inspector Tab
+      renderStateJson();
+    }
+
+    // Render Step Details Tab
+    function renderStepDetails() {
+      const arch = getArch();
+      const step = arch.steps[currentStepIndex];
+      if (!step) return;
+
+      document.getElementById("detail-step-title").textContent = step.title;
+      document.getElementById("detail-action-tag").textContent = step.action;
+      document.getElementById("detail-stage-badge").textContent = `STAGE ${currentStepIndex + 1} OF ${arch.steps.length}`;
+      document.getElementById("detail-step-desc").textContent = step.description;
+
+      // Plain English definition
+      const plainDefEl = document.getElementById("detail-simple-definition");
+      if (plainDefEl) {
+        plainDefEl.textContent = step.simpleDefinition || "In simple words: " + step.description;
+      }
+
+      const dd = step.deepDive;
+      document.getElementById("detail-role-text").textContent = dd.role + (dd.why ? " — " + dd.why : "");
+      document.getElementById("detail-input-text").textContent = dd.inputs;
+      document.getElementById("detail-mechanics-text").textContent = dd.mechanics;
+      
+      const outEl = document.getElementById("detail-output-text");
+      if (outEl) outEl.textContent = dd.output || "Verified output for downstream nodes.";
+
+      document.getElementById("detail-pitfalls-text").textContent = dd.pitfalls;
+      document.getElementById("detail-code-content").textContent = dd.langgraphCode;
+    }
+
+    // Render State JSON Tab
+    function renderStateJson() {
+      const arch = getArch();
+      const step = arch.steps[currentStepIndex];
+      if (!step) return;
+
+      const jsonViewer = document.getElementById("json-inspector-view");
+      const stateObj = step.state;
+
+      // Format JSON with syntax styling
+      const formatted = Object.entries(stateObj).map(([k, v]) => {
+        let valHtml;
+        if (typeof v === 'string') valHtml = `<span class="json-str">"${escapeHtml(v)}"</span>`;
+        else if (typeof v === 'number') valHtml = `<span class="json-num">${v}</span>`;
+        else if (typeof v === 'boolean') valHtml = `<span class="json-bool">${v}</span>`;
+        else valHtml = `<span class="json-str">${escapeHtml(JSON.stringify(v))}</span>`;
+
+        return `  <span class="json-key">"${k}"</span>: ${valHtml}`;
+      }).join(',\n');
+
+      jsonViewer.innerHTML = `<pre>{\n${formatted}\n}</pre>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // Play / Pause Flow
+    function togglePlayback() {
+      if (isPlaying) {
+        pausePlayback();
+      } else {
+        startPlayback();
+      }
+    }
+
+    function startPlayback() {
+      const arch = getArch();
+      if (currentStepIndex >= arch.steps.length - 1) {
+        currentStepIndex = 0;
+        goToStep(0);
+      }
+      isPlaying = true;
+      document.getElementById("play-icon").textContent = "⏸";
+      document.getElementById("play-text").textContent = "Pause Flow";
+      scheduleNextStep();
+    }
+
+    function pausePlayback() {
+      isPlaying = false;
+      if (playTimer) {
+        clearTimeout(playTimer);
+        playTimer = null;
+      }
+      document.getElementById("play-icon").textContent = "▶";
+      document.getElementById("play-text").textContent = "Play Flow";
+    }
+
+    function scheduleNextStep() {
+      if (!isPlaying) return;
+      const arch = getArch();
+      const delay = 2200 / playbackSpeed;
+
+      playTimer = setTimeout(() => {
+        if (currentStepIndex < arch.steps.length - 1) {
+          goToStep(currentStepIndex + 1);
+          scheduleNextStep();
+        } else {
+          pausePlayback();
+        }
+      }, delay);
+    }
+
+    // Event Listeners
+    document.getElementById("btn-play-toggle").addEventListener("click", togglePlayback);
+    document.getElementById("btn-next").addEventListener("click", () => {
+      pausePlayback();
+      goToStep(currentStepIndex + 1);
+    });
+    document.getElementById("btn-prev").addEventListener("click", () => {
+      pausePlayback();
+      goToStep(currentStepIndex - 1);
+    });
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      pausePlayback();
+      goToStep(0);
+    });
+
+    document.getElementById("speed-select").addEventListener("change", (e) => {
+      playbackSpeed = parseFloat(e.target.value);
+    });
+
+    // Paradigm switcher buttons (All 8 Architectures)
+    document.querySelectorAll(".arch-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const archKey = btn.getAttribute("data-arch");
+        if (archKey) switchArchitecture(archKey);
+      });
+    });
+
+    // Copy code button
+    document.getElementById("btn-copy-code").addEventListener("click", () => {
+      const code = document.getElementById("detail-code-content").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById("btn-copy-code");
+        btn.textContent = "Copied! ✓";
+        setTimeout(() => { btn.textContent = "Copy Snippet"; }, 2000);
+      });
+    });
+
+    // Tabs
+    const tabButtons = document.querySelectorAll(".tab-item");
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const tabKey = btn.getAttribute("data-tab");
+        document.getElementById("tab-content-step").style.display = (tabKey === "step" ? "block" : "none");
+        document.getElementById("tab-content-state").style.display = (tabKey === "state" ? "block" : "none");
+        document.getElementById("tab-content-comparison").style.display = (tabKey === "comparison" ? "block" : "none");
+      });
+    });
+
+    // Keyboard Shortcuts (Space for Play/Pause, Arrows for Steps, Keys 1-8 for Architectures)
+    window.addEventListener("keydown", (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        togglePlayback();
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        pausePlayback();
+        goToStep(currentStepIndex + 1);
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        pausePlayback();
+        goToStep(currentStepIndex - 1);
+      } else {
+        const archKeys = [
+          "simple_rag", "advanced_rag", "self_rag", "crag",
+          "agentic_rag", "graph_rag", "multimodal_rag", "vectorless_rag"
+        ];
+        const num = parseInt(e.key, 10);
+        if (!isNaN(num) && num >= 1 && num <= 8) {
+          switchArchitecture(archKeys[num - 1]);
+        }
+      }
+    });
+
+    // Check query params if specified (e.g., ?arch=agentic_rag)
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedArch = urlParams.get("arch");
+    if (requestedArch && RAG_ARCHITECTURES[requestedArch]) {
+      switchArchitecture(requestedArch);
+    } else {
+      switchArchitecture("simple_rag");
+    }
+  </script>
+</body>
+</html>

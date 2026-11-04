@@ -21,6 +21,7 @@
       <ul class="nav-links">
         <li><a href="/static/index.html">Home</a></li>
         <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/rag_visualizer.html" class="nav-rag-highlight"><span class="ai-sparkle">✦</span> AI Architectures</a></li>
         <li><a href="/static/practice.html">Practice</a></li>
         <li><a href="/static/quiz.html">Quiz</a></li>
         <li><a href="/static/dashboard.html">Dashboard</a></li>
@@ -44,6 +45,20 @@
         <div>Time: <strong id="algo-time" style="color:var(--accent-secondary);">O(N)</strong></div>
         <div>Space: <strong id="algo-space" style="color:var(--accent-primary);">O(1)</strong></div>
       </div>
+    </div>
+
+    <!-- RAG Studio Dedicated Callout (shown for RAG algorithms) -->
+    <div id="rag-studio-callout" class="glass-panel" style="display:none; padding:1.25rem 1.5rem; margin-bottom:1.5rem; background:linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%); border:1px solid rgba(168, 85, 247, 0.5); justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.35rem;">
+          <span class="badge" style="background:rgba(168,85,247,0.25); color:#c084fc; border:1px solid rgba(168,85,247,0.5);">RECOMMENDED</span>
+          <h3 style="font-size:1.15rem; color:#fff; margin:0;">Specialized LangGraph Architecture Studio</h3>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Experience this architecture with animated SVG node topology, live token flow particles, and LangGraph StateGraph memory inspection.</p>
+      </div>
+      <a id="btn-launch-rag-studio" href="/static/rag_visualizer.html" class="btn btn-primary" style="background:linear-gradient(135deg, #6366f1 0%, #a855f7 100%); padding:0.6rem 1.4rem;">
+        Launch Full AI Studio →
+      </a>
     </div>
 
     <!-- Custom Input Configuration Bar -->
@@ -142,9 +157,18 @@
           const algoId = (algorithmId || "").toLowerCase();
           const visType = (currentAlgoDetail.visualizer_type || "").toLowerCase();
 
+          if (algoId.includes("rag")) {
+            const callout = document.getElementById("rag-studio-callout");
+            if (callout) {
+              callout.style.display = "flex";
+              const launchBtn = document.getElementById("btn-launch-rag-studio");
+              if (launchBtn) launchBtn.href = `/static/rag_visualizer.html?arch=${algoId}`;
+            }
+          }
+
           if (visType === "crypto" || catLower.includes("crypto") || algoId.includes("rsa") || algoId.includes("cipher") || algoId.includes("aes") || algoId.includes("sha")) {
             currentVisualizer = new CryptoVisualizer(container);
-          } else if (visType === "graph" || catLower.includes("graph") || catLower.includes("path") || algoId.includes("bfs") || algoId.includes("dfs") || algoId.includes("dijkstra") || algoId.includes("bst")) {
+          } else if (visType === "graph" || catLower.includes("graph") || catLower.includes("path") || algoId.includes("bfs") || algoId.includes("dfs") || algoId.includes("dijkstra") || algoId.includes("bst") || algoId.includes("rag")) {
             currentVisualizer = new GraphVisualizer(container);
           } else if (visType === "grid" || catLower.includes("os") || catLower.includes("network") || catLower.includes("dbms") || algoId.includes("cpu") || algoId.includes("page") || algoId.includes("tcp") || algoId.includes("sql")) {
             currentVisualizer = new GridVisualizer(container);

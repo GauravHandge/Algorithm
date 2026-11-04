@@ -21,6 +21,7 @@
       <ul class="nav-links">
         <li><a href="/static/index.html" class="active">Home</a></li>
         <li><a href="/static/algorithms.html">Explore Algorithms</a></li>
+        <li><a href="/static/rag_visualizer.html" class="nav-rag-highlight"><span class="ai-sparkle">✦</span> AI Architectures</a></li>
         <li><a href="/static/practice.html">Practice</a></li>
         <li><a href="/static/quiz.html">Quiz</a></li>
         <li><a href="/static/dashboard.html">Dashboard</a></li>
@@ -36,11 +37,34 @@
         Master Computer Science Algorithms by Seeing Real Execution Step-by-Step
       </h1>
       <p style="font-size:1.2rem; color:var(--text-muted); margin-bottom:2rem; max-width:750px; margin-left:auto; margin-right:auto;">
-        From fundamental Data Structures & Algorithms to Cybersecurity, Operating Systems, Computer Networks, DBMS, and AI/ML Deep Learning.
+        From fundamental Data Structures & Algorithms to Cybersecurity, Operating Systems, Computer Networks, DBMS, and AI/ML Deep Learning & Agentic StateGraphs.
       </p>
       <div style="display:flex; justify-content:center; gap:1.25rem; flex-wrap:wrap;">
         <a href="/static/algorithms.html" class="btn btn-primary" style="font-size:1.05rem; padding:0.85rem 1.8rem;">Explore All Subjects →</a>
-        <a href="/static/algorithm.html?id=bfs" class="btn btn-secondary" style="font-size:1.05rem; padding:0.85rem 1.8rem;">Try Interactive Visualizer</a>
+        <a href="/static/rag_visualizer.html" class="btn btn-secondary" style="font-size:1.05rem; padding:0.85rem 1.8rem; border-color:rgba(168,85,247,0.5);"><span class="ai-sparkle">✦</span> Try RAG & LangGraph Studio</a>
+      </div>
+    </section>
+
+    <!-- NEW FEATURE CALLOUT: AI RAG & LangGraph Visualizer -->
+    <section style="margin-top:2rem;">
+      <div class="glass-panel" style="padding:2rem; background: linear-gradient(135deg, rgba(19, 27, 46, 0.95) 0%, rgba(30, 27, 75, 0.85) 100%); border: 1px solid rgba(168, 85, 247, 0.4); box-shadow: 0 0 35px rgba(99, 102, 241, 0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 720px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.75rem;">
+            <span class="badge" style="background:rgba(168,85,247,0.25); color:#c084fc; border:1px solid rgba(168,85,247,0.5);">NEW AI FEATURE</span>
+            <span class="badge badge-easy">Interactive Simulation</span>
+          </div>
+          <h2 style="font-size:2rem; margin-bottom:0.75rem; background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            RAG & LangGraph Architecture Visualizer
+          </h2>
+          <p style="color:var(--text-muted); font-size:1rem; line-height:1.6;">
+            Experience step-by-step animated execution of <strong>Simple RAG</strong>, <strong>Advanced RAG</strong> (Hybrid BM25 + Dense + Cross-Encoder), and <strong>Self-RAG</strong> agentic StateGraphs featuring reflection tokens (<code>[Retrieve]</code>, <code>[IsRel]</code>, <code>[IsSupported]</code>) and self-correction loops.
+          </p>
+        </div>
+        <div>
+          <a href="/static/rag_visualizer.html" class="btn btn-primary" style="font-size:1.1rem; padding:0.9rem 2rem; background:linear-gradient(135deg, #6366f1 0%, #a855f7 100%); box-shadow:0 0 25px rgba(168,85,247,0.5);">
+            Launch AI Studio →
+          </a>
+        </div>
       </div>
     </section>
 
@@ -57,16 +81,16 @@
       <h2 style="font-size:1.8rem; margin-bottom:1.5rem; text-align:center;">Featured Interactive Visualizers</h2>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
         
-        <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; border:1px solid rgba(168,85,247,0.4);">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-              <span class="badge badge-medium">Medium</span>
-              <span style="font-size:0.8rem; color:var(--text-muted);">DSA - Graph</span>
+              <span class="badge" style="background:rgba(168,85,247,0.2); color:#c084fc; border:1px solid rgba(168,85,247,0.4);">Agentic AI</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">AI / StateGraph</span>
             </div>
-            <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">Breadth-First Search (BFS)</h3>
-            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">Visualize graph node queue additions, active node exploration, and traversal step-by-step.</p>
+            <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">Self-RAG (LangGraph)</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">Visualize cyclical reflection nodes, document grading, hallucination detection, and query rewriting loops.</p>
           </div>
-          <a href="/static/algorithm.html?id=bfs" class="btn btn-primary" style="width:100%;">Launch Visualizer →</a>
+          <a href="/static/rag_visualizer.html?arch=self_rag" class="btn btn-primary" style="width:100%; background:linear-gradient(135deg, #6366f1 0%, #a855f7 100%);">Launch AI Visualizer →</a>
         </div>
 
         <div class="glass-panel" style="padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">

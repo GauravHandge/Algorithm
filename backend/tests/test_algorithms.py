@@ -73,5 +73,18 @@ class TestAlgorithmExecutionEngines(unittest.TestCase):
         self.assertTrue(res.success)
         self.assertIn("prediction", res.result)
 
+    def test_rag_engines(self):
+        rag_algos = [
+            "simple_rag", "advanced_rag", "self_rag", "crag",
+            "agentic_rag", "graph_rag", "multimodal_rag", "vectorless_rag"
+        ]
+        for algo in rag_algos:
+            res = global_execution_registry.execute(algo, {})
+            self.assertTrue(res.success, f"Failed execution for {algo}")
+            self.assertGreater(len(res.steps), 0, f"No steps for {algo}")
+            self.assertEqual(res.algorithm, algo)
+            self.assertIsNotNone(res.result)
+
 if __name__ == "__main__":
     unittest.main()
+

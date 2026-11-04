@@ -16,6 +16,11 @@ from backend.algorithms.dijkstra import DijkstraEngine
 from backend.algorithms.selection_sort import SelectionSortEngine
 from backend.algorithms.insertion_sort import InsertionSortEngine
 from backend.algorithms.linear_search import LinearSearchEngine
+from backend.algorithms.rag_engine import (
+    SimpleRAGEngine, AdvancedRAGEngine, SelfRAGEngine,
+    CRAGEngine, AgenticRAGEngine, GraphRAGEngine,
+    MultimodalRAGEngine, VectorlessRAGEngine
+)
 from backend.schemas.algorithm import AlgorithmExecuteResponse
 
 class AlgorithmExecutionEngineRegistry:
@@ -40,7 +45,15 @@ class AlgorithmExecutionEngineRegistry:
             TCPHandshakeEngine(),
             SQLEngine(),
             LinearRegressionEngine(),
-            NeuralNetworkEngine()
+            NeuralNetworkEngine(),
+            SimpleRAGEngine(),
+            AdvancedRAGEngine(),
+            SelfRAGEngine(),
+            CRAGEngine(),
+            AgenticRAGEngine(),
+            GraphRAGEngine(),
+            MultimodalRAGEngine(),
+            VectorlessRAGEngine()
         ]
         for engine in engines:
             self.engines[engine.get_id()] = engine
