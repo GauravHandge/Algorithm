@@ -39,42 +39,41 @@ export class RagGraphVisualizer {
     switch (role) {
       case "START":
       case "END":
-        return { bg: "rgba(16, 185, 129, 0.15)", border: "#10b981", text: "#34d399", glow: "rgba(16, 185, 129, 0.4)" };
+        return { bg: "#ecfdf5", border: "#10b981", text: "#059669", glow: "rgba(16, 185, 129, 0.25)" };
       case "GATE":
       case "ROUTER":
-        return { bg: "rgba(245, 158, 11, 0.15)", border: "#f59e0b", text: "#fbbf24", glow: "rgba(245, 158, 11, 0.4)" };
+        return { bg: "#fffbeb", border: "#f59e0b", text: "#d97706", glow: "rgba(245, 158, 11, 0.25)" };
       case "TOOL":
-        return { bg: "rgba(234, 179, 8, 0.15)", border: "#eab308", text: "#facc15", glow: "rgba(234, 179, 8, 0.4)" };
+        return { bg: "#fefce8", border: "#eab308", text: "#ca8a04", glow: "rgba(234, 179, 8, 0.25)" };
       case "PLANNER":
-        return { bg: "rgba(99, 102, 241, 0.15)", border: "#6366f1", text: "#818cf8", glow: "rgba(99, 102, 241, 0.4)" };
+        return { bg: "#eff6ff", border: "#0052ff", text: "#0052ff", glow: "rgba(0, 82, 255, 0.25)" };
       case "GRAPH":
-        return { bg: "rgba(20, 184, 166, 0.15)", border: "#14b8a6", text: "#2dd4bf", glow: "rgba(20, 184, 166, 0.4)" };
+        return { bg: "#f0fdfa", border: "#14b8a6", text: "#0f766e", glow: "rgba(20, 184, 166, 0.25)" };
       case "VISION":
-        return { bg: "rgba(236, 72, 153, 0.15)", border: "#ec4899", text: "#f472b6", glow: "rgba(236, 72, 153, 0.4)" };
+        return { bg: "#fdf2f8", border: "#ec4899", text: "#be185d", glow: "rgba(236, 72, 153, 0.25)" };
       case "FUSION":
-        return { bg: "rgba(139, 92, 246, 0.15)", border: "#8b5cf6", text: "#a78bfa", glow: "rgba(139, 92, 246, 0.4)" };
+        return { bg: "#faf5ff", border: "#8b5cf6", text: "#6d28d9", glow: "rgba(139, 92, 246, 0.25)" };
       case "AUGMENT":
-        return { bg: "rgba(6, 182, 212, 0.15)", border: "#06b6d4", text: "#22d3ee", glow: "rgba(6, 182, 212, 0.4)" };
       case "RETRIEVE":
       case "DENSE_SEARCH":
       case "BM25_SEARCH":
-        return { bg: "rgba(6, 182, 212, 0.15)", border: "#06b6d4", text: "#22d3ee", glow: "rgba(6, 182, 212, 0.4)" };
+        return { bg: "#ecfeff", border: "#0891b2", text: "#0e7490", glow: "rgba(8, 145, 178, 0.25)" };
       case "EVALUATE":
       case "REFLECTION":
-        return { bg: "rgba(168, 85, 247, 0.15)", border: "#a855f7", text: "#c084fc", glow: "rgba(168, 85, 247, 0.4)" };
+        return { bg: "#faf5ff", border: "#9333ea", text: "#7e22ce", glow: "rgba(147, 51, 234, 0.25)" };
       case "REWRITE":
       case "LOOP":
-        return { bg: "rgba(244, 63, 94, 0.15)", border: "#f43f5e", text: "#fb7185", glow: "rgba(244, 63, 94, 0.4)" };
+        return { bg: "#fff1f2", border: "#f43f5e", text: "#e11d48", glow: "rgba(244, 63, 94, 0.25)" };
       case "GENERATE":
       case "SYNTHESIS":
-        return { bg: "rgba(99, 102, 241, 0.15)", border: "#6366f1", text: "#818cf8", glow: "rgba(99, 102, 241, 0.4)" };
+        return { bg: "#eff6ff", border: "#2563eb", text: "#1d4ed8", glow: "rgba(37, 99, 235, 0.25)" };
       case "STORE":
       case "EMBED":
       case "PROCESS":
       case "SUMMARIZE":
-        return { bg: "rgba(59, 130, 246, 0.15)", border: "#3b82f6", text: "#60a5fa", glow: "rgba(59, 130, 246, 0.4)" };
+        return { bg: "#f0fdf4", border: "#2563eb", text: "#1d4ed8", glow: "rgba(37, 99, 235, 0.25)" };
       default:
-        return { bg: "rgba(148, 163, 184, 0.15)", border: "#64748b", text: "#94a3b8", glow: "rgba(100, 116, 139, 0.4)" };
+        return { bg: "#f1f5f9", border: "#64748b", text: "#475569", glow: "rgba(100, 116, 139, 0.25)" };
     }
   }
 
@@ -181,13 +180,13 @@ export class RagGraphVisualizer {
       }
 
       // Edge Styling
-      let strokeColor = "rgba(100, 116, 139, 0.4)";
+      let strokeColor = "rgba(148, 163, 184, 0.6)";
       let strokeWidth = 2;
       let strokeDash = isConditional ? "5,4" : (isLoop ? "6,3" : "none");
       let markerId = "arrow-default";
 
       if (isEdgeActive) {
-        strokeColor = isLoop ? "#f43f5e" : "#06b6d4";
+        strokeColor = isLoop ? "#f43f5e" : "#0052ff";
         strokeWidth = 3;
         markerId = isLoop ? "arrow-loop" : "arrow-active";
       }
@@ -198,7 +197,7 @@ export class RagGraphVisualizer {
         <g class="graph-edge ${isEdgeActive ? 'active-edge' : ''}">
           <path id="${pathId}" d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDash}" marker-end="url(#${markerId})" />
           ${edge.label ? `
-            <text font-size="10" font-family="var(--font-mono)" fill="${isEdgeActive ? '#38bdf8' : '#94a3b8'}" font-weight="600">
+            <text font-size="10" font-family="var(--font-mono)" fill="${isEdgeActive ? '#0052ff' : '#64748b'}" font-weight="700">
               <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">
                 ${edge.label}
               </textPath>
@@ -209,7 +208,7 @@ export class RagGraphVisualizer {
 
       // If active edge, inject animated pulse particle!
       if (isEdgeActive) {
-        const particleColor = isLoop ? "#fb7185" : "#38bdf8";
+        const particleColor = isLoop ? "#f43f5e" : "#0052ff";
         particlesSvg += `
           <circle r="5" fill="${particleColor}" filter="url(#glow-filter)">
             <animateMotion dur="1.2s" repeatCount="indefinite" path="${pathD}" keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
@@ -231,8 +230,8 @@ export class RagGraphVisualizer {
 
       // Determine step status relative to current playback
       let statusText = "IDLE";
-      let statusBg = "rgba(100, 116, 139, 0.2)";
-      let statusColor = "#94a3b8";
+      let statusBg = "rgba(100, 116, 139, 0.12)";
+      let statusColor = "#64748b";
 
       if (isNodeActive) {
         statusText = "RUNNING";
@@ -240,8 +239,8 @@ export class RagGraphVisualizer {
         statusColor = "#ffffff";
       } else if (node.role === "START" && this.currentStepIndex > 0) {
         statusText = "PASSED";
-        statusBg = "rgba(16, 185, 129, 0.3)";
-        statusColor = "#34d399";
+        statusBg = "#ecfdf5";
+        statusColor = "#059669";
       }
 
       nodesSvg += `
@@ -249,23 +248,23 @@ export class RagGraphVisualizer {
           
           <!-- Active Pulsing Glow Halo -->
           ${isNodeActive ? `
-            <rect x="-4" y="-4" width="${nodeW + 8}" height="${nodeH + 8}" rx="14" fill="none" stroke="${colors.border}" stroke-width="2" opacity="0.6">
-              <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.5s" repeatCount="indefinite" />
+            <rect x="-4" y="-4" width="${nodeW + 8}" height="${nodeH + 8}" rx="14" fill="none" stroke="${colors.border}" stroke-width="2.5" opacity="0.5">
+              <animate attributeName="opacity" values="0.7;0.2;0.7" dur="1.5s" repeatCount="indefinite" />
               <animate attributeName="transform" type="scale" values="1;1.02;1" dur="1.5s" repeatCount="indefinite" />
             </rect>
           ` : ''}
 
-          <!-- Main Node Card Box -->
+          <!-- Main Node Card Box (Crisp White Card with Soft Shadow) -->
           <rect 
             x="0" 
             y="0" 
             width="${nodeW}" 
             height="${nodeH}" 
             rx="10" 
-            fill="${isNodeActive ? 'rgba(30, 41, 59, 0.95)' : 'rgba(15, 23, 42, 0.85)'}" 
-            stroke="${isNodeActive ? colors.border : (isNodeSelected ? '#a5b4fc' : 'rgba(255, 255, 255, 0.12)')}" 
-            stroke-width="${isNodeActive || isNodeSelected ? '2' : '1'}"
-            filter="${isNodeActive ? 'url(#active-shadow)' : 'none'}"
+            fill="${isNodeActive ? '#ffffff' : '#ffffff'}" 
+            stroke="${isNodeActive ? colors.border : (isNodeSelected ? '#0052ff' : '#e2e8f0')}" 
+            stroke-width="${isNodeActive || isNodeSelected ? '2' : '1.5'}"
+            filter="${isNodeActive ? 'url(#active-shadow)' : 'url(#card-shadow)'}"
           />
 
           <!-- Header Role Tag -->
@@ -284,12 +283,12 @@ export class RagGraphVisualizer {
             </svg>
           </g>
 
-          <text x="34" y="45" font-size="11" font-family="var(--font-heading)" font-weight="600" fill="#f8fafc">
+          <text x="34" y="45" font-size="11" font-family="var(--font-heading)" font-weight="700" fill="#0f172a">
             ${node.label.length > 13 ? node.label.substring(0, 12) + '…' : node.label}
           </text>
 
           <!-- Node Footer: Status Text -->
-          <text x="10" y="65" font-size="9" font-family="var(--font-mono)" fill="${isNodeActive ? '#38bdf8' : '#64748b'}">
+          <text x="10" y="65" font-size="9" font-family="var(--font-mono)" font-weight="600" fill="${isNodeActive ? '#0052ff' : '#64748b'}">
             ${isNodeActive ? '● Active Step' : (isNodeSelected ? '▸ Selected' : 'Idle Node')}
           </text>
         </g>
@@ -298,26 +297,26 @@ export class RagGraphVisualizer {
 
     // 3. Assemble Complete SVG Structure
     this.container.innerHTML = `
-      <div style="position:relative; width:100%; height:100%; min-height:430px; display:flex; flex-direction:column; background:#070a12; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
+      <div style="position:relative; width:100%; height:100%; min-height:430px; display:flex; flex-direction:column; background:#f8fafc; border-radius:14px; overflow:hidden; border:1px solid #e2e8f0;">
         
         <!-- Top Visualizer HUD Bar -->
-        <div style="background:rgba(15, 23, 42, 0.85); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.08); padding:10px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; z-index:10;">
+        <div style="background:#ffffff; border-bottom:1px solid #e2e8f0; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; z-index:10;">
           <div style="display:flex; align-items:center; gap:12px;">
-            <span class="badge ${arch.badgeClass}" style="font-size:0.75rem; letter-spacing:0.5px; text-transform:uppercase;">
+            <span class="badge ${arch.badgeClass}" style="font-size:0.75rem; letter-spacing:0.5px; text-transform:uppercase; font-weight:700;">
               ${arch.name}
             </span>
-            <span style="color:var(--text-muted); font-size:0.85rem; font-family:var(--font-mono);">
-              Topology: <strong style="color:#e2e8f0;">${arch.topology}</strong>
+            <span style="color:#64748b; font-size:0.85rem; font-family:var(--font-mono);">
+              Topology: <strong style="color:#0f172a;">${arch.topology}</strong>
             </span>
           </div>
 
           <div style="display:flex; align-items:center; gap:15px; font-size:0.85rem;">
             <div style="display:flex; align-items:center; gap:6px;">
-              <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block; box-shadow:0 0 8px #10b981;"></span>
-              <span style="color:#94a3b8; font-size:0.8rem;">Step <strong>${this.currentStepIndex + 1}</strong> of <strong>${arch.steps.length}</strong></span>
+              <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block; box-shadow:0 0 6px rgba(16,185,129,0.5);"></span>
+              <span style="color:#475569; font-size:0.8rem; font-weight:500;">Step <strong style="color:#0f172a;">${this.currentStepIndex + 1}</strong> of <strong style="color:#0f172a;">${arch.steps.length}</strong></span>
             </div>
-            <span style="color:#475569;">|</span>
-            <span style="color:var(--accent-secondary); font-size:0.85rem; font-weight:600; font-family:var(--font-mono);">
+            <span style="color:#cbd5e1;">|</span>
+            <span style="color:#0052ff; font-size:0.85rem; font-weight:700; font-family:var(--font-mono);">
               ${currentStep ? currentStep.action : 'IDLE'}
             </span>
           </div>
@@ -329,15 +328,15 @@ export class RagGraphVisualizer {
             <defs>
               <!-- Grid Pattern -->
               <pattern id="dot-grid" width="24" height="24" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="rgba(255, 255, 255, 0.07)" />
+                <circle cx="2" cy="2" r="1.2" fill="rgba(15, 23, 42, 0.08)" />
               </pattern>
 
               <!-- Arrow Markers -->
               <marker id="arrow-default" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="rgba(100, 116, 139, 0.6)" />
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8" />
               </marker>
               <marker id="arrow-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="#06b6d4" />
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#0052ff" />
               </marker>
               <marker id="arrow-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
@@ -352,7 +351,10 @@ export class RagGraphVisualizer {
                 </feMerge>
               </filter>
               <filter id="active-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(99, 102, 241, 0.35)" />
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 82, 255, 0.25)" />
+              </filter>
+              <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.05)" />
               </filter>
             </defs>
 
@@ -371,16 +373,16 @@ export class RagGraphVisualizer {
         </div>
 
         <!-- Bottom Step Banner Overlay -->
-        <div style="background:rgba(11, 15, 25, 0.92); border-top:1px solid rgba(255,255,255,0.08); padding:10px 18px; display:flex; align-items:center; justify-content:space-between; gap:15px; z-index:10;">
+        <div style="background:#ffffff; border-top:1px solid #e2e8f0; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; gap:15px; z-index:10;">
           <div style="display:flex; align-items:center; gap:12px;">
-            <span style="background:rgba(99, 102, 241, 0.2); color:#a5b4fc; border:1px solid rgba(99, 102, 241, 0.4); font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:4px; font-family:var(--font-mono);">
+            <span style="background:#eff6ff; color:#0052ff; border:1px solid #bfdbfe; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:4px; font-family:var(--font-mono);">
               ACTIVE
             </span>
-            <span style="font-size:0.95rem; font-weight:600; color:#ffffff;">
+            <span style="font-size:0.95rem; font-weight:700; color:#0f172a;">
               ${currentStep ? currentStep.title : 'Ready'}
             </span>
           </div>
-          <span style="color:var(--text-muted); font-size:0.85rem; max-width:650px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+          <span style="color:#475569; font-size:0.85rem; max-width:650px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
             ${currentStep ? currentStep.description : 'Select a step or click play to start visualization.'}
           </span>
         </div>

@@ -84,29 +84,28 @@ export class GraphVisualizer {
 
     // 3. Render SVG Canvas
     let svgHtml = `
-      <div style="position:relative; width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between; background:#0b0f19; border-radius:12px; overflow:hidden;">
+      <div style="position:relative; width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between; background:#ffffff; border-radius:12px; overflow:hidden; border:1px solid #e2e8f0;">
         
         <!-- On-Canvas Step Live Explanation Overlay -->
-        <div style="background:rgba(15, 23, 42, 0.9); border-bottom:1px solid rgba(99,102,241,0.3); padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:10;">
+        <div style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:10;">
           <div style="display:flex; align-items:center; gap:10px;">
-            <span style="background:var(--accent-primary); color:#fff; font-size:0.75rem; font-weight:bold; padding:4px 10px; border-radius:6px; text-transform:uppercase; letter-spacing:0.5px;">
+            <span style="background:#0052ff; color:#fff; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; text-transform:uppercase; letter-spacing:0.5px;">
               ${(state.action || 'STEP EXECUTION').toUpperCase()}
             </span>
-            <span style="color:#f8fafc; font-size:0.95rem; font-weight:500;">
+            <span style="color:#0f172a; font-size:0.95rem; font-weight:600;">
               ${state.message || 'Executing graph algorithm step...'}
             </span>
           </div>
-          <span style="font-family:var(--font-mono); color:var(--accent-secondary); font-size:0.85rem; font-weight:bold; white-space:nowrap;">
+          <span style="font-family:var(--font-mono); color:#0052ff; font-size:0.85rem; font-weight:700; white-space:nowrap;">
             Step ${(state.step || 0) + 1}
           </span>
         </div>
 
         <!-- SVG Graph Canvas -->
-        <svg width="100%" height="${height}" style="flex-grow:1;">
+        <svg width="100%" height="${height}" style="flex-grow:1; background:#ffffff;">
           <defs>
             <filter id="glow-node" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 82, 255, 0.35)" />
             </filter>
           </defs>
     `;
@@ -119,7 +118,7 @@ export class GraphVisualizer {
       if (p1 && p2) {
         const isEdgeActive = (activeNode === edge.source && visitedNodes.has(edge.target)) ||
                              (activeNode === edge.target && visitedNodes.has(edge.source));
-        const strokeColor = isEdgeActive ? "var(--accent-secondary)" : "rgba(255,255,255,0.18)";
+        const strokeColor = isEdgeActive ? "#0052ff" : "#64748b";
         const strokeWidth = isEdgeActive ? "3.5" : "2";
 
         svgHtml += `
@@ -130,8 +129,8 @@ export class GraphVisualizer {
           const midX = (p1.x + p2.x) / 2;
           const midY = (p1.y + p2.y) / 2;
           svgHtml += `
-            <rect x="${midX - 12}" y="${midY - 10}" width="24" height="20" rx="4" fill="#1e293b" stroke="rgba(255,255,255,0.2)" />
-            <text x="${midX}" y="${midY + 4}" fill="var(--accent-warning)" font-size="11" font-weight="bold" text-anchor="middle">${edge.weight}</text>
+            <rect x="${midX - 12}" y="${midY - 10}" width="24" height="20" rx="4" fill="#ffffff" stroke="#cbd5e1" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.06))" />
+            <text x="${midX}" y="${midY + 4}" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">${edge.weight}</text>
           `;
         }
       }
@@ -144,20 +143,24 @@ export class GraphVisualizer {
       const isVisited = visitedNodes.has(nodeId);
       const isQueued = queueNodes.includes(nodeId);
 
-      let nodeFill = "#1e293b";
-      let nodeStroke = "rgba(255,255,255,0.3)";
+      let nodeFill = "#ffffff";
+      let nodeStroke = "#0f172a";
+      let textColor = "#0f172a";
       let nodeGlow = false;
 
       if (isActive) {
-        nodeFill = "var(--accent-primary)";
-        nodeStroke = "#a5b4fc";
+        nodeFill = "#0052ff";
+        nodeStroke = "#0052ff";
+        textColor = "#ffffff";
         nodeGlow = true;
       } else if (isVisited) {
-        nodeFill = "var(--accent-success)";
-        nodeStroke = "#86efac";
+        nodeFill = "#eff6ff";
+        nodeStroke = "#2563eb";
+        textColor = "#1d4ed8";
       } else if (isQueued) {
-        nodeFill = "var(--accent-warning)";
-        nodeStroke = "#fde047";
+        nodeFill = "#fffbeb";
+        nodeStroke = "#f59e0b";
+        textColor = "#b45309";
       }
 
       const distVal = distances[nodeId] !== undefined ? `d:${distances[nodeId]}` : null;
@@ -165,8 +168,8 @@ export class GraphVisualizer {
       svgHtml += `
         <g>
           <circle cx="${pos.x}" cy="${pos.y}" r="22" fill="${nodeFill}" stroke="${nodeStroke}" stroke-width="2.5" ${nodeGlow ? 'filter="url(#glow-node)"' : ''} />
-          <text x="${pos.x}" y="${pos.y + 5}" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">${pos.label}</text>
-          ${distVal ? `<text x="${pos.x}" y="${pos.y - 28}" fill="var(--accent-secondary)" font-size="11" font-weight="bold" text-anchor="middle">${distVal}</text>` : ''}
+          <text x="${pos.x}" y="${pos.y + 5}" fill="${textColor}" font-size="14" font-weight="700" text-anchor="middle">${pos.label}</text>
+          ${distVal ? `<text x="${pos.x}" y="${pos.y - 28}" fill="#0052ff" font-size="11" font-weight="700" text-anchor="middle">${distVal}</text>` : ''}
         </g>
       `;
     });
@@ -175,9 +178,9 @@ export class GraphVisualizer {
 
     // Bottom Queue/Visited Status Strip
     svgHtml += `
-        <div style="background:rgba(15,23,42,0.85); padding:8px 16px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:20px; align-items:center; font-size:0.8rem;">
-          <div><strong style="color:var(--text-muted);">Queue/Stack:</strong> <span style="color:var(--accent-warning); font-family:var(--font-mono); font-weight:bold;">[${queueNodes.join(', ')}]</span></div>
-          <div><strong style="color:var(--text-muted);">Visited:</strong> <span style="color:var(--accent-success); font-family:var(--font-mono); font-weight:bold;">{${Array.from(visitedNodes).join(', ')}}</span></div>
+        <div style="background:#f8fafc; padding:10px 16px; border-top:1px solid #e2e8f0; display:flex; gap:20px; align-items:center; font-size:0.82rem;">
+          <div><strong style="color:#64748b;">Queue/Stack:</strong> <span style="color:#b45309; font-family:var(--font-mono); font-weight:700;">[${queueNodes.join(', ')}]</span></div>
+          <div><strong style="color:#64748b;">Visited:</strong> <span style="color:#059669; font-family:var(--font-mono); font-weight:700;">{${Array.from(visitedNodes).join(', ')}}</span></div>
         </div>
       </div>
     `;
