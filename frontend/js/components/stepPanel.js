@@ -20,7 +20,7 @@ export class StepPanel {
           Select an algorithm and click Run to begin step-by-step execution simulation.
         </div>
 
-        <div id="step-variables-box" style="font-family:var(--font-mono); font-size:0.85rem; color:var(--text-main); background:rgba(0,0,0,0.3); padding:0.85rem; border-radius:8px; border:1px solid var(--border-color); display:none;">
+        <div id="step-variables-box" style="font-family:var(--font-mono); font-size:0.85rem; color:#0f172a; background:#f8fafc; padding:0.85rem; border-radius:8px; border:1px solid #e2e8f0; display:none;">
         </div>
       </div>
     `;
@@ -94,9 +94,9 @@ export class StepPanel {
 
     const highlighted = lines.map((line, lIdx) => {
       if (lIdx === targetLineIdx) {
-        return `<div style="background:rgba(99,102,241,0.3); border-left:3px solid var(--accent-primary); padding-left:8px; font-weight:bold; color:#fff;">${line}</div>`;
+        return `<div style="background:#eff6ff; border-left:3px solid #0052ff; padding-left:8px; font-weight:700; color:#0052ff;">${line}</div>`;
       }
-      return `<div style="padding-left:11px; opacity:0.75;">${line}</div>`;
+      return `<div style="padding-left:11px; color:#334155;">${line}</div>`;
     }).join("");
 
     codeBlock.innerHTML = highlighted;

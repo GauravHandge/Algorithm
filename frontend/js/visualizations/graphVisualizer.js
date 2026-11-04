@@ -14,21 +14,33 @@ export class GraphVisualizer {
     }
 
     // 1. Extract or Auto-Generate Nodes & Edges
-    let nodes = state.nodes || (state.graph ? state.graph.nodes : null) || [];
-    let edges = state.edges || (state.graph ? state.graph.edges : null) || [];
+    let rawNodes = state.nodes || (state.graph ? state.graph.nodes : null) || [];
+    let rawEdges = state.edges || (state.graph ? state.graph.edges : null) || [];
 
-    // Fallback: If nodes is empty, auto-generate nodes from edges list (e.g. ["A-B", "A-C", "B-D"])
-    if (nodes.length === 0 && edges.length > 0) {
+    // Helper to normalize any edge representation
+    const normalizeEdge = (e) => {
+      if (!e) return null;
+      if (typeof e === 'string') {
+        const parts = e.split('-');
+        return { source: (parts[0] || '').trim(), target: (parts[1] || '').trim(), weight: 1 };
+      }
+      const src = e.source || e.from || e.u;
+      const tgt = e.target || e.to || e.v;
+      if (src && tgt) {
+        return { source: String(src).trim(), target: String(tgt).trim(), weight: e.weight !== undefined ? e.weight : 1 };
+      }
+      return null;
+    };
+
+    const formattedEdges = rawEdges.map(normalizeEdge).filter(Boolean);
+
+    // Auto-discover nodes from edges if not explicitly provided
+    let nodes = rawNodes;
+    if (nodes.length === 0 && formattedEdges.length > 0) {
       const nodeSet = new Set();
-      edges.forEach(e => {
-        if (typeof e === 'string') {
-          const parts = e.split('-');
-          if (parts[0]) nodeSet.add(parts[0]);
-          if (parts[1]) nodeSet.add(parts[1]);
-        } else if (e.source && e.target) {
-          nodeSet.add(e.source);
-          nodeSet.add(e.target);
-        }
+      formattedEdges.forEach(e => {
+        if (e.source) nodeSet.add(e.source);
+        if (e.target) nodeSet.add(e.target);
       });
       nodes = Array.from(nodeSet).map(id => ({ id, label: id }));
     }
@@ -42,22 +54,13 @@ export class GraphVisualizer {
         { id: "D", label: "D" },
         { id: "E", label: "E" }
       ];
-      edges = [
+      formattedEdges.push(
         { source: "A", target: "B", weight: 4 },
         { source: "A", target: "C", weight: 2 },
         { source: "B", target: "D", weight: 5 },
         { source: "C", target: "E", weight: 3 }
-      ];
+      );
     }
-
-    // Normalize edges format
-    const formattedEdges = edges.map(e => {
-      if (typeof e === 'string') {
-        const parts = e.split('-');
-        return { source: parts[0], target: parts[1], weight: 1 };
-      }
-      return e;
-    });
 
     // 2. Position nodes in a clean circular / grid 2D layout
     const width = this.container.clientWidth || 700;
@@ -77,7 +80,7 @@ export class GraphVisualizer {
       nodePositions[nodeId] = { x, y, label: typeof node === 'string' ? node : (node.label || nodeId) };
     });
 
-    const activeNode = state.current_node || (state.pointers ? state.pointers.current : null);
+    const activeNode = state.current || state.current_node || (state.pointers ? state.pointers.current : null);
     const visitedNodes = new Set(state.visited || []);
     const queueNodes = state.queue || state.stack || [];
     const distances = (state.variables && state.variables.distances) || {};

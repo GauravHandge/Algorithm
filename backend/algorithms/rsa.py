@@ -7,9 +7,17 @@ class RSAEngine(BaseAlgorithmEngine):
         return "rsa"
 
     def execute(self, input_data: Dict[str, Any], params: Dict[str, Any] = None) -> AlgorithmExecuteResponse:
-        p = int(input_data.get("p", 61))
-        q = int(input_data.get("q", 53))
-        message_val = int(input_data.get("message", 65)) # Message integer (e.g. 'A')
+        merged = {**(params or {}), **(input_data or {})}
+        p = int(merged.get("p", 61))
+        q = int(merged.get("q", 53))
+        raw_msg = merged.get("message", 65)
+        if isinstance(raw_msg, str):
+            try:
+                message_val = int(raw_msg)
+            except ValueError:
+                message_val = ord(raw_msg[0]) if raw_msg else 65
+        else:
+            message_val = int(raw_msg)
 
         raw_states = []
 

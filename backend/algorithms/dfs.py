@@ -7,8 +7,9 @@ class DFSEngine(BaseAlgorithmEngine):
         return "dfs"
 
     def execute(self, input_data: Dict[str, Any], params: Dict[str, Any] = None) -> AlgorithmExecuteResponse:
-        raw_edges = input_data.get("edges", ["A-B", "A-C", "B-D", "C-E", "D-F"])
-        start_node = input_data.get("start_node", "A")
+        merged = {**(params or {}), **(input_data or {})}
+        raw_edges = merged.get("edges", ["A-B", "A-C", "B-D", "C-E", "D-F"])
+        start_node = merged.get("start_node", "A")
 
         adj: Dict[str, List[str]] = {}
         parsed_edges = []

@@ -4,225 +4,411 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AlgoVerse - Learn Computer Science by Seeing How It Works</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
-  <link rel="stylesheet" href="/static/css/layout.css" />
-  <link rel="stylesheet" href="/static/css/components.css" />
-  <link rel="stylesheet" href="/static/css/responsive.css" />
+  <link rel="stylesheet" href="/static/css/style.css?v=20261104" />
+  <link rel="stylesheet" href="/static/css/layout.css?v=20261104" />
+  <link rel="stylesheet" href="/static/css/components.css?v=20261104" />
+  <link rel="stylesheet" href="/static/css/responsive.css?v=20261104" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Hero Two-Column Layout */
-    .hero-section {
+    /* Global Page Styling */
+    body {
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Soft Blue Radial Blob on Top Right */
+    .hero-ambient-blob {
+      position: absolute;
+      top: -60px;
+      right: -80px;
+      width: 680px;
+      height: 680px;
+      background: radial-gradient(circle, rgba(219, 234, 254, 0.7) 0%, rgba(239, 246, 255, 0.45) 55%, transparent 75%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header Nav Pill Active (Matching Image 4) */
+    .nav-pill-active {
+      background: #eff6ff !important;
+      color: #0052ff !important;
+      border-radius: 9999px !important;
+      padding: 0.4rem 1.15rem !important;
+      font-weight: 700 !important;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Hero Layout */
+    .hero-wrapper {
+      position: relative;
+      z-index: 1;
+      padding: 3rem 0 1.5rem 0;
       display: grid;
       grid-template-columns: 1.15fr 1fr;
       align-items: center;
-      gap: 3rem;
-      padding: 3rem 0 2rem 0;
+      gap: 3.5rem;
     }
 
     @media (max-width: 992px) {
-      .hero-section {
+      .hero-wrapper {
         grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .hero-cta-group {
-        justify-content: center;
-      }
-      .hero-section .section-tag {
-        justify-content: center;
+        gap: 2.5rem;
       }
     }
 
-    .hero-title {
-      font-size: 3.1rem;
+    /* Section Tag with Blue/Orange Pill Bar */
+    .section-pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #0052ff;
+      margin-bottom: 1.1rem;
+    }
+
+    .section-pill-tag::before {
+      content: "";
+      display: inline-block;
+      width: 3.5px;
+      height: 15px;
+      background: #0052ff;
+      border-radius: 2px;
+    }
+
+    /* Hero Heading */
+    .hero-main-title {
+      font-size: 3.2rem;
       line-height: 1.18;
+      font-weight: 800;
+      letter-spacing: -0.035em;
       color: #0f172a;
       margin-bottom: 1.25rem;
-      letter-spacing: -0.035em;
     }
 
-    .hero-title .text-highlight {
-      color: var(--accent-primary);
+    .hero-main-title .blue-gradient-text {
+      color: #0052ff;
     }
 
-    .hero-subtitle {
-      font-size: 1.1rem;
+    .hero-lead-text {
+      font-size: 1.08rem;
       color: #475569;
-      line-height: 1.6;
+      line-height: 1.65;
       margin-bottom: 2rem;
       max-width: 540px;
     }
 
-    .hero-cta-group {
+    /* Hero CTA Button Group */
+    .hero-actions-group {
       display: flex;
       align-items: center;
       gap: 1rem;
       flex-wrap: wrap;
+      margin-bottom: 2.75rem;
     }
 
-    /* Hero Laptop / Visualizer Mockup */
-    .laptop-mockup-wrapper {
-      position: relative;
-      display: flex;
-      justify-content: center;
+    .btn-hero-primary {
+      background: #0052ff;
+      color: #ffffff !important;
+      padding: 0.85rem 1.65rem;
+      font-size: 0.96rem;
+      font-weight: 700;
+      border-radius: 10px;
+      display: inline-flex;
       align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 14px rgba(0, 82, 255, 0.28);
+      transition: all 0.2s ease;
+      text-decoration: none;
     }
 
-    .laptop-frame {
-      width: 100%;
-      max-width: 560px;
+    .btn-hero-primary:hover {
+      background: #0045d8;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 82, 255, 0.38);
+    }
+
+    .btn-hero-secondary {
       background: #ffffff;
+      color: #0f172a !important;
       border: 1px solid #cbd5e1;
-      border-radius: 16px;
-      box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.05);
-      overflow: hidden;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.96rem;
+      font-weight: 600;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
     }
 
-    .laptop-header {
+    .btn-hero-secondary:hover {
       background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 0.6rem 1rem;
+      border-color: #94a3b8;
+    }
+
+    /* 4-Stat Strip Matching Image 4 */
+    .hero-stats-row {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .stat-pill-icon {
+      font-size: 1.1rem;
+      color: #0052ff;
+      font-weight: 800;
+    }
+
+    .stat-pill-label {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .stat-pill-sub {
+      font-size: 0.92rem;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    /* Right Mockup Window Matching Image 4 */
+    .laptop-window-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 20px 45px -10px rgba(0, 82, 255, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      width: 100%;
+      max-width: 570px;
+    }
+
+    .laptop-window-top {
+      background: #ffffff;
+      border-bottom: 1px solid #f1f5f9;
+      padding: 0.75rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .laptop-title {
-      font-size: 0.82rem;
+    .dots-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot-circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .window-title-center {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .window-badge-pill {
+      font-size: 0.72rem;
       font-weight: 700;
-      color: #1e293b;
+      background: #eff6ff;
+      color: #0052ff;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
     }
 
-    .laptop-content {
-      padding: 1rem;
+    .window-body-grid {
       display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 1rem;
-      background: #ffffff;
+      grid-template-columns: 1.4fr 1fr;
+      padding: 1.25rem;
+      gap: 1.25rem;
+      align-items: center;
     }
 
-    .mini-graph-canvas {
-      width: 100%;
-      height: 200px;
+    @media (max-width: 600px) {
+      .window-body-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .window-canvas-box {
       background: #f8fafc;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      border: 1px solid #f1f5f9;
+      padding: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .mini-steps-list {
+    /* Algorithm Steps List */
+    .steps-checklist {
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
     }
 
-    .mini-step-item {
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #64748b;
-      background: #f8fafc;
-    }
-
-    .mini-step-item.active {
-      background: #eff6ff;
-      color: var(--accent-primary);
-      border: 1px solid #bfdbfe;
-    }
-
-    .laptop-controls {
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      padding: 0.6rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .steps-checklist-title {
       font-size: 0.78rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.25rem;
+    }
+
+    .step-check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.4rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
       color: #64748b;
     }
 
-    /* Stacked Books Badge (Reference Design) */
-    .books-decoration {
-      position: absolute;
-      right: -24px;
-      bottom: 20px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 0.6rem 0.85rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.72rem;
+    .step-check-item.active {
+      background: #eff6ff;
+      color: #0052ff;
       font-weight: 700;
     }
 
-    @media (max-width: 640px) {
-      .books-decoration { display: none; }
-      .laptop-content { grid-template-columns: 1fr; }
-    }
-
-    .book-spine {
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      border-left: 3px solid #0052ff;
-    }
-
-    /* Featured Banner Section */
-    .featured-vis-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .step-num-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      display: inline-flex;
       align-items: center;
-      gap: 3rem;
-      margin: 4.5rem 0;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 20px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
     }
 
-    @media (max-width: 900px) {
-      .featured-vis-section {
-        grid-template-columns: 1fr;
-        padding: 1.5rem;
+    .step-check-item.active .step-num-badge {
+      background: #0052ff;
+      color: #ffffff;
+    }
+
+    .window-footer-bar {
+      background: #ffffff;
+      border-top: 1px solid #f1f5f9;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .play-circle-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #0052ff;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Slider Track with Thumb Matching Image 4 */
+    .slider-track-line {
+      width: 120px;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      position: relative;
+      margin: 0 10px;
+    }
+
+    .slider-track-line .slider-fill {
+      width: 60%;
+      height: 100%;
+      background: #0052ff;
+      border-radius: 2px;
+    }
+
+    .slider-track-line .slider-thumb {
+      width: 10px;
+      height: 10px;
+      background: #0052ff;
+      border-radius: 50%;
+      position: absolute;
+      top: -3px;
+      left: 60%;
+      transform: translateX(-50%);
+    }
+
+    /* Explore by Subject Section (3x2 Grid) */
+    .subject-cards-3x2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 992px) {
+      .subject-cards-3x2 {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    /* Learn by Doing Cards */
-    .doing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+    @media (max-width: 640px) {
+      .subject-cards-3x2 {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .doing-card {
+    .subject-pill-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 1.5rem;
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
       display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      transition: all 0.25s ease;
+      align-items: center;
+      justify-content: space-between;
       text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
     }
 
-    .doing-card:hover {
+    .subject-pill-card:hover {
       border-color: #93c5fd;
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(37,99,235,0.08);
+      box-shadow: 0 8px 24px rgba(0, 82, 255, 0.08);
     }
 
-    .doing-icon {
+    .subject-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .subject-icon-box {
       width: 44px;
       height: 44px;
       border-radius: 10px;
@@ -231,422 +417,399 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       flex-shrink: 0;
     }
 
-    /* Clean Footer */
-    .app-footer {
-      border-top: 1px solid #e2e8f0;
-      background: #ffffff;
-      padding: 2.5rem 2rem;
-      margin-top: 5rem;
+    .subject-pill-title {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.2rem;
     }
 
-    .footer-inner {
-      max-width: 1260px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+    .subject-pill-desc {
+      font-size: 0.78rem;
+      color: #64748b;
+      line-height: 1.45;
+      max-width: 250px;
+    }
+
+    .subject-pill-arrow {
+      color: #0f172a;
+      font-size: 1.1rem;
+      font-weight: 700;
+      transition: transform 0.2s ease;
+    }
+
+    .subject-pill-card:hover .subject-pill-arrow {
+      transform: translateX(3px);
+      color: #0052ff;
     }
   </style>
 </head>
 <body style="background-color: #ffffff !important; color: #0f172a !important;">
-  <!-- Clean Modern Header -->
-  <header class="app-header">
-    <a href="/static/index.html" class="brand-logo">
-      <div class="brand-icon">
-        <!-- Modern Stylized "A" Monogram Matching Reference -->
+  <!-- Ambient Soft Blue Gradient Behind Hero Mockup -->
+  <div class="hero-ambient-blob"></div>
+
+  <!-- Header Matching Image 4 -->
+  <header class="app-header" style="background:#ffffff; border-bottom:1px solid #e2e8f0; position:sticky; top:0; z-index:100; height:72px;">
+    <a href="/static/index.html" class="brand-logo" style="text-decoration:none; display:flex; align-items:center; gap:8px;">
+      <div style="width:28px; height:28px;">
+        <!-- Clean Modern Monogram "A" -->
         <svg viewBox="0 0 32 32" fill="none">
-          <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="url(#brandGrad)" />
-          <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#ffffff" opacity="0.9" />
-          <defs>
-            <linearGradient id="brandGrad" x1="3" y1="2" x2="29" y2="28" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0052FF" />
-              <stop offset="1" stop-color="#38BDF8" />
-            </linearGradient>
-          </defs>
+          <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#0052ff" />
+          <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#ffffff" />
         </svg>
       </div>
-      <span>AlgoVerse</span>
+      <span style="font-size:1.35rem; font-weight:800; color:#0f172a; letter-spacing:-0.03em;">AlgoVerse</span>
     </a>
 
-    <!-- Center Navigation -->
+    <!-- Center Navigation Links (Matching Image 4) -->
     <nav>
-      <ul class="nav-links">
-        <li><a href="/static/index.html" class="active">Home</a></li>
-        <li><a href="/static/algorithms.html">Explore</a></li>
-        <li><a href="/static/rag_visualizer.html" class="nav-rag-highlight"><span style="color:#0052FF;">✦</span> AI Visualizations</a></li>
-        <li><a href="/static/practice.html">Practice</a></li>
-        <li><a href="/static/quiz.html">Roadmaps</a></li>
-        <li><a href="/static/dashboard.html">Resources</a></li>
+      <ul class="nav-links" style="display:flex; align-items:center; gap:1.75rem; list-style:none; margin:0; padding:0;">
+        <li><a href="/static/index.html" class="nav-pill-active">Home</a></li>
+        <li><a href="/static/algorithms.html" style="color:#334155; font-weight:600; text-decoration:none; font-size:0.92rem;">Explore</a></li>
+        <li><a href="/static/algorithms.html" style="color:#334155; font-weight:600; text-decoration:none; font-size:0.92rem;">Visualizations</a></li>
+        <li><a href="/static/practice.html" style="color:#334155; font-weight:600; text-decoration:none; font-size:0.92rem;">Practice</a></li>
+        <li><a href="/static/quiz.html" style="color:#334155; font-weight:600; text-decoration:none; font-size:0.92rem;">Roadmaps</a></li>
+        <li><a href="/static/dashboard.html" style="color:#334155; font-weight:600; text-decoration:none; font-size:0.92rem;">Resources</a></li>
       </ul>
     </nav>
 
-    <!-- Right Header Actions -->
-    <div class="header-actions">
-      <button class="action-icon-btn" title="Search algorithms">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <!-- Header Actions (Matching Image 4) -->
+    <div style="display:flex; align-items:center; gap:0.85rem;">
+      <button style="background:transparent; border:none; color:#334155; cursor:pointer; padding:6px; display:flex; align-items:center;" title="Search">
+        <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
-      <a href="/static/dashboard.html" class="btn btn-secondary" style="padding:0.45rem 1rem; font-size:0.85rem;">Sign In</a>
-      <a href="/static/algorithms.html" class="btn btn-primary" style="padding:0.45rem 1.15rem; font-size:0.85rem;">Get Started</a>
+      <a href="/static/dashboard.html" style="text-decoration:none; background:#ffffff; color:#0f172a; border:1px solid #e2e8f0; padding:0.45rem 1.15rem; font-size:0.88rem; font-weight:600; border-radius:8px;">Sign In</a>
+      <a href="/static/algorithms.html" style="text-decoration:none; background:#0052ff; color:#ffffff; padding:0.45rem 1.25rem; font-size:0.88rem; font-weight:700; border-radius:8px; box-shadow:0 2px 8px rgba(0,82,255,0.25);">Get Started</a>
     </div>
   </header>
 
-  <main class="main-container">
-    <!-- Hero Section (Pixel-Perfect to User Reference) -->
-    <section class="hero-section">
+  <main style="max-width:1260px; margin:0 auto; padding:0 1.5rem; position:relative; z-index:1;">
+    <!-- Hero Section (Pixel-Perfect to Image 4) -->
+    <section class="hero-wrapper">
+      <!-- Left Column: Content -->
       <div>
-        <div class="section-tag">
-          <span class="tag-bar"></span>
+        <div class="section-pill-tag">
           INTERACTIVE COMPUTER SCIENCE PLATFORM
         </div>
-        <h1 class="hero-title">
-          Learn Computer Science by <span class="text-highlight">Seeing How It Works.</span>
+        <h1 class="hero-main-title">
+          Learn Computer Science by<br>
+          <span class="blue-gradient-text">Seeing How It Works.</span>
         </h1>
-        <p class="hero-subtitle">
+        <p class="hero-lead-text">
           Interactive visualizations, step-by-step execution and real-world examples for Algorithms, AI/ML, Cybersecurity and core CS subjects.
         </p>
-        <div class="hero-cta-group">
-          <a href="/static/algorithms.html" class="btn btn-primary" style="padding:0.75rem 1.6rem; font-size:0.95rem;">
+        
+        <div class="hero-actions-group">
+          <a href="/static/algorithms.html" class="btn-hero-primary">
             Explore Visualizations →
           </a>
-          <a href="/static/rag_visualizer.html" class="btn btn-secondary" style="padding:0.75rem 1.4rem; font-size:0.95rem;">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:4px;">
+          <a href="/static/rag_visualizer.html" class="btn-hero-secondary">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:2px;">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
             Browse Learning Paths
           </a>
         </div>
+
+        <!-- 4-Stat Strip Matching Image 4 Exactly -->
+        <div class="hero-stats-row">
+          <div class="stat-pill-item">
+            <span class="stat-pill-icon">&lt;&gt;</span>
+            <span class="stat-pill-label">500+ <span class="stat-pill-sub">Algorithms</span></span>
+          </div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-icon">▷</span>
+            <span class="stat-pill-label">120+ <span class="stat-pill-sub">Visualizations</span></span>
+          </div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-icon">≡</span>
+            <span class="stat-pill-label">8+ <span class="stat-pill-sub">Subject Areas</span></span>
+          </div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-icon">👤</span>
+            <span class="stat-pill-label">10K+ <span class="stat-pill-sub">Active Learners</span></span>
+          </div>
+        </div>
       </div>
 
-      <!-- Hero Visualizer Window Mockup -->
-      <div class="laptop-mockup-wrapper">
-        <div class="laptop-frame">
-          <div class="laptop-header">
-            <div class="window-dots">
-              <span class="window-dot dot-red"></span>
-              <span class="window-dot dot-yellow"></span>
-              <span class="window-dot dot-green"></span>
+      <!-- Right Column: Window Mockup with Live Dijkstra Simulation (Matching Image 4) -->
+      <div>
+        <div class="laptop-window-card">
+          <!-- Window Header with 3 dots & Title -->
+          <div class="laptop-window-top">
+            <div class="dots-group">
+              <span class="dot-circle" style="background:#ff5f56;"></span>
+              <span class="dot-circle" style="background:#ffbd2e;"></span>
+              <span class="dot-circle" style="background:#27c93f;"></span>
             </div>
-            <span class="laptop-title">Dijkstra's Shortest Path</span>
-            <span style="font-size:0.72rem; color:#64748b; font-weight:600;">Interactive Demo</span>
+            <span class="window-title-center">Dijkstra's Shortest Path</span>
+            <span class="window-badge-pill">Interactive Demo</span>
           </div>
 
-          <div class="laptop-content">
-            <!-- Mini SVG Graph Canvas -->
-            <div class="mini-graph-canvas">
-              <svg width="240" height="180" viewBox="0 0 240 180">
-                <!-- Edges with weights -->
-                <line x1="35" y1="90" x2="90" y2="40" stroke="#cbd5e1" stroke-width="2" />
-                <line x1="35" y1="90" x2="90" y2="140" stroke="#cbd5e1" stroke-width="2" />
-                <line x1="90" y1="40" x2="150" y2="40" stroke="#cbd5e1" stroke-width="2" />
-                <line x1="90" y1="40" x2="150" y2="90" stroke="#0052ff" stroke-width="3" />
-                <line x1="90" y1="140" x2="150" y2="90" stroke="#cbd5e1" stroke-width="2" />
-                <line x1="150" y1="90" x2="205" y2="90" stroke="#0052ff" stroke-width="3" />
+          <!-- Window Body: Graph + Algorithm Steps -->
+          <div class="window-body-grid">
+            <!-- Dijkstra SVG Graph Matching Image 4 -->
+            <div class="window-canvas-box">
+              <svg width="250" height="190" viewBox="0 0 250 190">
+                <!-- Inactive Gray Edges -->
+                <line x1="38" y1="95" x2="95" y2="148" stroke="#cbd5e1" stroke-width="2" />
+                <line x1="95" y1="42" x2="165" y2="42" stroke="#cbd5e1" stroke-width="2" />
+                <line x1="95" y1="148" x2="165" y2="95" stroke="#cbd5e1" stroke-width="2" />
+                <line x1="165" y1="95" x2="165" y2="42" stroke="#cbd5e1" stroke-width="2" />
+                <line x1="95" y1="148" x2="218" y2="95" stroke="#cbd5e1" stroke-width="2" />
 
-                <!-- Weights -->
-                <text x="55" y="60" font-size="10" fill="#64748b">4</text>
-                <text x="55" y="125" font-size="10" fill="#64748b">11</text>
-                <text x="120" y="32" font-size="10" fill="#64748b">10</text>
-                <text x="125" y="70" font-size="10" fill="#0052ff" font-weight="bold">2</text>
-                <text x="180" y="80" font-size="10" fill="#0052ff" font-weight="bold">5</text>
+                <!-- Active Highlighted Blue Edges (Matching Image 4) -->
+                <line x1="38" y1="95" x2="95" y2="42" stroke="#0052ff" stroke-width="3" />
+                <line x1="95" y1="42" x2="165" y2="95" stroke="#0052ff" stroke-width="3" />
+                <line x1="165" y1="95" x2="218" y2="95" stroke="#0052ff" stroke-width="3" />
 
-                <!-- Nodes -->
-                <circle cx="35" cy="90" r="14" fill="#0052ff" />
-                <text x="35" y="94" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">0</text>
+                <!-- Edge Weight Numbers (Matching Image 4) -->
+                <text x="60" y="62" font-size="10" fill="#64748b" font-weight="600">4</text>
+                <text x="62" y="132" font-size="10" fill="#64748b" font-weight="600">11</text>
+                <text x="130" y="34" font-size="10" fill="#64748b" font-weight="600">10</text>
+                <text x="135" y="74" font-size="10" fill="#0052ff" font-weight="800">2</text>
+                <text x="190" y="85" font-size="10" fill="#0052ff" font-weight="800">5</text>
+                <text x="125" y="125" font-size="10" fill="#64748b" font-weight="600">8</text>
+                <text x="155" y="65" font-size="10" fill="#64748b" font-weight="600">3</text>
+                <text x="155" y="145" font-size="10" fill="#64748b" font-weight="600">15</text>
 
-                <circle cx="90" cy="40" r="14" fill="#ffffff" stroke="#0052ff" stroke-width="2" />
-                <text x="90" y="44" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">1</text>
+                <!-- Nodes Matching Image 4 -->
+                <!-- Node 0: Solid Royal Blue -->
+                <circle cx="38" cy="95" r="14" fill="#0052ff" />
+                <text x="38" y="99" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">0</text>
 
-                <circle cx="90" cy="140" r="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
-                <text x="90" y="144" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">3</text>
+                <!-- Node 1: White with Blue Border -->
+                <circle cx="95" cy="42" r="14" fill="#ffffff" stroke="#0052ff" stroke-width="2.5" />
+                <text x="95" y="46" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">1</text>
 
-                <circle cx="150" cy="90" r="14" fill="#0052ff" />
-                <text x="150" y="94" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">2</text>
+                <!-- Node 3: White with Gray Border -->
+                <circle cx="95" cy="148" r="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+                <text x="95" y="152" font-size="11" font-weight="700" fill="#64748b" text-anchor="middle">3</text>
 
-                <circle cx="150" cy="40" r="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
-                <text x="150" y="44" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">4</text>
+                <!-- Node 4: White with Gray Border -->
+                <circle cx="165" cy="42" r="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+                <text x="165" y="46" font-size="11" font-weight="700" fill="#64748b" text-anchor="middle">4</text>
 
-                <circle cx="205" cy="90" r="14" fill="#ff5722" />
-                <text x="205" y="94" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">5</text>
+                <!-- Node 2: Solid Royal Blue -->
+                <circle cx="165" cy="95" r="14" fill="#0052ff" />
+                <text x="165" y="99" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">2</text>
+
+                <!-- Node 5: Solid Orange #ff5722 (Target Node) -->
+                <circle cx="218" cy="95" r="14" fill="#ff5722" />
+                <text x="218" y="99" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">5</text>
               </svg>
             </div>
 
-            <!-- Algorithm Steps -->
-            <div class="mini-steps-list">
-              <div style="font-size:0.75rem; font-weight:700; color:#1e293b; margin-bottom:2px;">Algorithm Steps</div>
-              <div class="mini-step-item active">
-                <span style="background:#0052ff; color:#fff; width:16px; height:16px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px;">1</span>
+            <!-- Algorithm Steps Checklist (Matching Image 4) -->
+            <div class="steps-checklist">
+              <div class="steps-checklist-title">Algorithm Steps</div>
+              <div class="step-check-item active">
+                <span class="step-num-badge">1</span>
                 Initialize
               </div>
-              <div class="mini-step-item">
-                <span style="background:#e2e8f0; color:#64748b; width:16px; height:16px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px;">2</span>
+              <div class="step-check-item">
+                <span class="step-num-badge">2</span>
                 Pick Node
               </div>
-              <div class="mini-step-item">
-                <span style="background:#e2e8f0; color:#64748b; width:16px; height:16px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px;">3</span>
+              <div class="step-check-item">
+                <span class="step-num-badge">3</span>
                 Update Neighbors
               </div>
-              <div class="mini-step-item">
-                <span style="background:#e2e8f0; color:#64748b; width:16px; height:16px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px;">4</span>
+              <div class="step-check-item">
+                <span class="step-num-badge">4</span>
                 Repeat
               </div>
-              <div class="mini-step-item">
-                <span style="background:#e2e8f0; color:#64748b; width:16px; height:16px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px;">5</span>
+              <div class="step-check-item">
+                <span class="step-num-badge">5</span>
                 Shortest Path
               </div>
             </div>
           </div>
 
-          <div class="laptop-controls">
-            <span style="display:inline-flex; align-items:center; gap:6px;">
-              <button style="background:#0052ff; color:#fff; border-radius:50%; width:20px; height:20px; font-size:10px; display:inline-flex; align-items:center; justify-content:center;">▶</button>
-              <strong>Step 1 of 5</strong>
-            </span>
-            <a href="/static/algorithm.html?id=dijkstra" style="font-size:0.75rem; font-weight:700;">Open Workspace →</a>
-          </div>
-        </div>
+          <!-- Window Footer with Step Slider & Play Controls (Matching Image 4) -->
+          <div class="window-footer-bar">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="play-circle-btn">▶</button>
+              <strong style="color:#0f172a; font-size:0.82rem;">Step 3 of 5</strong>
+              
+              <!-- Slider Line with Circle Thumb -->
+              <div class="slider-track-line">
+                <div class="slider-fill"></div>
+                <div class="slider-thumb"></div>
+              </div>
+            </div>
 
-        <!-- Decorative Stacked Books -->
-        <div class="books-decoration">
-          <div class="book-spine">DSA</div>
-          <div class="book-spine" style="color:#0284c7; border-color:#0284c7;">AI / ML</div>
-          <div class="book-spine" style="color:#7c3aed; border-color:#7c3aed;">Security</div>
-          <div class="book-spine" style="color:#059669; border-color:#059669;">Systems</div>
+            <a href="/static/algorithm.html?id=dijkstra" style="font-size:0.82rem; font-weight:700; color:#0052ff; text-decoration:none; display:inline-flex; align-items:center; gap:3px;">
+              Open in Full View ↗
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Stats Metric Strip (Matching Reference) -->
-    <div class="stats-strip">
-      <div class="stat-item">
-        <div class="stat-icon">&lt;/&gt;</div>
-        <div class="stat-info">
-          <span class="stat-val">500+</span>
-          <span class="stat-label">Algorithms</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-icon" style="background:#eff6ff; color:#0284c7;">▷</div>
-        <div class="stat-info">
-          <span class="stat-val">120+</span>
-          <span class="stat-label">Visualizations</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-icon" style="background:#f5f3ff; color:#7c3aed;">❖</div>
-        <div class="stat-info">
-          <span class="stat-val">8+</span>
-          <span class="stat-label">Subject Areas</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-icon" style="background:#ecfdf5; color:#059669;">👥</div>
-        <div class="stat-info">
-          <span class="stat-val">10K+</span>
-          <span class="stat-label">Active Learners</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Explore by Subject Section (Reference Design) -->
-    <section style="margin: 3.5rem 0;">
+    <!-- Explore by Subject Section (3x2 Grid Matching Image 4 Exactly) -->
+    <section style="margin: 4rem 0 5rem 0;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-        <div class="section-tag" style="margin-bottom:0;">
-          <span class="tag-bar"></span>
+        <div class="section-pill-tag" style="margin-bottom:0; font-size:0.82rem;">
           Explore by Subject
         </div>
-        <a href="/static/algorithms.html" style="font-size:0.88rem; font-weight:700; color:#0052ff;">
+        <a href="/static/algorithms.html" style="font-size:0.88rem; font-weight:700; color:#0052ff; text-decoration:none;">
           View All Subjects →
         </a>
       </div>
 
-      <div id="subjects-grid" class="subjects-grid">
-        <!-- Dynamically populated or rendered -->
-        <a href="/static/algorithms.html?subject_id=dsa" class="subject-card">
-          <div class="subject-card-left">
-            <div class="subject-card-icon">&lt;/&gt;</div>
+      <div class="subject-cards-3x2">
+        <!-- 1. Data Structures & Algorithms -->
+        <a href="/static/algorithms.html?subject_id=dsa" class="subject-pill-card">
+          <div class="subject-pill-left">
+            <div class="subject-icon-box">&lt;&gt;</div>
             <div>
-              <div class="subject-card-title">Data Structures & Algorithms</div>
-              <div class="subject-card-desc">Arrays, Linked Lists, Trees, Graphs, Sorting, Searching, DP and more.</div>
+              <div class="subject-pill-title">Data Structures & Algorithms</div>
+              <div class="subject-pill-desc">Arrays, Linked Lists, Trees, Graphs, Sorting, Searching, DP and more.</div>
             </div>
           </div>
-          <span class="subject-card-arrow">→</span>
+          <span class="subject-pill-arrow">→</span>
         </a>
 
-        <a href="/static/algorithms.html?subject_id=aiml" class="subject-card">
-          <div class="subject-card-left">
-            <div class="subject-card-icon" style="color:#0284c7;">🧠</div>
+        <!-- 2. AI & Machine Learning -->
+        <a href="/static/algorithms.html?subject_id=aiml" class="subject-pill-card">
+          <div class="subject-pill-left">
+            <div class="subject-icon-box" style="color:#0284c7;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"/>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"/>
+              </svg>
+            </div>
             <div>
-              <div class="subject-card-title">AI & Machine Learning</div>
-              <div class="subject-card-desc">ML, Deep Learning, NLP, Computer Vision, RAG and modern AI models.</div>
+              <div class="subject-pill-title">AI & Machine Learning</div>
+              <div class="subject-pill-desc">ML, DL, NLP, Computer Vision, Generative AI and modern AI models.</div>
             </div>
           </div>
-          <span class="subject-card-arrow">→</span>
+          <span class="subject-pill-arrow">→</span>
         </a>
 
-        <a href="/static/algorithms.html?subject_id=cybersecurity" class="subject-card">
-          <div class="subject-card-left">
-            <div class="subject-card-icon" style="color:#7c3aed;">🛡️</div>
+        <!-- 3. Cybersecurity -->
+        <a href="/static/algorithms.html?subject_id=cybersecurity" class="subject-pill-card">
+          <div class="subject-pill-left">
+            <div class="subject-icon-box" style="color:#7c3aed;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
             <div>
-              <div class="subject-card-title">Cybersecurity</div>
-              <div class="subject-card-desc">Network security, encryption, RSA, Caesar cipher, defense and defense tools.</div>
+              <div class="subject-pill-title">Cybersecurity</div>
+              <div class="subject-pill-desc">Network security, encryption, vulnerabilities, attacks, defense and security tools.</div>
             </div>
           </div>
-          <span class="subject-card-arrow">→</span>
+          <span class="subject-pill-arrow">→</span>
         </a>
 
-        <a href="/static/algorithms.html?subject_id=os" class="subject-card">
-          <div class="subject-card-left">
-            <div class="subject-card-icon" style="color:#059669;">💻</div>
+        <!-- 4. Operating Systems -->
+        <a href="/static/algorithms.html?subject_id=os" class="subject-pill-card">
+          <div class="subject-pill-left">
+            <div class="subject-icon-box" style="color:#059669;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
             <div>
-              <div class="subject-card-title">Operating Systems</div>
-              <div class="subject-card-desc">Processes, CPU scheduling, memory management, deadlocks and synchronization.</div>
+              <div class="subject-pill-title">Operating Systems</div>
+              <div class="subject-pill-desc">Processes, scheduling, memory management, deadlocks and synchronization.</div>
             </div>
           </div>
-          <span class="subject-card-arrow">→</span>
+          <span class="subject-pill-arrow">→</span>
         </a>
 
-        <a href="/static/algorithms.html?subject_id=networks" class="subject-card">
-          <div class="subject-card-left">
-            <div class="subject-card-icon" style="color:#ea580c;">🌐</div>
+        <!-- 5. Computer Networks -->
+        <a href="/static/algorithms.html?subject_id=networks" class="subject-pill-card">
+          <div class="subject-pill-left">
+            <div class="subject-icon-box" style="color:#ea580c;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><line x1="12" y1="8" x2="12" y2="12"/>
+              </svg>
+            </div>
             <div>
-              <div class="subject-card-title">Computer Networks</div>
-              <div class="subject-card-desc">Network models, routing, TCP 3-way handshake, DNS, HTTP and protocols.</div>
+              <div class="subject-pill-title">Computer Networks</div>
+              <div class="subject-pill-desc">Network models, routing, protocols, TCP/IP, DNS, HTTP and more.</div>
             </div>
           </div>
-          <span class="subject-card-arrow">→</span>
+          <span class="subject-pill-arrow">→</span>
         </a>
 
-        <a href="/static/algorithms.html?subject_id=dbms" class="subject-card">
-          <div class="subject-card-left">
-            <div class="subject-card-icon" style="color:#0284c7;">🗄️</div>
+        <!-- 6. Database Systems -->
+        <a href="/static/algorithms.html?subject_id=dbms" class="subject-pill-card">
+          <div class="subject-pill-left">
+            <div class="subject-icon-box" style="color:#0284c7;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
             <div>
-              <div class="subject-card-title">Database Systems</div>
-              <div class="subject-card-desc">SQL query execution, B-Tree indexing, relational joins and transaction plans.</div>
+              <div class="subject-pill-title">Database Systems</div>
+              <div class="subject-pill-desc">SQL, database design, indexing, transactions and query execution.</div>
             </div>
           </div>
-          <span class="subject-card-arrow">→</span>
+          <span class="subject-pill-arrow">→</span>
         </a>
       </div>
     </section>
 
-    <!-- Featured Interactive Visualization Spotlight (Reference Design) -->
-    <section class="featured-vis-section">
-      <!-- Left side preview -->
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:1.5rem;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-          <span class="badge" style="background:#eff6ff; color:#0052ff; font-weight:bold;">✦ LIVE INTERACTIVE STUDIO</span>
-          <span style="font-size:0.75rem; color:#64748b;">8 Architectures</span>
+    <!-- Featured Live Studio Spotlight -->
+    <section style="background:#ffffff; border:1px solid #e2e8f0; border-radius:20px; padding:2.5rem; margin-bottom:5rem; box-shadow:0 4px 20px rgba(0,0,0,0.02); display:grid; grid-template-columns:1.2fr 1fr; gap:2.5rem; align-items:center;">
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#0052ff; font-weight:800; font-size:0.75rem; padding:0.3rem 0.75rem; border-radius:6px; margin-bottom:1rem; letter-spacing:0.5px;">
+          ✦ LIVE ARCHITECTURE STUDIO
         </div>
-        <h3 style="font-size:1.4rem; margin-bottom:0.5rem; color:#0f172a;">RAG & LangGraph Architecture Studio</h3>
-        <p style="font-size:0.88rem; color:#475569; margin-bottom:1.25rem; line-height:1.55;">
-          Step through <strong>Simple RAG, Advanced RAG, Self-RAG, CRAG, Agentic RAG, Graph RAG, Multimodal RAG</strong>, and <strong>Vectorless RAG</strong> with animated StateGraph nodes and simple English definitions.
+        <h3 style="font-size:1.85rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; letter-spacing:-0.025em;">
+          LangGraph & Advanced AI Architectures
+        </h3>
+        <p style="color:#475569; font-size:0.95rem; line-height:1.65; margin-bottom:1.5rem;">
+          Step through <strong>Simple RAG, Advanced RAG, Self-RAG, CRAG, Agentic RAG, Graph RAG, Multimodal RAG</strong>, and <strong>Vectorless RAG</strong>. See live StateGraph node tokens, hallucination correction loops, and multi-tool agentic reasoning with plain-English definitions.
+        </p>
+        <a href="/static/rag_visualizer.html" class="btn-hero-primary" style="padding:0.75rem 1.5rem;">
+          Launch AI Studio Visualizer →
+        </a>
+      </div>
+
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:1.5rem; box-shadow:inset 0 1px 3px rgba(0,0,0,0.02);">
+        <div style="font-size:0.8rem; font-weight:800; color:#0052ff; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:0.5rem;">
+          Highlighted Architecture
+        </div>
+        <h4 style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">
+          Autonomous Agentic RAG (LangGraph)
+        </h4>
+        <p style="font-size:0.85rem; color:#475569; line-height:1.5; margin-bottom:1rem;">
+          The LLM itself decides when to search, which tools to call (Calculator, Python REPL, Web), grades document relevance, and terminates autonomously.
         </p>
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-          <span class="badge" style="background:#ecfdf5; color:#059669;">🟢 Simple RAG</span>
-          <span class="badge" style="background:#eff6ff; color:#0284c7;">🔵 Advanced</span>
-          <span class="badge" style="background:#f5f3ff; color:#7c3aed;">🟣 Self-RAG</span>
-          <span class="badge" style="background:#fff7ed; color:#ea580c;">🤖 Agentic</span>
+          <span style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#0f172a; padding:4px 10px; border-radius:6px;">8 Nodes</span>
+          <span style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#059669; padding:4px 10px; border-radius:6px;">Conditional Edges</span>
+          <span style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#0052ff; padding:4px 10px; border-radius:6px;">StateGraph</span>
         </div>
-      </div>
-
-      <!-- Right side details & actions -->
-      <div>
-        <div class="section-tag">
-          <span class="tag-bar"></span>
-          INTERACTIVE VISUALIZATION
-        </div>
-        <h2 style="font-size:2.2rem; line-height:1.25; margin-bottom:1rem; color:#0f172a;">
-          Dijkstra's Shortest Path & AI Architectures
-        </h2>
-        <p style="color:#475569; font-size:1rem; line-height:1.6; margin-bottom:1.75rem;">
-          See how classic shortest-path algorithms and modern AI pipeline StateGraphs find optimal routes step by step with clear, intuitive animations.
-        </p>
-        <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
-          <a href="/static/rag_visualizer.html" class="btn btn-primary">
-            Try the visualization →
-          </a>
-          <a href="/static/algorithms.html" style="font-size:0.92rem; font-weight:700; color:#334155;">
-            View more algorithms →
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Learn by Doing Section (Reference Design) -->
-    <section style="margin: 3.5rem 0;">
-      <div class="section-tag" style="margin-bottom:1.5rem;">
-        <span class="tag-bar"></span>
-        Learn by doing
-      </div>
-
-      <div class="doing-grid">
-        <a href="/static/practice.html" class="doing-card">
-          <div class="doing-icon">🎯</div>
-          <div>
-            <h4 style="font-size:1.1rem; color:#0f172a; margin-bottom:0.25rem;">Practice</h4>
-            <p style="font-size:0.85rem; color:#64748b; line-height:1.5;">Solve topic-wise problems and strengthen your concepts with immediate execution feedback.</p>
-          </div>
-        </a>
-
-        <a href="/static/quiz.html" class="doing-card">
-          <div class="doing-icon" style="background:#f5f3ff; color:#7c3aed;">📚</div>
-          <div>
-            <h4 style="font-size:1.1rem; color:#0f172a; margin-bottom:0.25rem;">Quizzes</h4>
-            <p style="font-size:0.85rem; color:#64748b; line-height:1.5;">Test your understanding with quick, focused knowledge assessment quizzes across subjects.</p>
-          </div>
-        </a>
-
-        <a href="/static/dashboard.html" class="doing-card">
-          <div class="doing-icon" style="background:#ecfdf5; color:#059669;">🗺️</div>
-          <div>
-            <h4 style="font-size:1.1rem; color:#0f172a; margin-bottom:0.25rem;">Roadmaps</h4>
-            <p style="font-size:0.85rem; color:#64748b; line-height:1.5;">Follow structured learning paths from computer science fundamentals to cutting-edge AI.</p>
-          </div>
-        </a>
       </div>
     </section>
   </main>
 
-  <!-- Clean Minimalist Footer (Reference Design) -->
-  <footer class="app-footer">
-    <div class="footer-inner">
-      <div style="display:flex; align-items:center; gap:0.75rem;">
-        <strong style="color:#0f172a; font-size:1.1rem;">AlgoVerse</strong>
-        <span style="color:#cbd5e1;">|</span>
-        <span style="color:#64748b; font-size:0.85rem;">Interactive Computer Science Learning Platform</span>
+  <!-- Clean SaaS Footer -->
+  <footer style="background:#ffffff; border-top:1px solid #e2e8f0; padding:2.5rem 1.5rem; margin-top:4rem;">
+    <div style="max-width:1260px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg viewBox="0 0 32 32" width="24" height="24" fill="none">
+          <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#0052ff" />
+        </svg>
+        <span style="font-weight:800; color:#0f172a; font-size:1.1rem;">AlgoVerse</span>
+        <span style="color:#94a3b8; font-size:0.85rem; margin-left:8px;">Interactive Computer Science Learning Platform</span>
       </div>
-
-      <div style="display:flex; align-items:center; gap:1.5rem; font-size:0.85rem; color:#475569; font-weight:600;">
-        <a href="/static/index.html" style="color:#475569;">About</a>
-        <a href="/static/algorithms.html" style="color:#475569;">Catalog</a>
-        <a href="/static/rag_visualizer.html" style="color:#475569;">AI Studio</a>
-        <a href="/static/practice.html" style="color:#475569;">Practice</a>
+      <div style="font-size:0.85rem; color:#64748b;">
+        © 2026 AlgoVerse. All rights reserved.
       </div>
     </div>
   </footer>
-
-  <script type="module">
-    import { API } from '/static/js/api.js';
-
-    async function loadSubjectCounts() {
-      try {
-        const res = await API.getSubjects();
-        if (res.success && res.subjects) {
-          // Keep rich custom cards or sync if needed
-        }
-      } catch (e) {
-        console.warn("Could not load dynamic subjects", e);
-      }
-    }
-    loadSubjectCounts();
-  </script>
 </body>
 </html>

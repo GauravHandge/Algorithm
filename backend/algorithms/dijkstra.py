@@ -6,9 +6,10 @@ class DijkstraEngine(BaseAlgorithmEngine):
     def get_id(self) -> str:
         return "dijkstra"
 
-    def execute(self, input_data: Dict[str, Any], params: Dict[str, Any]) -> AlgorithmExecuteResponse:
-        edges = input_data.get("edges", ["A-B", "A-C", "B-D", "C-E"])
-        start_node = input_data.get("start_node", "A")
+    def execute(self, input_data: Dict[str, Any], params: Dict[str, Any] = None) -> AlgorithmExecuteResponse:
+        merged = {**(params or {}), **(input_data or {})}
+        edges = merged.get("edges", ["A-B", "A-C", "B-D", "C-E"])
+        start_node = merged.get("start_node", "A")
 
         # Build Graph
         graph = {}

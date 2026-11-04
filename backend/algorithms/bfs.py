@@ -8,10 +8,9 @@ class BFSEngine(BaseAlgorithmEngine):
         return "bfs"
 
     def execute(self, input_data: Dict[str, Any], params: Dict[str, Any] = None) -> AlgorithmExecuteResponse:
-        # Default graph if input is empty
-        # Input format: "edges": ["A-B", "A-C", "B-D", "C-E", "D-F"], "start_node": "A"
-        raw_edges = input_data.get("edges", ["A-B", "A-C", "B-D", "C-E", "D-F"])
-        start_node = input_data.get("start_node", "A")
+        merged = {**(params or {}), **(input_data or {})}
+        raw_edges = merged.get("edges", ["A-B", "A-C", "B-D", "C-E", "D-F"])
+        start_node = merged.get("start_node", "A")
 
         # Parse graph adj list and edges
         adj: Dict[str, List[str]] = {}

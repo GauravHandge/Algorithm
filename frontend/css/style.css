@@ -9,7 +9,7 @@
   --bg-card-hover: #ffffff;
   --bg-panel: #ffffff;
   --bg-input: #f8fafc;
-  
+
   --border-color: #e2e8f0;
   --border-subtle: #f1f5f9;
   --border-highlight: #bfdbfe;
@@ -20,7 +20,7 @@
   --accent-primary-hover: #0041cc;
   --accent-primary-light: #eff6ff;
   --accent-primary-glow: rgba(0, 82, 255, 0.22);
-  
+
   /* Orange / Coral Vertical Tag Indicator */
   --accent-tag: #ff5722;
   --accent-tag-light: #fff7ed;
@@ -34,10 +34,14 @@
   --accent-purple: #7c3aed;
 
   /* High-Contrast Modern Typography */
-  --text-main: #0f172a;       /* Slate-900 */
-  --text-body: #334155;       /* Slate-700 */
-  --text-muted: #64748b;      /* Slate-500 */
-  --text-dim: #94a3b8;        /* Slate-400 */
+  --text-main: #0f172a;
+  /* Slate-900 */
+  --text-body: #334155;
+  /* Slate-700 */
+  --text-muted: #64748b;
+  /* Slate-500 */
+  --text-dim: #94a3b8;
+  /* Slate-400 */
 
   --font-main: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Plus Jakarta Sans', sans-serif;
@@ -75,14 +79,19 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  background-image: 
+  background-image:
     radial-gradient(circle at 5% 15%, rgba(219, 234, 254, 0.55) 0%, transparent 45%),
     radial-gradient(circle at 95% 25%, rgba(224, 242, 254, 0.5) 0%, transparent 40%),
     radial-gradient(circle at 50% 85%, rgba(239, 246, 255, 0.6) 0%, transparent 50%) !important;
   background-attachment: fixed;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   color: var(--text-main);
   font-weight: 800;
@@ -107,7 +116,8 @@ button {
 }
 
 /* Luminous Card & Glass Panels */
-.glass-panel, .white-card {
+.glass-panel,
+.white-card {
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -115,7 +125,8 @@ button {
   transition: all var(--transition-normal);
 }
 
-.glass-panel:hover, .white-card:hover {
+.glass-panel:hover,
+.white-card:hover {
   border-color: var(--border-highlight);
   box-shadow: var(--shadow-card-hover);
 }

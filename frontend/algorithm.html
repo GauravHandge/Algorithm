@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Algorithm Visualizer Workspace - AlgoVerse</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
-  <link rel="stylesheet" href="/static/css/layout.css" />
-  <link rel="stylesheet" href="/static/css/components.css" />
-  <link rel="stylesheet" href="/static/css/responsive.css" />
+  <link rel="stylesheet" href="/static/css/style.css?v=20261104" />
+  <link rel="stylesheet" href="/static/css/layout.css?v=20261104" />
+  <link rel="stylesheet" href="/static/css/components.css?v=20261104" />
+  <link rel="stylesheet" href="/static/css/responsive.css?v=20261104" />
   <style>
     .workspace-info-card {
       background: #ffffff;
@@ -133,7 +133,7 @@
             <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Interactive Canvas Viewport</span>
             <span style="font-size:0.72rem; color:#059669; font-weight:700;">● Online State</span>
           </div>
-          <div id="visualizer-container" class="visualizer-viewport">
+          <div id="visualizer-container" class="visualizer-viewport" style="background:#ffffff !important; min-height:480px; width:100%;">
             <!-- Visualizer dynamic render -->
           </div>
         </div>
@@ -262,7 +262,7 @@
       try {
         const execRes = await API.executeAlgorithm(algorithmId, inputData);
         if (execRes.success && execRes.steps) {
-          globalPlayer.loadSteps(execRes.steps);
+          globalPlayer.loadExecution(algorithmId, execRes.steps);
           showToast(`Loaded ${execRes.steps.length} execution states`, "info");
         } else {
           showToast(execRes.error || "Execution failed", "error");

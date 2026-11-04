@@ -18,6 +18,14 @@ export class AlgorithmStatePlayer {
     this.notify();
   }
 
+  loadSteps(steps, algorithmId = null) {
+    this.pause();
+    if (algorithmId) this.algorithmId = algorithmId;
+    this.steps = steps || [];
+    this.currentIndex = 0;
+    this.notify();
+  }
+
   subscribe(callback) {
     this.listeners.push(callback);
   }
