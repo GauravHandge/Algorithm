@@ -96,7 +96,7 @@ export class CryptoVisualizer {
           html += `<div style="font-family:var(--font-mono); font-size:0.9rem; color:#0052ff; font-weight:700; text-align:right;">Ciphertext so far: "${resultText}"</div>`;
         }
 
-      // RSA / Asymmetric Cards
+        // RSA / Asymmetric Cards
       } else {
         html += `<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px;">`;
         if (variables.p !== undefined) html += `<div style="background:#ffffff; border:1px solid #e2e8f0; padding:8px 12px; border-radius:6px; font-size:0.85rem;"><span style="color:#64748b;">p:</span> <strong style="color:#0f172a;">${variables.p}</strong></div>`;

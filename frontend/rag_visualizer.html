@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAG & LangGraph Architecture Visualizer - AlgoVerse</title>
+  <title>RAG & LangGraph Studio - AlgoVerse</title>
   <link rel="stylesheet" href="/static/css/style.css?v=20261104" />
   <link rel="stylesheet" href="/static/css/layout.css?v=20261104" />
   <link rel="stylesheet" href="/static/css/components.css?v=20261104" />
@@ -12,564 +12,660 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Scoped Professional Developer Workspace Tokens (Linear / Vercel Palette) */
     :root {
-      --bg-studio: #ffffff;
-      --card-bg: #ffffff;
-      --card-border: #e2e8f0;
-      --card-border-glow: rgba(0, 82, 255, 0.25);
-      --accent-glow: rgba(0, 82, 255, 0.15);
+      --bg-studio-main: #FFFFFF;
+      --bg-studio-workspace: #F8FAFC;
+      --bg-studio-panel: #FFFFFF;
+      --text-studio-primary: #111827;
+      --text-studio-secondary: #64748B;
+      --border-studio: #E5E7EB;
+      --primary-blue: #2563EB;
+      --primary-blue-hover: #1D4ED8;
+      --primary-blue-subtle: #EFF6FF;
+      --color-success: #16A34A;
+      --color-error: #DC2626;
+      --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+      --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 
     body {
-      background-color: #ffffff;
-      background-image: 
-        radial-gradient(circle at 10% 15%, rgba(219, 234, 254, 0.55) 0%, transparent 45%),
-        radial-gradient(circle at 90% 40%, rgba(224, 231, 255, 0.45) 0%, transparent 40%),
-        radial-gradient(circle at 50% 90%, rgba(238, 242, 255, 0.6) 0%, transparent 50%);
+      background-color: var(--bg-studio-main) !important;
+      color: var(--text-studio-primary) !important;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #0f172a;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Top Studio Header */
-    .studio-header {
-      text-align: center;
-      margin-bottom: 2rem;
-      position: relative;
+    /* Compact Studio Header (Section 3) */
+    .studio-header-compact {
+      padding: 1.25rem 0 1rem 0;
+      border-bottom: 1px solid var(--border-studio);
+      margin-bottom: 1rem;
+      background: #FFFFFF;
     }
 
-    .studio-badge {
-      display: inline-flex;
+    .studio-header-compact .title-row {
+      display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: #ff5722;
-      margin-bottom: 0.85rem;
-    }
-
-    .studio-badge::before {
-      content: "";
-      display: inline-block;
-      width: 3.5px;
-      height: 15px;
-      background: #ff5722;
-      border-radius: 2px;
-    }
-
-    .studio-title {
-      font-size: 2.6rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.75rem;
-      color: #0f172a;
-    }
-
-    .studio-title .text-highlight {
-      color: #0052ff;
-    }
-
-    .studio-subtitle {
-      color: #475569;
-      font-size: 1.05rem;
-      max-width: 820px;
-      margin: 0 auto 1.5rem auto;
-      line-height: 1.6;
-    }
-
-    /* Architecture Switcher Container */
-    .arch-switch-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 0.5rem;
-      background: #ffffff;
-      padding: 0.55rem;
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
-      max-width: 1200px;
-      margin: 0 auto 1.25rem auto;
-      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-    }
-
-    .arch-btn {
-      padding: 0.65rem 0.75rem;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.82rem;
-      background: #f8fafc;
-      color: #475569;
-      border: 1px solid #e2e8f0;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .arch-btn .arch-icon {
-      font-size: 1.15rem;
-    }
-
-    .arch-btn .arch-key {
-      font-size: 0.65rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: #94a3b8;
-      margin-top: 2px;
-    }
-
-    .arch-btn:hover {
-      color: #0052ff;
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      transform: translateY(-1px);
-    }
-
-    .arch-btn.active {
-      color: #ffffff;
-      background: #0052ff;
-      border: 1px solid #0052ff;
-      box-shadow: 0 4px 14px rgba(0, 82, 255, 0.3);
-    }
-
-    .arch-btn.active .arch-key {
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-    /* Highlight Banner: IN SIMPLE WORDS */
-    .arch-simple-banner {
-      max-width: 1200px;
-      margin: 0 auto 1.5rem auto;
-      background: #eff6ff;
-      border-radius: 12px;
-      border: 1px solid #bfdbfe;
-      border-left: 4px solid #0052ff;
-      padding: 1rem 1.35rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      box-shadow: 0 2px 8px rgba(0, 82, 255, 0.05);
-      text-align: left;
-    }
-
-    .arch-simple-badge {
-      background: #0052ff;
-      color: #ffffff;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 6px rgba(0, 82, 255, 0.25);
-    }
-
-    .arch-simple-text {
-      font-size: 0.96rem;
-      color: #1e293b;
-      line-height: 1.6;
-      font-weight: 500;
-    }
-
-    /* Quick Metrics Bar */
-    .metrics-grid {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-
-    .metric-pill {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: #ffffff;
-      padding: 0.6rem 1.15rem;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-      min-width: 115px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    }
-
-    .metric-pill .label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #64748b;
-      margin-bottom: 0.2rem;
-      font-weight: 700;
-    }
-
-    .metric-pill .val {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #0f172a;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Control Bar */
-    .control-bar {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 0.85rem 1.35rem;
-      margin-bottom: 1.25rem;
-      display: flex;
       justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      gap: 0.75rem;
     }
 
-    .btn-action {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      color: #0f172a;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
+    .studio-header-compact h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-studio-primary);
+      margin: 0;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .studio-header-compact .studio-badge-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--primary-blue-subtle);
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .studio-header-compact p {
+      color: var(--text-studio-secondary);
+      font-size: 0.88rem;
+      margin: 0.35rem 0 0 0;
+      line-height: 1.5;
+    }
+
+    /* Architecture Selector (Section 4) */
+    .arch-selector-bar {
+      display: flex;
       align-items: center;
       gap: 0.4rem;
-      transition: all 0.18s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    }
-
-    .btn-action:hover {
-      background: #f8fafc;
-      border-color: #cbd5e1;
-      transform: translateY(-1px);
-    }
-
-    .btn-action.btn-primary {
-      background: #0052ff;
-      border: 1px solid #0052ff;
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 82, 255, 0.28);
-    }
-
-    .btn-action.btn-primary:hover {
-      background: #0045d8;
-      box-shadow: 0 6px 16px rgba(0, 82, 255, 0.38);
-    }
-
-    /* Step Timeline Scrubber */
-    .timeline-scrubber {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
       overflow-x: auto;
-      padding: 0.65rem 0.85rem;
-      background: #ffffff;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 0.4rem;
+      background: var(--bg-studio-workspace);
+      border: 1px solid var(--border-studio);
+      border-radius: 8px;
+      margin-bottom: 1rem;
       scrollbar-width: thin;
     }
 
-    .scrub-dot {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 7px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      color: #64748b;
-      font-size: 0.78rem;
+    .arch-tab-btn {
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
       font-weight: 600;
+      color: var(--text-studio-secondary);
+      background: transparent;
+      border: 1px solid transparent;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.15s ease;
-    }
-
-    .scrub-dot:hover {
-      background: #eff6ff;
-      color: #0052ff;
-      border-color: #bfdbfe;
-    }
-
-    .scrub-dot.active {
-      background: #0052ff;
-      color: #ffffff;
-      border-color: #0052ff;
-      box-shadow: 0 2px 8px rgba(0, 82, 255, 0.3);
-      font-weight: 700;
-    }
-
-    .scrub-dot.passed {
-      background: #ecfdf5;
-      color: #059669;
-      border-color: #a7f3d0;
-    }
-
-    /* Main Two-Column Split Layout */
-    .split-layout {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 1.5rem;
-      align-items: start;
-    }
-
-    @media (max-width: 1080px) {
-      .split-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Mac Window Frame Mockup */
-    .window-frame {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .window-header {
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 0.65rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .window-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
-
-    .window-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #64748b;
-      margin-left: 0.5rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Canvas Panel */
-    .canvas-panel {
-      background: #f8fafc;
-      border-radius: 0 0 16px 16px;
-      overflow: hidden;
-      min-height: 440px;
-      position: relative;
-    }
-
-    /* Details Panel */
-    .details-panel {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 1.35rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-      min-height: 580px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Tab Bar */
-    .tab-bar {
-      display: flex;
-      border-bottom: 1px solid #e2e8f0;
-      gap: 0.5rem;
-      padding-bottom: 0.65rem;
-      margin-bottom: 1.15rem;
-    }
-
-    .tab-item {
-      padding: 0.45rem 0.95rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      background: #f8fafc;
-      color: #64748b;
-      border-radius: 7px;
-      border: 1px solid #e2e8f0;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .tab-item:hover {
-      color: #0052ff;
-      background: #eff6ff;
-    }
-
-    .tab-item.active {
-      background: #eff6ff;
-      color: #0052ff;
-      border-color: #bfdbfe;
-      font-weight: 700;
-    }
-
-    /* Plain English Step Highlight Box */
-    .step-plain-box {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-left: 4px solid #16a34a;
-      border-radius: 10px;
-      padding: 0.9rem 1.15rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.05);
-    }
-
-    .step-plain-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #166534;
-      margin-bottom: 0.35rem;
-    }
-
-    .step-plain-text {
-      color: #14532d;
-      font-size: 0.92rem;
-      line-height: 1.55;
-      font-weight: 500;
-    }
-
-    /* Structured Breakdown Grid */
-    .spec-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 0.75rem 0.95rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .spec-label {
-      font-size: 0.74rem;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      margin-bottom: 0.25rem;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: #0f172a;
-    }
-
-    .spec-body {
-      font-size: 0.86rem;
-      color: #475569;
-      line-height: 1.5;
-    }
-
-    /* Code Block styling */
-    .code-editor-block {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 0.85rem;
-    }
-
-    .code-editor-header {
-      background: #1e293b;
-      padding: 0.45rem 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #334155;
-      font-size: 0.78rem;
-      color: #94a3b8;
-    }
-
-    .code-editor-content {
-      padding: 0.85rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      line-height: 1.5;
-      color: #e2e8f0;
-      white-space: pre-wrap;
-      overflow-x: auto;
-      max-height: 280px;
-    }
-
-    /* JSON Inspector */
-    .json-tree-container {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      max-height: 480px;
-      overflow-y: auto;
-      line-height: 1.6;
-    }
-
-    .json-key { color: #38bdf8; font-weight: 600; }
-    .json-str { color: #a7f3d0; }
-    .json-num { color: #fde047; }
-    .json-bool { color: #f472b6; font-weight: 600; }
-
-    /* Comparison Table */
-    .comparison-table-wrapper {
-      overflow-x: auto;
-      max-height: 520px;
-    }
-
-    .comp-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      text-align: left;
-    }
-
-    .comp-table th {
-      background: #f8fafc;
-      padding: 0.75rem 0.85rem;
-      color: #475569;
-      font-weight: 700;
-      border-bottom: 2px solid #e2e8f0;
-      position: sticky;
-      top: 0;
-    }
-
-    .comp-table td {
-      padding: 0.75rem 0.85rem;
-      border-bottom: 1px solid #e2e8f0;
-      vertical-align: middle;
-      color: #334155;
-    }
-
-    .nav-rag-highlight {
-      background: #eff6ff !important;
-      border: 1px solid #bfdbfe !important;
-      color: #0052ff !important;
-      padding: 0.4rem 0.85rem !important;
-      border-radius: 6px;
-      font-weight: 700;
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
+
+    .arch-tab-btn:hover {
+      color: var(--text-studio-primary);
+      background: #FFFFFF;
+      border-color: var(--border-studio);
+    }
+
+    .arch-tab-btn.active {
+      color: var(--primary-blue);
+      background: #FFFFFF;
+      border-color: var(--border-studio);
+      box-shadow: var(--shadow-subtle);
+      font-weight: 700;
+      position: relative;
+    }
+
+    .arch-tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 15%;
+      width: 70%;
+      height: 2px;
+      background: var(--primary-blue);
+      border-radius: 2px;
+    }
+
+    .arch-tab-btn .key-hint {
+      font-size: 0.68rem;
+      color: #94A3B8;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 1px 4px;
+      background: #F1F5F9;
+      border-radius: 3px;
+    }
+
+    /* Execution Toolbar (Section 5) */
+    .execution-toolbar {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
+      border-radius: 8px;
+      padding: 0.55rem 0.85rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .toolbar-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-tool {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
+      color: var(--text-studio-primary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-tool:hover {
+      background: var(--bg-studio-workspace);
+      border-color: #CBD5E1;
+    }
+
+    .btn-tool.btn-primary-flow {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #FFFFFF;
+    }
+
+    .btn-tool.btn-primary-flow:hover {
+      background: var(--primary-blue-hover);
+    }
+
+    .stage-counter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: var(--text-studio-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-studio-workspace);
+      border: 1px solid var(--border-studio);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    .stage-counter-badge strong {
+      color: var(--text-studio-primary);
+      font-weight: 700;
+    }
+
+    .stage-counter-badge .stage-blue {
+      color: var(--primary-blue);
+      font-weight: 700;
+    }
+
+    .speed-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-studio-secondary);
+      font-weight: 500;
+    }
+
+    .speed-select-wrap select {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
+      color: var(--text-studio-primary);
+      border-radius: 6px;
+      padding: 0.35rem 0.55rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .keyboard-shortcut-pill {
+      font-size: 0.72rem;
+      color: var(--text-studio-secondary);
+      background: var(--bg-studio-workspace);
+      border: 1px solid var(--border-studio);
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Main Workspace Two-Column Grid (Section 6) */
+    .studio-workspace-grid {
+      display: grid;
+      grid-template-columns: 72% 28%;
+      gap: 1.25rem;
+      align-items: stretch;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 1200px) {
+      .studio-workspace-grid {
+        grid-template-columns: 68% 32%;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .studio-workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Column Canvas Wrapper */
+    .canvas-column {
+      display: flex;
+      flex-direction: column;
+      min-height: 520px;
+    }
+
+    #rag-canvas-container {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+    }
+
+    /* Right Column Inspector Panel (Section 6) */
+    .inspector-panel {
+      background: var(--bg-studio-panel);
+      border: 1px solid var(--border-studio);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-subtle);
+      overflow: hidden;
+      min-height: 520px;
+    }
+
+    /* Inspector Header Tabs */
+    .inspector-tab-header {
+      display: flex;
+      border-bottom: 1px solid var(--border-studio);
+      background: #FFFFFF;
+      padding: 0 0.5rem;
+    }
+
+    .inspector-tab-btn {
+      flex: 1;
+      padding: 0.75rem 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-studio-secondary);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .inspector-tab-btn:hover {
+      color: var(--text-studio-primary);
+    }
+
+    .inspector-tab-btn.active {
+      color: var(--primary-blue);
+      border-bottom-color: var(--primary-blue);
+      font-weight: 700;
+    }
+
+    .inspector-tab-body {
+      padding: 1.15rem;
+      overflow-y: auto;
+      flex: 1;
+      max-height: 600px;
+    }
+
+    /* Step Deep Dive Elements */
+    .step-header-card {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-studio);
+    }
+
+    .step-header-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-studio-primary);
+      margin: 0.25rem 0 0 0;
+      line-height: 1.35;
+    }
+
+    .step-action-tag {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--primary-blue);
+      background: var(--primary-blue-subtle);
+      border: 1px solid #BFDBFE;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* What this step does box */
+    .step-explain-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-studio);
+      border-left: 3px solid var(--primary-blue);
+      border-radius: 6px;
+      padding: 0.75rem 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-explain-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary-blue);
+      margin-bottom: 0.25rem;
+    }
+
+    .step-explain-text {
+      font-size: 0.86rem;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    /* Collapsible / Clean Specification Cards */
+    .spec-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .spec-item {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+    }
+
+    .spec-item-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-studio-secondary);
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spec-item-content {
+      font-size: 0.84rem;
+      color: var(--text-studio-primary);
+      line-height: 1.5;
+    }
+
+    .spec-item-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--bg-studio-workspace);
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: 1px solid #F1F5F9;
+      color: #1E293B;
+      display: block;
+      margin-top: 3px;
+    }
+
+    /* Python Code Box */
+    .code-box-wrapper {
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+
+    .code-box-header {
+      background: #1E293B;
+      padding: 0.45rem 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      color: #94A3B8;
+      font-family: 'JetBrains Mono', monospace;
+      border-bottom: 1px solid #334155;
+    }
+
+    .code-copy-btn {
+      background: transparent;
+      border: 1px solid #475569;
+      color: #E2E8F0;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .code-copy-btn:hover {
+      background: #334155;
+      border-color: #64748B;
+    }
+
+    .code-content-block {
+      padding: 0.75rem;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: #E2E8F0;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 240px;
+    }
+
+    /* Structured GraphState JSON Inspector (Tab 2) */
+    .state-inspector-view {
+      background: #F8FAFC;
+      border: 1px solid var(--border-studio);
+      border-radius: 6px;
+      padding: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .json-key { color: var(--primary-blue); font-weight: 600; }
+    .json-str { color: #059669; }
+    .json-num { color: #D97706; }
+    .json-bool { color: #7C3AED; font-weight: 600; }
+
+    /* Paradigm Comparison Table (Tab 3) */
+    .comparison-table-wrap {
+      overflow-x: auto;
+      max-height: 480px;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      text-align: left;
+    }
+
+    .matrix-table th {
+      background: #F8FAFC;
+      padding: 0.6rem 0.75rem;
+      color: var(--text-studio-secondary);
+      font-weight: 700;
+      border-bottom: 2px solid var(--border-studio);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .matrix-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border-studio);
+      vertical-align: middle;
+      color: var(--text-studio-primary);
+    }
+
+    .matrix-table tr.active-arch-row {
+      background: var(--primary-blue-subtle);
+      font-weight: 600;
+    }
+
+    /* Educational Section Below Workspace (Section 7) */
+    .edu-content-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 992px) {
+      .edu-content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .edu-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-studio);
+      border-radius: 10px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .edu-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-studio-primary);
+      margin: 0 0 0.5rem 0;
+    }
+
+    .edu-card p {
+      font-size: 0.88rem;
+      color: var(--text-studio-secondary);
+      line-height: 1.6;
+      margin: 0 0 1rem 0;
+    }
+
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      border-top: 1px solid var(--border-studio);
+      padding-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .pros-cons-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pros-list, .cons-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #334155;
+    }
+
+    .pros-list li {
+      padding-left: 1.25rem;
+      position: relative;
+      margin-bottom: 0.45rem;
+    }
+
+    .pros-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--color-success);
+      font-weight: 700;
+    }
+
+    .cons-list li {
+      padding-left: 1.25rem;
+      position: relative;
+      margin-bottom: 0.45rem;
+    }
+
+    .cons-list li::before {
+      content: "✕";
+      position: absolute;
+      left: 0;
+      color: var(--color-error);
+      font-weight: 700;
+    }
+
+    .metrics-summary-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .mini-metric-box {
+      background: var(--bg-studio-workspace);
+      border: 1px solid var(--border-studio);
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+
+    .mini-metric-label {
+      font-size: 0.7rem;
+      color: var(--text-studio-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.25rem;
+    }
+
+    .mini-metric-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-studio-primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
   </style>
 </head>
-<body style="background-color: #ffffff !important; color: #0f172a !important;">
-  <!-- Clean Modern Header Matching Reference -->
+<body>
+  <!-- Standard Clean Header -->
   <header class="app-header">
     <a href="/static/index.html" class="brand-logo">
       <div class="brand-icon">
@@ -578,7 +674,7 @@
           <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#ffffff" opacity="0.9" />
           <defs>
             <linearGradient id="brandGrad" x1="3" y1="2" x2="29" y2="28" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0052FF" />
+              <stop stop-color="#2563EB" />
               <stop offset="1" stop-color="#38BDF8" />
             </linearGradient>
           </defs>
@@ -591,7 +687,7 @@
       <ul class="nav-links">
         <li><a href="/static/index.html">Home</a></li>
         <li><a href="/static/algorithms.html">Explore</a></li>
-        <li><a href="/static/rag_visualizer.html" class="nav-rag-highlight active"><span style="color:#0052ff;">✦</span> AI Visualizations</a></li>
+        <li><a href="/static/rag_visualizer.html" class="nav-link-active" style="color:#2563EB; font-weight:700;">AI Visualizations</a></li>
         <li><a href="/static/practice.html">Practice</a></li>
         <li><a href="/static/quiz.html">Roadmaps</a></li>
         <li><a href="/static/dashboard.html">Resources</a></li>
@@ -599,347 +695,314 @@
     </nav>
 
     <div class="header-actions">
-      <button class="action-icon-btn" title="Search algorithms">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
       <a href="/static/dashboard.html" class="btn btn-secondary" style="padding:0.45rem 1rem; font-size:0.85rem;">Sign In</a>
-      <a href="/static/algorithms.html" class="btn btn-primary" style="padding:0.45rem 1.15rem; font-size:0.85rem;">Get Started</a>
+      <a href="/static/algorithms.html" class="btn btn-primary" style="padding:0.45rem 1.15rem; font-size:0.85rem; background:#2563EB; border-color:#2563EB;">Get Started</a>
     </div>
   </header>
 
-  <main class="main-container" style="max-width:1440px; padding:1.5rem 1rem;">
-    <!-- Top Header -->
-    <div class="studio-header">
-      <span class="studio-badge">✦ Interactive AI Architecture Visualizer & StateGraph Studio</span>
-      <h1 class="studio-title">RAG & LangGraph Architecture Visualizer</h1>
-      <p class="studio-subtitle">
-        Explore how modern LLM pipelines retrieve knowledge, evaluate quality, self-correct hallucinations, and orchestrate autonomous tools — explained with crystal-clear plain English and interactive LangGraph flows.
-      </p>
-
-      <!-- 8-Way Paradigm Switcher -->
-      <div class="arch-switch-container">
-        <button class="arch-btn active" data-arch="simple_rag" title="Linear Baseline (Press 1)">
-          <span class="arch-icon">🟢</span>
-          <span>Simple RAG</span>
-          <span class="arch-key">Key [1]</span>
-        </button>
-        <button class="arch-btn" data-arch="advanced_rag" title="Pre & Post Retrieval (Press 2)">
-          <span class="arch-icon">🔵</span>
-          <span>Advanced RAG</span>
-          <span class="arch-key">Key [2]</span>
-        </button>
-        <button class="arch-btn" data-arch="self_rag" title="Self-Correction Loops (Press 3)">
-          <span class="arch-icon">🟣</span>
-          <span>Self-RAG</span>
-          <span class="arch-key">Key [3]</span>
-        </button>
-        <button class="arch-btn" data-arch="crag" title="Corrective Web Search (Press 4)">
-          <span class="arch-icon">🛡️</span>
-          <span>CRAG</span>
-          <span class="arch-key">Key [4]</span>
-        </button>
-        <button class="arch-btn" data-arch="agentic_rag" title="Autonomous Multi-Tool (Press 5)">
-          <span class="arch-icon">🤖</span>
-          <span>Agentic RAG</span>
-          <span class="arch-key">Key [5]</span>
-        </button>
-        <button class="arch-btn" data-arch="graph_rag" title="Knowledge Graph Network (Press 6)">
-          <span class="arch-icon">🕸️</span>
-          <span>Graph RAG</span>
-          <span class="arch-key">Key [6]</span>
-        </button>
-        <button class="arch-btn" data-arch="multimodal_rag" title="Vision ColPali Late-Interaction (Press 7)">
-          <span class="arch-icon">🖼️</span>
-          <span>Multimodal RAG</span>
-          <span class="arch-key">Key [7]</span>
-        </button>
-        <button class="arch-btn" data-arch="vectorless_rag" title="AST & Tree-Based (Press 8)">
-          <span class="arch-icon">🌳</span>
-          <span>Vectorless RAG</span>
-          <span class="arch-key">Key [8]</span>
-        </button>
-      </div>
-
-      <!-- Highlight Banner: IN SIMPLE WORDS -->
-      <div class="arch-simple-banner">
-        <span class="arch-simple-badge">💡 In Simple Words</span>
-        <div id="arch-simple-def" class="arch-simple-text">
-          Loading architecture plain-English explanation...
+  <main class="main-container" style="max-width:1440px; padding:0.5rem 1.25rem 2rem 1.25rem;">
+    <!-- Compact Page Header (Section 3) -->
+    <div class="studio-header-compact">
+      <div class="title-row">
+        <div>
+          <h1>
+            RAG & LangGraph Studio
+            <span class="studio-badge-pill">Interactive Workspace</span>
+          </h1>
+          <p>Explore, execute and understand modern AI architectures step by step.</p>
         </div>
-      </div>
-
-      <!-- Quick Metrics Bar -->
-      <div id="arch-metrics-bar" class="metrics-grid">
-        <!-- Dynamically rendered -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:0.75rem; color:#64748B;">Topology:</span>
+          <span id="header-topology-text" style="font-size:0.75rem; font-family:'JetBrains Mono', monospace; font-weight:700; color:#111827; background:#F1F5F9; padding:2px 8px; border-radius:4px;">
+            Linear Graph
+          </span>
+        </div>
       </div>
     </div>
 
-    <!-- Playback Control Toolbar -->
-    <div class="control-bar">
-      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-        <button id="btn-play-toggle" class="btn-action btn-primary">
+    <!-- Architecture Selector (Section 4) -->
+    <div class="arch-selector-bar">
+      <button class="arch-tab-btn active" data-arch="simple_rag">
+        <span>Simple RAG</span>
+        <span class="key-hint">1</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="advanced_rag">
+        <span>Advanced RAG</span>
+        <span class="key-hint">2</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="self_rag">
+        <span>Self-RAG</span>
+        <span class="key-hint">3</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="crag">
+        <span>CRAG</span>
+        <span class="key-hint">4</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="agentic_rag">
+        <span>Agentic RAG</span>
+        <span class="key-hint">5</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="graph_rag">
+        <span>Graph RAG</span>
+        <span class="key-hint">6</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="multimodal_rag">
+        <span>Multimodal RAG</span>
+        <span class="key-hint">7</span>
+      </button>
+      <button class="arch-tab-btn" data-arch="vectorless_rag">
+        <span>Vectorless RAG</span>
+        <span class="key-hint">8</span>
+      </button>
+    </div>
+
+    <!-- Execution Toolbar (Section 5) -->
+    <div class="execution-toolbar">
+      <div class="toolbar-btn-group">
+        <button id="btn-play-toggle" class="btn-tool btn-primary-flow">
           <span id="play-icon">▶</span> <span id="play-text">Play Flow</span>
         </button>
-        <button id="btn-prev" class="btn-action" title="Previous Step (Left Arrow)">⏮ Prev</button>
-        <button id="btn-next" class="btn-action" title="Next Step (Right Arrow)">Next ⏭</button>
-        <button id="btn-reset" class="btn-action" title="Reset Flow (R)">↺ Reset</button>
+        <button id="btn-prev" class="btn-tool" title="Previous Step (Left Arrow)">Previous</button>
+        <button id="btn-next" class="btn-tool" title="Next Step (Right Arrow)">Next</button>
+        <button id="btn-reset" class="btn-tool" title="Reset Flow (R)">Reset</button>
       </div>
 
-      <!-- Center Step Progress Counter -->
-      <div style="display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size:0.9rem;">
-        <span style="color:#64748b; font-weight:600;">Stage:</span>
-        <strong id="counter-current" style="color:#0052ff; font-size:1.15rem; font-weight:800;">1</strong>
-        <span style="color:#cbd5e1;">/</span>
-        <strong id="counter-total" style="color:#0f172a; font-weight:800;">7</strong>
+      <!-- Current Stage / Total Stages -->
+      <div class="stage-counter-badge">
+        <span>Stage</span>
+        <span id="counter-current" class="stage-blue">1</span>
+        <span>of</span>
+        <span id="counter-total">7</span>
       </div>
 
-      <!-- Speed & Hints -->
-      <div style="display:flex; align-items:center; gap:1rem;">
-        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.82rem; color:#64748b; font-weight:600;">
+      <!-- Speed & Shortcuts -->
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div class="speed-select-wrap">
           <label>Speed:</label>
-          <select id="speed-select" style="background:#ffffff; border:1px solid #cbd5e1; color:#0f172a; border-radius:6px; padding:0.35rem 0.6rem; font-size:0.82rem; font-weight:600;">
-            <option value="0.5">0.5x Slow</option>
-            <option value="1.0" selected>1.0x Normal</option>
-            <option value="1.5">1.5x Fast</option>
-            <option value="2.0">2.0x Turbo</option>
+          <select id="speed-select">
+            <option value="0.5">0.5x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2.0">2.0x</option>
           </select>
         </div>
-        <span style="font-size:0.75rem; color:#64748b; background:#f8fafc; border:1px solid #e2e8f0; padding:0.3rem 0.6rem; border-radius:6px; font-weight:600;">
-          Space = Play/Pause
+        <span class="keyboard-shortcut-pill">
+          Space: Play/Pause  ·  ← / →: Step
         </span>
       </div>
     </div>
 
-    <!-- Step Timeline Scrubber -->
-    <div id="timeline-scrubber" class="timeline-scrubber">
-      <!-- Dynamically filled with step buttons -->
-    </div>
-
-    <!-- Main Workspace Split Layout -->
-    <div class="split-layout">
-      
-      <!-- Left Column: Interactive LangGraph SVG Canvas & Architecture Notes -->
-      <div style="display:flex; flex-direction:column; gap:1.25rem;">
-        <!-- Window Mockup Frame with 3 dots -->
-        <div class="window-frame">
-          <div class="window-header">
-            <span class="window-dot dot-red"></span>
-            <span class="window-dot dot-yellow"></span>
-            <span class="window-dot dot-green"></span>
-            <span class="window-title">LangGraph Architecture Studio & State Flow</span>
-          </div>
-          <div id="rag-canvas-container" class="canvas-panel">
-            <!-- Injected via RagGraphVisualizer -->
-          </div>
-        </div>
-
-        <!-- Architecture Deep Overview Card -->
-        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:1.35rem; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
-          <h3 id="arch-overview-title" style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px;">
-            Architecture Overview
-          </h3>
-          <p id="arch-overview-desc" style="color:#475569; font-size:0.92rem; line-height:1.6; margin-bottom:1.15rem;">
-            Loading architecture description...
-          </p>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; border-top:1px solid #e2e8f0; padding-top:1rem;">
-            <div>
-              <h4 style="font-size:0.82rem; color:#059669; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:6px; text-transform:uppercase; letter-spacing:0.5px;">
-                <span>✓</span> Key Advantages
-              </h4>
-              <ul id="arch-pros-list" style="font-size:0.84rem; color:#475569; padding-left:1.1rem; line-height:1.6;">
-              </ul>
-            </div>
-            <div>
-              <h4 style="font-size:0.82rem; color:#e11d48; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:6px; text-transform:uppercase; letter-spacing:0.5px;">
-                <span>✗</span> Trade-offs & Limitations
-              </h4>
-              <ul id="arch-cons-list" style="font-size:0.84rem; color:#475569; padding-left:1.1rem; line-height:1.6;">
-              </ul>
-            </div>
-          </div>
+    <!-- Main Visualization Workspace: 72% / 28% Two-Column (Section 6) -->
+    <div class="studio-workspace-grid">
+      <!-- LEFT/CENTER — 72% WIDTH: Interactive Graph Canvas -->
+      <div class="canvas-column">
+        <div id="rag-canvas-container">
+          <!-- Injected via RagGraphVisualizer -->
         </div>
       </div>
 
-      <!-- Right Column: Interactive Intelligence Panel -->
-      <div class="details-panel">
-        
-        <!-- Tab Bar -->
-        <div class="tab-bar">
-          <button id="tab-btn-step" class="tab-item active" data-tab="step">Step Deep Dive</button>
-          <button id="tab-btn-state" class="tab-item" data-tab="state">GraphState (Memory)</button>
-          <button id="tab-btn-comparison" class="tab-item" data-tab="comparison">Paradigm Comparison</button>
+      <!-- RIGHT PANEL — 28% WIDTH: 3 Tabs (Step Deep Dive, GraphState, Paradigm Comparison) -->
+      <div class="inspector-panel">
+        <!-- Tab Navigation Bar -->
+        <div class="inspector-tab-header">
+          <button id="tab-btn-step" class="inspector-tab-btn active" data-tab="step">Step Deep Dive</button>
+          <button id="tab-btn-state" class="inspector-tab-btn" data-tab="state">GraphState Memory</button>
+          <button id="tab-btn-comparison" class="inspector-tab-btn" data-tab="comparison">Paradigm Comparison</button>
         </div>
 
         <!-- Tab 1: Step Deep Dive Content -->
-        <div id="tab-content-step" class="tab-content">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+        <div id="tab-content-step" class="inspector-tab-body">
+          <div class="step-header-card">
             <div>
-              <span id="detail-stage-badge" class="studio-badge" style="font-size:0.68rem; padding:0.2rem 0.6rem; margin-bottom:0.3rem;">STAGE</span>
-              <h3 id="detail-step-title" style="font-size:1.2rem; font-weight:700;">Step Details</h3>
+              <span id="detail-stage-badge" style="font-size:0.7rem; font-family:'JetBrains Mono', monospace; font-weight:700; color:#64748B;">STAGE 1 OF 7</span>
+              <h3 id="detail-step-title">Step Details</h3>
             </div>
-            <span id="detail-action-tag" style="background:rgba(99,102,241,0.2); color:#a5b4fc; font-family:'JetBrains Mono', monospace; font-size:0.72rem; padding:4px 8px; border-radius:5px; font-weight:700;">
-              ACTION
-            </span>
+            <span id="detail-action-tag" class="step-action-tag">ACTION</span>
           </div>
 
-          <!-- Highlight Box: IN SIMPLE WORDS -->
-          <div class="step-plain-box">
-            <span class="step-plain-badge">💡 What This Step Does (In Simple Words):</span>
-            <div id="detail-simple-definition" class="step-plain-text">
-              ...
+          <!-- What this step does (in simple English) -->
+          <div class="step-explain-box">
+            <div class="step-explain-label">What This Step Does</div>
+            <div id="detail-simple-definition" class="step-explain-text">
+              Loading plain English description...
             </div>
-          </div>
-
-          <div id="detail-step-desc" style="background:rgba(0,0,0,0.3); padding:0.75rem 0.85rem; border-radius:8px; border-left:3px solid #38bdf8; color:#cbd5e1; font-size:0.85rem; line-height:1.5; margin-bottom:0.85rem;">
-            Step technical summary...
           </div>
 
           <!-- Structured Specifications Breakdown -->
-          <div style="display:flex; flex-direction:column; gap:0.45rem;">
-            <div class="spec-card">
-              <span class="spec-label" style="color:#38bdf8;">🎯 Why We Need This Step</span>
-              <div id="detail-role-text" class="spec-body">...</div>
+          <div class="spec-section">
+            <div class="spec-item">
+              <div class="spec-item-label">Why This Step Is Needed</div>
+              <div id="detail-role-text" class="spec-item-content">...</div>
             </div>
 
-            <div class="spec-card">
-              <span class="spec-label" style="color:#fbbf24;">📥 What Goes In (Input)</span>
-              <div id="detail-input-text" class="spec-body" style="font-family:'JetBrains Mono', monospace; font-size:0.78rem;">...</div>
+            <div class="spec-item">
+              <div class="spec-item-label">Input</div>
+              <div id="detail-input-text" class="spec-item-content spec-item-mono">...</div>
             </div>
 
-            <div class="spec-card">
-              <span class="spec-label" style="color:#34d399;">⚙️ Under The Hood (Process & Algorithm)</span>
-              <div id="detail-mechanics-text" class="spec-body">...</div>
+            <div class="spec-item">
+              <div class="spec-item-label">Internal Process (Algorithm)</div>
+              <div id="detail-mechanics-text" class="spec-item-content">...</div>
             </div>
 
-            <div class="spec-card">
-              <span class="spec-label" style="color:#c084fc;">📤 What Comes Out (Output)</span>
-              <div id="detail-output-text" class="spec-body">...</div>
+            <div class="spec-item">
+              <div class="spec-item-label">Output</div>
+              <div id="detail-output-text" class="spec-item-content spec-item-mono">...</div>
             </div>
 
-            <div class="spec-card">
-              <span class="spec-label" style="color:#f87171;">⚠️ Watch Out For (Pitfalls & Gotchas)</span>
-              <div id="detail-pitfalls-text" class="spec-body">...</div>
+            <div class="spec-item">
+              <div class="spec-item-label">Real-World Pitfalls & Gotchas</div>
+              <div id="detail-pitfalls-text" class="spec-item-content">...</div>
             </div>
           </div>
 
-          <!-- LangGraph Python Code Block -->
-          <div class="code-editor-block">
-            <div class="code-editor-header">
-              <span>🐍 LangGraph Node Implementation</span>
-              <button id="btn-copy-code" class="btn-action" style="font-size:0.7rem; padding:0.2rem 0.5rem;">Copy Snippet</button>
+          <!-- Python LangGraph Node Implementation -->
+          <div class="code-box-wrapper">
+            <div class="code-box-header">
+              <span>LangGraph Node Implementation</span>
+              <button id="btn-copy-code" class="code-copy-btn">Copy Snippet</button>
             </div>
-            <pre id="detail-code-content" class="code-editor-content"># Loading node implementation...</pre>
+            <pre id="detail-code-content" class="code-content-block"># Loading node snippet...</pre>
           </div>
         </div>
 
-        <!-- Tab 2: GraphState Inspector Content -->
-        <div id="tab-content-state" class="tab-content" style="display:none;">
+        <!-- Tab 2: GraphState Memory Content -->
+        <div id="tab-content-state" class="inspector-tab-body" style="display:none;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-            <h4 style="font-size:0.9rem; color:#e2e8f0; font-weight:600;">Active StateGraph Memory State:</h4>
-            <span style="font-size:0.72rem; font-family:'JetBrains Mono', monospace; color:#38bdf8;">LangGraph Schema: TypedDict</span>
+            <span style="font-size:0.78rem; font-weight:700; color:#111827;">Active StateGraph Memory</span>
+            <span style="font-size:0.7rem; font-family:'JetBrains Mono', monospace; color:#2563EB; background:#EFF6FF; padding:2px 6px; border-radius:4px;">TypedDict Schema</span>
           </div>
-          <div id="json-inspector-view" class="json-tree-container">
+          <div id="json-inspector-view" class="state-inspector-view">
             // Loading state JSON...
           </div>
         </div>
 
         <!-- Tab 3: Paradigm Comparison Content -->
-        <div id="tab-content-comparison" class="tab-content" style="display:none;">
-          <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#f8fafc; font-weight:700;">Complete 8-Architecture Comparison Matrix</h4>
-          <div class="comparison-table-wrapper">
-            <table class="comp-table">
+        <div id="tab-content-comparison" class="inspector-tab-body" style="display:none;">
+          <div style="margin-bottom:0.75rem;">
+            <span style="font-size:0.82rem; font-weight:700; color:#111827;">8-Architecture Paradigm Matrix</span>
+          </div>
+          <div class="comparison-table-wrap">
+            <table class="matrix-table">
               <thead>
                 <tr>
                   <th>Architecture</th>
                   <th>Core Paradigm</th>
-                  <th>Retrieval Source</th>
                   <th>Quality Guarantee</th>
-                  <th>Graph Routing</th>
+                  <th>Routing</th>
                   <th>Latency</th>
-                  <th>Best Use Case</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td style="color:#34d399; font-weight:700;">🟢 Simple RAG</td>
+                <tr id="row-simple_rag">
+                  <td style="font-weight:700; color:#2563EB;">Simple RAG</td>
                   <td>Linear Chunk-and-Vector</td>
-                  <td>Single Dense Vector DB</td>
-                  <td>None (Direct Pass-through)</td>
-                  <td>Linear 1-Way Flow</td>
-                  <td style="color:#34d399;">~400-800ms</td>
-                  <td>Basic FAQs, small manuals</td>
+                  <td>None (Direct Pass)</td>
+                  <td>Linear</td>
+                  <td>~400-800ms</td>
                 </tr>
-                <tr>
-                  <td style="color:#38bdf8; font-weight:700;">🔵 Advanced RAG</td>
+                <tr id="row-advanced_rag">
+                  <td style="font-weight:700; color:#2563EB;">Advanced RAG</td>
                   <td>Expansion + Cross-Encoder</td>
-                  <td>Dense Vector + Re-Ranker</td>
                   <td>Score Cutoff Filter</td>
-                  <td>Branch & Re-Rank Flow</td>
+                  <td>Branch & Rerank</td>
                   <td>~800-1500ms</td>
-                  <td>Customer support, contracts</td>
                 </tr>
-                <tr>
-                  <td style="color:#c084fc; font-weight:700;">🟣 Self-RAG</td>
+                <tr id="row-self_rag">
+                  <td style="font-weight:700; color:#2563EB;">Self-RAG</td>
                   <td>Evaluative Self-Reflection</td>
-                  <td>Vector DB + Self-Graders</td>
-                  <td>Hallucination Grader Loop</td>
-                  <td>Conditional Re-Write Loops</td>
-                  <td style="color:#fbbf24;">~1200-2500ms</td>
-                  <td>Medical QA, legal reasoning</td>
+                  <td>Hallucination Grader</td>
+                  <td>Loop-back</td>
+                  <td>~1200-2500ms</td>
                 </tr>
-                <tr>
-                  <td style="color:#f59e0b; font-weight:700;">🛡️ CRAG (Corrective)</td>
-                  <td>Fallback Web Search</td>
-                  <td>Vector DB + Web Search</td>
-                  <td>Confidence Threshold Router</td>
-                  <td>Fallback Routing Branch</td>
+                <tr id="row-crag">
+                  <td style="font-weight:700; color:#2563EB;">CRAG</td>
+                  <td>Corrective Fallback Search</td>
+                  <td>Confidence Threshold</td>
+                  <td>Fallback Web</td>
                   <td>~1200-2800ms</td>
-                  <td>Breaking news, live market research</td>
                 </tr>
-                <tr>
-                  <td style="color:#f472b6; font-weight:700;">🤖 Agentic RAG</td>
-                  <td>Autonomous Multi-Tool Agent</td>
-                  <td>Dynamic (SQL, Vector, Web)</td>
-                  <td>Self-Reflection & Code Sandbox</td>
-                  <td>Autonomous ReAct Loop</td>
-                  <td style="color:#fbbf24;">~1500-3500ms</td>
-                  <td>Multi-hop analytics, calculations</td>
+                <tr id="row-agentic_rag">
+                  <td style="font-weight:700; color:#2563EB;">Agentic RAG</td>
+                  <td>Multi-Tool Autonomous Agent</td>
+                  <td>Self-Reflection</td>
+                  <td>ReAct Loop</td>
+                  <td>~1500-3500ms</td>
                 </tr>
-                <tr>
-                  <td style="color:#2dd4bf; font-weight:700;">🕸️ Graph RAG</td>
+                <tr id="row-graph_rag">
+                  <td style="font-weight:700; color:#2563EB;">Graph RAG</td>
                   <td>Knowledge Graph Communities</td>
-                  <td>Subgraph Hops + Leiden</td>
                   <td>Entity-Relation Triples</td>
-                  <td>Global / Local Graph Router</td>
+                  <td>Leiden Subgraphs</td>
                   <td>~1000-2000ms</td>
-                  <td>Whole-corpus sensemaking</td>
                 </tr>
-                <tr>
-                  <td style="color:#ec4899; font-weight:700;">🖼️ Multimodal RAG</td>
+                <tr id="row-multimodal_rag">
+                  <td style="font-weight:700; color:#2563EB;">Multimodal RAG</td>
                   <td>ColPali Vision Multi-Vectors</td>
-                  <td>Patch-level Visual Embeddings</td>
                   <td>MaxSim Late-Interaction</td>
-                  <td>Vision Cross-Attention</td>
+                  <td>Vision Attention</td>
                   <td>~1100-2200ms</td>
-                  <td>PDFs with charts, blueprints</td>
                 </tr>
-                <tr>
-                  <td style="color:#60a5fa; font-weight:700;">🌳 Vectorless RAG</td>
+                <tr id="row-vectorless_rag">
+                  <td style="font-weight:700; color:#2563EB;">Vectorless RAG</td>
                   <td>Hierarchical Summary Tree</td>
-                  <td>Tree Navigation + BM25 AST</td>
                   <td>Exact AST Code Scopes</td>
-                  <td>Branch-and-Bound Pruning</td>
-                  <td style="color:#34d399;">~500-900ms</td>
-                  <td>Code repos, legal statutes, RFCs</td>
+                  <td>Tree Pruning</td>
+                  <td>~500-900ms</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+      </div>
+    </div>
 
+    <!-- Educational Content Below Workspace (Section 7) -->
+    <div class="edu-content-grid">
+      <!-- Architecture Overview & Trade-offs -->
+      <div class="edu-card">
+        <h3 id="arch-overview-title">Architecture Overview</h3>
+        <p id="arch-overview-desc">Loading architecture description...</p>
+
+        <div class="pros-cons-grid">
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--color-success); margin-bottom:0.5rem; letter-spacing:0.5px;">
+              Key Advantages
+            </div>
+            <ul id="arch-pros-list" class="pros-list"></ul>
+          </div>
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--color-error); margin-bottom:0.5rem; letter-spacing:0.5px;">
+              Trade-offs & Limitations
+            </div>
+            <ul id="arch-cons-list" class="cons-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Computational Complexity & Profile -->
+      <div class="edu-card">
+        <h3>Computational Complexity & Profile</h3>
+        <p style="margin-bottom:0.85rem;">Hardware footprint, latency characteristics, and accuracy expectations.</p>
+
+        <div class="metrics-summary-strip">
+          <div class="mini-metric-box">
+            <div class="mini-metric-label">Execution Stages</div>
+            <div id="metric-stages-val" class="mini-metric-val">7 Nodes</div>
+          </div>
+          <div class="mini-metric-box">
+            <div class="mini-metric-label">Latency Profile</div>
+            <div id="metric-latency-val" class="mini-metric-val" style="color:#2563EB;">~400-800ms</div>
+          </div>
+          <div class="mini-metric-box">
+            <div class="mini-metric-label">Accuracy Baseline</div>
+            <div id="metric-accuracy-val" class="mini-metric-val" style="color:#16A34A;">60-70%</div>
+          </div>
+          <div class="mini-metric-box">
+            <div class="mini-metric-label">Hallucination Risk</div>
+            <div id="metric-risk-val" class="mini-metric-val" style="color:#D97706;">Moderate</div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -958,7 +1021,6 @@
     // Visualizer instance
     const canvasContainer = document.getElementById("rag-canvas-container");
     const visualizer = new RagGraphVisualizer(canvasContainer, (nodeId) => {
-      // Find step matching this node
       const arch = RAG_ARCHITECTURES[currentArchKey];
       const matchIdx = arch.steps.findIndex(s => s.activeNodeId === nodeId);
       if (matchIdx !== -1) {
@@ -977,47 +1039,20 @@
       currentStepIndex = 0;
 
       // Update Switcher Buttons
-      document.querySelectorAll(".arch-btn").forEach(btn => {
-        btn.classList.remove("active", "active-self");
+      document.querySelectorAll(".arch-tab-btn").forEach(btn => {
+        btn.classList.remove("active");
         if (btn.getAttribute("data-arch") === archKey) {
-          btn.classList.add(archKey === "self_rag" ? "active-self" : "active");
+          btn.classList.add("active");
         }
       });
 
       const arch = getArch();
 
-      // Update Plain-English Banner
-      const simpleDefEl = document.getElementById("arch-simple-def");
-      if (simpleDefEl) {
-        simpleDefEl.textContent = arch.simpleDefinition || arch.description;
+      // Update Header Topology
+      const topolText = document.getElementById("header-topology-text");
+      if (topolText) {
+        topolText.textContent = arch.topology.split('(')[0].trim();
       }
-
-      // Render Metrics Bar
-      const metricsBar = document.getElementById("arch-metrics-bar");
-      metricsBar.innerHTML = `
-        <div class="metric-pill">
-          <span class="label">Topology</span>
-          <span class="val" style="color:#38bdf8;">${arch.topology.split(' ')[0]}</span>
-        </div>
-        <div class="metric-pill">
-          <span class="label">Total Stages</span>
-          <span class="val">${arch.summaryMetrics.stages} Nodes</span>
-        </div>
-        <div class="metric-pill">
-          <span class="label">Latency Profile</span>
-          <span class="val" style="color:#fbbf24;">${arch.summaryMetrics.latency}</span>
-        </div>
-        <div class="metric-pill">
-          <span class="label">Accuracy</span>
-          <span class="val" style="color:#34d399;">${arch.summaryMetrics.accuracy}</span>
-        </div>
-        <div class="metric-pill">
-          <span class="label">Hallucination Risk</span>
-          <span class="val" style="color:${arch.summaryMetrics.hallucinationRisk.includes('Near Zero') ? '#34d399' : (arch.summaryMetrics.hallucinationRisk.includes('Low') ? '#38bdf8' : '#f87171')};">
-            ${arch.summaryMetrics.hallucinationRisk}
-          </span>
-        </div>
-      `;
 
       // Update Overview Card
       document.getElementById("arch-overview-title").textContent = arch.name;
@@ -1029,30 +1064,20 @@
       const consList = document.getElementById("arch-cons-list");
       consList.innerHTML = arch.cons.map(c => `<li>${c}</li>`).join('');
 
-      // Build Timeline Scrubber
-      renderScrubber();
+      // Update Complexity Metrics Strip
+      document.getElementById("metric-stages-val").textContent = `${arch.summaryMetrics.stages} Nodes`;
+      document.getElementById("metric-latency-val").textContent = arch.summaryMetrics.latency;
+      document.getElementById("metric-accuracy-val").textContent = arch.summaryMetrics.accuracy;
+      document.getElementById("metric-risk-val").textContent = arch.summaryMetrics.hallucinationRisk;
+
+      // Highlight row in comparison table
+      document.querySelectorAll(".matrix-table tbody tr").forEach(tr => tr.classList.remove("active-arch-row"));
+      const matchRow = document.getElementById(`row-${archKey}`);
+      if (matchRow) matchRow.classList.add("active-arch-row");
 
       // Mount into Visualizer
       visualizer.setArchitecture(arch);
       goToStep(0);
-    }
-
-    // Render Timeline Scrubber Dots
-    function renderScrubber() {
-      const arch = getArch();
-      const scrubber = document.getElementById("timeline-scrubber");
-      scrubber.innerHTML = arch.steps.map((step, idx) => `
-        <button class="scrub-dot ${idx === currentStepIndex ? 'active' : ''}" data-step-idx="${idx}">
-          <span>${idx + 1}.</span> ${step.action}
-        </button>
-      `).join('');
-
-      scrubber.querySelectorAll(".scrub-dot").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const idx = parseInt(btn.getAttribute("data-step-idx"), 10);
-          goToStep(idx);
-        });
-      });
     }
 
     // Go to specific step
@@ -1062,16 +1087,9 @@
       if (idx >= arch.steps.length) idx = arch.steps.length - 1;
       currentStepIndex = idx;
 
-      // Update Counter
+      // Update Counters
       document.getElementById("counter-current").textContent = currentStepIndex + 1;
       document.getElementById("counter-total").textContent = arch.steps.length;
-
-      // Update Scrubber classes
-      document.querySelectorAll(".scrub-dot").forEach((dot, i) => {
-        dot.classList.remove("active", "passed");
-        if (i === currentStepIndex) dot.classList.add("active");
-        else if (i < currentStepIndex) dot.classList.add("passed");
-      });
 
       // Update Visualizer
       visualizer.setStep(currentStepIndex);
@@ -1092,16 +1110,15 @@
       document.getElementById("detail-step-title").textContent = step.title;
       document.getElementById("detail-action-tag").textContent = step.action;
       document.getElementById("detail-stage-badge").textContent = `STAGE ${currentStepIndex + 1} OF ${arch.steps.length}`;
-      document.getElementById("detail-step-desc").textContent = step.description;
 
       // Plain English definition
       const plainDefEl = document.getElementById("detail-simple-definition");
       if (plainDefEl) {
-        plainDefEl.textContent = step.simpleDefinition || "In simple words: " + step.description;
+        plainDefEl.textContent = step.simpleDefinition || step.description;
       }
 
       const dd = step.deepDive;
-      document.getElementById("detail-role-text").textContent = dd.role + (dd.why ? " — " + dd.why : "");
+      document.getElementById("detail-role-text").textContent = dd.why ? dd.why : dd.role;
       document.getElementById("detail-input-text").textContent = dd.inputs;
       document.getElementById("detail-mechanics-text").textContent = dd.mechanics;
       
@@ -1132,7 +1149,7 @@
         return `  <span class="json-key">"${k}"</span>: ${valHtml}`;
       }).join(',\n');
 
-      jsonViewer.innerHTML = `<pre>{\n${formatted}\n}</pre>`;
+      jsonViewer.innerHTML = `<pre style="margin:0;">{\n${formatted}\n}</pre>`;
     }
 
     function escapeHtml(str) {
@@ -1159,7 +1176,7 @@
       }
       isPlaying = true;
       document.getElementById("play-icon").textContent = "⏸";
-      document.getElementById("play-text").textContent = "Pause Flow";
+      document.getElementById("play-text").textContent = "Pause";
       scheduleNextStep();
     }
 
@@ -1207,8 +1224,8 @@
       playbackSpeed = parseFloat(e.target.value);
     });
 
-    // Paradigm switcher buttons (All 8 Architectures)
-    document.querySelectorAll(".arch-btn").forEach(btn => {
+    // Architecture tab selector buttons (All 8 Architectures)
+    document.querySelectorAll(".arch-tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const archKey = btn.getAttribute("data-arch");
         if (archKey) switchArchitecture(archKey);
@@ -1225,8 +1242,8 @@
       });
     });
 
-    // Tabs
-    const tabButtons = document.querySelectorAll(".tab-item");
+    // Right Inspector Tabs
+    const tabButtons = document.querySelectorAll(".inspector-tab-btn");
     tabButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         tabButtons.forEach(b => b.classList.remove("active"));
@@ -1265,7 +1282,7 @@
       }
     });
 
-    // Check query params if specified (e.g., ?arch=agentic_rag)
+    // Initial architecture from URL param or default
     const urlParams = new URLSearchParams(window.location.search);
     const requestedArch = urlParams.get("arch");
     if (requestedArch && RAG_ARCHITECTURES[requestedArch]) {
