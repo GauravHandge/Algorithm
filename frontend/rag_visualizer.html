@@ -337,6 +337,7 @@
       gap: 0.5rem;
       overflow-x: auto;
       padding-bottom: 2px;
+      flex-shrink: 0;
     }
 
     .arch-pill-btn {
@@ -373,6 +374,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 0.75rem;
+      flex-shrink: 0;
     }
 
     .controls-btn-group {
@@ -455,6 +457,8 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      flex-shrink: 0;
+      min-height: 380px;
     }
 
     .canvas-card-top-bar {
@@ -646,6 +650,7 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 0.85rem;
+      flex-shrink: 0;
     }
 
     @media (max-width: 1100px) {
@@ -693,6 +698,7 @@
       display: grid;
       grid-template-columns: 1.1fr 1fr 1fr;
       gap: 1rem;
+      flex-shrink: 0;
     }
 
     @media (max-width: 1000px) {
