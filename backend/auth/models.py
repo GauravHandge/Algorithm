@@ -13,3 +13,4 @@ class User(Base):
     role = Column(String, default="Learner")
     avatar = Column(String, default="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+

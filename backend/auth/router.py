@@ -30,6 +30,11 @@ def seed_default_user_if_needed(db: Session):
 def register(req: UserRegisterRequest, db: Session = Depends(get_db)):
     # 1. Check if email already registered
     email_clean = req.email.strip().lower()
+    if "@" not in email_clean or "." not in email_clean:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please provide a valid email address."
+        )
     existing_user = db.query(User).filter(User.email == email_clean).first()
     if existing_user:
         raise HTTPException(
@@ -137,3 +142,4 @@ def get_current_user(authorization: str = Header(None), db: Session = Depends(ge
         ),
         token=token
     )
+

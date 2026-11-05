@@ -47,3 +47,4 @@ def verify_auth_token(token: str) -> dict | None:
         return payload
     except Exception:
         return None
+
