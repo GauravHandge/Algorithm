@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 
 from backend.database.init_db import seed_database
 from backend.api import algorithms, ai, questions, progress
+from backend.auth import auth_router
 
 app = FastAPI(
     title="Interactive Computer Science Learning & Algorithm Visualization Platform API",
@@ -32,6 +33,7 @@ async def add_no_cache_headers(request, call_next):
     return response
 
 # Include Routers
+app.include_router(auth_router)
 app.include_router(algorithms.router)
 app.include_router(ai.router)
 app.include_router(questions.router)
