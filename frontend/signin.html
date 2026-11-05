@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Sign In - AlgoVerse</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-blue: #2563EB;
+      --primary-blue-hover: #1D4ED8;
+      --primary-blue-subtle: #EFF6FF;
+      --primary-gradient: linear-gradient(135deg, #0052FF 0%, #38BDF8 100%);
+      --text-main: #0F172A;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --border-color: #E2E8F0;
+      --border-subtle: #F1F5F9;
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --shadow-3d: 0 25px 50px -12px rgba(37, 99, 235, 0.15), 0 12px 24px -8px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient Decorative Gradient Sweeps (Matching Reference Image 2) */
+    .ambient-blob-tl {
+      position: absolute;
+      top: -120px;
+      left: -120px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(219, 234, 254, 0.65) 0%, rgba(239, 246, 255, 0.3) 50%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-blob-bl {
+      position: absolute;
+      bottom: -150px;
+      left: -80px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(191, 219, 254, 0.5) 0%, rgba(239, 246, 255, 0.25) 55%, transparent 75%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-blob-br {
+      position: absolute;
+      bottom: -180px;
+      right: -100px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(224, 231, 255, 0.45) 0%, rgba(241, 245, 249, 0.2) 60%, transparent 75%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Soft curved corner wave in bottom-left matching Image 2 */
+    .corner-wave-art {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 320px;
+      height: 240px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
+    /* Main Container (2-Column Grid) */
+    .signin-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      align-items: center;
+      gap: 3.5rem;
+    }
+
+    @media (max-width: 1080px) {
+      .signin-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 2rem 1.25rem;
+      }
+    }
+
+    /* LEFT HERO SECTION */
+    .left-hero-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hero-title-area {
+      position: relative;
+    }
+
+    .sparkle-doodle {
+      position: absolute;
+      top: -24px;
+      left: -18px;
+      width: 32px;
+      height: 32px;
+      color: #38BDF8;
+      pointer-events: none;
+    }
+
+    .hero-main-heading {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      color: #0F172A;
+      line-height: 1.15;
+    }
+
+    .hero-main-heading span.brand-highlight {
+      color: var(--primary-blue);
+      position: relative;
+    }
+
+    .hero-sub-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 0.45rem;
+    }
+
+    /* 3D FLOATING & INTERACTIVE CARD CONTAINER */
+    .preview-card-perspective-stage {
+      perspective: 1200px;
+      position: relative;
+      margin: 0.5rem 0;
+    }
+
+    /* 3D Card with Ambient Floating and Mouse-tilt interaction */
+    .preview-3d-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 
+        0 20px 45px -10px rgba(15, 23, 42, 0.1),
+        0 10px 20px -5px rgba(37, 99, 235, 0.08),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      overflow: hidden;
+      transition: transform 0.15s ease-out, box-shadow 0.25s ease-out;
+      transform-style: preserve-3d;
+      will-change: transform;
+      animation: float3D 6s ease-in-out infinite;
+      position: relative;
+    }
+
+    /* Floating Keyframe Animation */
+    @keyframes float3D {
+      0% {
+        transform: translateY(0px) rotateX(1.5deg) rotateY(-2.5deg);
+        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.1), 0 10px 20px -5px rgba(37, 99, 235, 0.08);
+      }
+      50% {
+        transform: translateY(-12px) rotateX(3.5deg) rotateY(-1deg);
+        box-shadow: 0 32px 60px -12px rgba(15, 23, 42, 0.14), 0 16px 28px -6px rgba(37, 99, 235, 0.12);
+      }
+      100% {
+        transform: translateY(0px) rotateX(1.5deg) rotateY(-2.5deg);
+        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.1), 0 10px 20px -5px rgba(37, 99, 235, 0.08);
+      }
+    }
+
+    /* Glow reflection sheen overlay */
+    .preview-card-sheen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(125deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 50%, rgba(37, 99, 235, 0.03) 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Preview Card: Top Header Bar */
+    .card-topbar {
+      height: 48px;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+    }
+
+    .card-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #0F172A;
+    }
+
+    .card-brand-logo svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .card-nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #64748B;
+    }
+
+    .card-nav-pills .pill-active {
+      background: #EFF6FF;
+      color: var(--primary-blue);
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    .card-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .icon-dot-badge {
+      position: relative;
+      color: #64748B;
+    }
+
+    .icon-dot-badge::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #EF4444;
+    }
+
+    .mini-user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #E2E8F0;
+    }
+
+    /* Preview Card: Inner Content Body */
+    .card-inner-body {
+      padding: 1.25rem 1.35rem 1.1rem 1.35rem;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.25rem;
+      align-items: center;
+      background: #FFFFFF;
+    }
+
+    @media (max-width: 640px) {
+      .card-inner-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Mini Hero Left */
+    .mini-platform-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--primary-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .mini-platform-tag::before {
+      content: '|';
+      font-weight: 900;
+      color: var(--primary-blue);
+    }
+
+    .mini-hero-headline {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #0F172A;
+      line-height: 1.25;
+      margin-bottom: 0.45rem;
+    }
+
+    .mini-hero-headline span {
+      color: var(--primary-blue);
+    }
+
+    .mini-hero-desc {
+      font-size: 0.74rem;
+      line-height: 1.45;
+      color: #64748B;
+      margin-bottom: 0.85rem;
+    }
+
+    .mini-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mini-btn-primary {
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.4rem 0.75rem;
+      border-radius: 7px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    }
+
+    .mini-btn-secondary {
+      background: #FFFFFF;
+      color: #334155;
+      border: 1px solid #E2E8F0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.4rem 0.65rem;
+      border-radius: 7px;
+      text-decoration: none;
+    }
+
+    /* Mini Visualizer Window (Right side of 3D Card) */
+    .mini-visualizer-window {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 0.65rem 0.75rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .mini-vis-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.45rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid #EDF2F7;
+    }
+
+    .traffic-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .traffic-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .mini-vis-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .mini-vis-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      background: #EFF6FF;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    /* Dijkstra Interactive Graph SVG Canvas */
+    .vis-svg-container {
+      width: 100%;
+      height: 105px;
+      position: relative;
+    }
+
+    .vis-svg-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Bottom Slider & Step Controls */
+    .vis-step-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.35rem;
+      font-size: 0.66rem;
+      color: #64748B;
+      font-weight: 600;
+    }
+
+    .vis-slider-track {
+      flex: 1;
+      height: 3px;
+      background: #E2E8F0;
+      border-radius: 2px;
+      margin: 0 8px;
+      position: relative;
+    }
+
+    .vis-slider-fill {
+      width: 65%;
+      height: 100%;
+      background: var(--primary-blue);
+      border-radius: 2px;
+    }
+
+    .vis-slider-thumb {
+      width: 8px;
+      height: 8px;
+      background: var(--primary-blue);
+      border-radius: 50%;
+      position: absolute;
+      top: -2.5px;
+      left: 65%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 0 2px #FFFFFF;
+    }
+
+    .vis-arrow-buttons {
+      display: flex;
+      gap: 3px;
+    }
+
+    .vis-arrow-btn {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #E2E8F0;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #475569;
+      cursor: pointer;
+    }
+
+    /* 3D Card Bottom Stat Badges */
+    .card-bottom-metrics {
+      padding: 0.55rem 1.25rem;
+      border-top: 1px solid #F1F5F9;
+      background: #FCFDFE;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .metric-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .metric-chip svg {
+      color: var(--primary-blue);
+    }
+
+    /* 4 FEATURE PILL CARDS BELOW THE 3D CARD (Image 2) */
+    .features-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .features-pill-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .feature-pill-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 0.75rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .feature-pill-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      border-color: #BFDBFE;
+    }
+
+    .feature-pill-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #EFF6FF;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+
+    .feature-pill-content h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.2;
+    }
+
+    .feature-pill-content p {
+      font-size: 0.68rem;
+      color: #64748B;
+      line-height: 1.25;
+      margin-top: 1px;
+    }
+
+    /* RIGHT COLUMN: PURE WHITE AUTH CARD (Image 2) */
+    .auth-card-container {
+      background: #FFFFFF;
+      border-radius: 24px;
+      border: 1px solid #E2E8F0;
+      padding: 2.75rem 2.5rem;
+      box-shadow: 
+        0 20px 40px -15px rgba(0, 0, 0, 0.07),
+        0 0 1px rgba(0, 0, 0, 0.08);
+      position: relative;
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card-container {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    /* Card Top Logo */
+    .auth-brand-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-logo-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0.35rem;
+    }
+
+    .auth-logo-text {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #0F172A;
+      letter-spacing: -0.03em;
+    }
+
+    .auth-logo-tagline {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #64748B;
+      letter-spacing: 0.2px;
+    }
+
+    /* Heading & Subtitle */
+    .auth-headings {
+      margin-bottom: 1.75rem;
+    }
+
+    .auth-main-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+    }
+
+    .auth-sub-desc {
+      font-size: 0.88rem;
+      color: #64748B;
+      line-height: 1.4;
+    }
+
+    /* Form Fields */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 14px;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .auth-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 42px 0 42px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      color: #0F172A;
+      background: #FFFFFF;
+      border: 1px solid #D1D5DB;
+      border-radius: 10px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .auth-input::placeholder {
+      color: #9CA3AF;
+    }
+
+    .auth-input:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .input-icon-right {
+      position: absolute;
+      right: 14px;
+      color: #94A3B8;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      transition: color 0.15s ease;
+    }
+
+    .input-icon-right:hover {
+      color: #475569;
+    }
+
+    /* Remember Me & Forgot Password Row */
+    .form-options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      margin-top: -0.25rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #D1D5DB;
+      accent-color: var(--primary-blue);
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .forgot-link:hover {
+      color: var(--primary-blue-hover);
+      text-decoration: underline;
+    }
+
+    /* Primary Submit Button */
+    .btn-auth-primary {
+      height: 48px;
+      width: 100%;
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      margin-top: 0.25rem;
+    }
+
+    .btn-auth-primary:hover {
+      background: var(--primary-blue-hover);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-auth-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Quick 1-Click Demo Sign In Button */
+    .btn-demo-quick {
+      height: 38px;
+      width: 100%;
+      background: #F0FDF4;
+      color: #166534;
+      border: 1px solid #BBF7D0;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-top: -0.35rem;
+    }
+
+    .btn-demo-quick:hover {
+      background: #DCFCE7;
+      border-color: #86EFAC;
+    }
+
+    /* OR Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0.65rem 0;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: #E5E7EB;
+    }
+
+    .divider-text {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #9CA3AF;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* Google Sign In Button */
+    .btn-google-auth {
+      height: 48px;
+      width: 100%;
+      background: #FFFFFF;
+      color: #1F2937;
+      border: 1px solid #D1D5DB;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-google-auth:hover {
+      background: #F9FAFB;
+      border-color: #9CA3AF;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Card Footer Link */
+    .auth-card-footer {
+      text-align: center;
+      margin-top: 1.75rem;
+      font-size: 0.88rem;
+      color: #64748B;
+    }
+
+    .auth-card-footer a {
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .auth-card-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Error / Alert banner */
+    .auth-alert-banner {
+      display: none;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .auth-alert-banner.info {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+
+    /* Subtle pulse on graph nodes */
+    @keyframes nodePulse {
+      0%, 100% {
+        r: 10;
+        filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.4));
+      }
+      50% {
+        r: 11.5;
+        filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.8));
+      }
+    }
+
+    .pulse-node {
+      animation: nodePulse 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Ambient Sweeps -->
+  <div class="ambient-blob-tl"></div>
+  <div class="ambient-blob-bl"></div>
+  <div class="ambient-blob-br"></div>
+
+  <!-- Decorative Corner Wave (Bottom Left - Image 2) -->
+  <svg class="corner-wave-art" viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-40 240C20 210 60 170 80 120C100 70 140 40 220 20C260 10 290 5 320 0V240H-40Z" fill="url(#waveGrad1)" opacity="0.4" />
+    <path d="M-40 240C40 230 90 200 130 150C170 100 210 80 280 60V240H-40Z" fill="url(#waveGrad2)" opacity="0.6" />
+    <defs>
+      <linearGradient id="waveGrad1" x1="0" y1="0" x2="320" y2="240" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#93C5FD" />
+        <stop offset="1" stop-color="#DBEAFE" />
+      </linearGradient>
+      <linearGradient id="waveGrad2" x1="0" y1="0" x2="280" y2="240" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#60A5FA" />
+        <stop offset="1" stop-color="#BFDBFE" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <main class="signin-container">
+
+    <!-- ========================================== -->
+    <!-- LEFT COLUMN: WELCOME & 3D INTERACTIVE CARD -->
+    <!-- ========================================== -->
+    <section class="left-hero-wrapper" id="leftHeroWrapper">
+
+      <div class="hero-title-area">
+        <!-- Sparkle Doodle Art (Matching Image 2) -->
+        <svg class="sparkle-doodle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="12" y1="2" x2="12" y2="6"></line>
+          <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+          <line x1="2" y1="12" x2="6" y2="12"></line>
+        </svg>
+        <h1 class="hero-main-heading">
+          Welcome to <span class="brand-highlight">AlgoVerse</span>
+        </h1>
+        <p class="hero-sub-text">
+          Your Interactive Computer Science Learning Platform
+        </p>
+      </div>
+
+      <!-- 3D Moving Perspective Card Container -->
+      <div class="preview-card-perspective-stage" id="perspectiveStage">
+        <div class="preview-3d-card" id="interactiveCard">
+          
+          <div class="preview-card-sheen" id="cardSheen"></div>
+
+          <!-- Card Top Bar with AlgoVerse Logo & Mini Nav -->
+          <div class="card-topbar">
+            <div class="card-brand-logo">
+              <svg viewBox="0 0 32 32" fill="none">
+                <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#2563EB" />
+                <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#FFFFFF" />
+              </svg>
+              <span>AlgoVerse</span>
+            </div>
+
+            <div class="card-nav-pills">
+              <span>Home</span>
+              <span class="pill-active">Explore</span>
+              <span>Visualizations</span>
+              <span>Practice</span>
+              <span>Roadmaps</span>
+              <span>Resources</span>
+            </div>
+
+            <div class="card-topbar-actions">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <div class="icon-dot-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              </div>
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" alt="Learner Avatar" class="mini-user-avatar" />
+            </div>
+          </div>
+
+          <!-- Card Body: Split Grid -->
+          <div class="card-inner-body">
+            
+            <!-- Left Mini Hero -->
+            <div>
+              <div class="mini-platform-tag">
+                Interactive Computer Science Platform
+              </div>
+              <h2 class="mini-hero-headline">
+                Learn Computer Science<br>
+                by <span>Seeing How It Works.</span>
+              </h2>
+              <p class="mini-hero-desc">
+                Interactive visualizations, step-by-step execution and real-world examples for Algorithms, AI/ML, Cybersecurity and core CS subjects.
+              </p>
+              <div class="mini-btn-row">
+                <span class="mini-btn-primary">
+                  Explore Visualizations ➔
+                </span>
+                <span class="mini-btn-secondary">
+                  Browse Learning Paths
+                </span>
+              </div>
+            </div>
+
+            <!-- Right Mini Visualizer: Dijkstra Graph (Image 3) -->
+            <div class="mini-visualizer-window">
+              <div class="mini-vis-header">
+                <div class="traffic-dots">
+                  <span class="traffic-dot" style="background:#EF4444;"></span>
+                  <span class="traffic-dot" style="background:#F59E0B;"></span>
+                  <span class="traffic-dot" style="background:#10B981;"></span>
+                </div>
+                <div class="mini-vis-title">Dijkstra's Shortest Path</div>
+                <div class="mini-vis-badge">Interactive Demo</div>
+              </div>
+
+              <!-- SVG Graph with nodes 0, 1, 2, 3, 4, 5 -->
+              <div class="vis-svg-container">
+                <svg viewBox="0 0 250 110">
+                  <defs>
+                    <linearGradient id="activeEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#2563EB" />
+                      <stop offset="100%" stop-color="#60A5FA" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Edges / Path lines -->
+                  <!-- Normal / unexplored edges -->
+                  <line x1="25" y1="55" x2="85" y2="20" stroke="#CBD5E1" stroke-width="1.8" />
+                  <line x1="25" y1="55" x2="85" y2="85" stroke="#CBD5E1" stroke-width="1.8" />
+                  <line x1="85" y1="20" x2="155" y2="20" stroke="#CBD5E1" stroke-width="1.8" />
+                  <line x1="85" y1="85" x2="145" y2="55" stroke="#CBD5E1" stroke-width="1.8" />
+                  <line x1="155" y1="20" x2="215" y2="55" stroke="#CBD5E1" stroke-width="1.8" />
+                  <line x1="85" y1="85" x2="215" y2="55" stroke="#CBD5E1" stroke-width="1.8" stroke-dasharray="3,3" />
+
+                  <!-- Active Blue Shortest Path Line: 0 -> 1 -> 2 -> 5 -->
+                  <line x1="25" y1="55" x2="85" y2="20" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
+                  <line x1="85" y1="20" x2="145" y2="55" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
+                  <line x1="145" y1="55" x2="215" y2="55" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
+
+                  <!-- Edge Weight Labels -->
+                  <text x="50" y="32" font-size="8" font-weight="700" fill="#64748B" font-family="'JetBrains Mono', monospace">4</text>
+                  <text x="50" y="78" font-size="8" font-weight="700" fill="#64748B" font-family="'JetBrains Mono', monospace">11</text>
+                  <text x="110" y="34" font-size="8" font-weight="700" fill="#2563EB" font-family="'JetBrains Mono', monospace">2</text>
+                  <text x="122" y="15" font-size="8" font-weight="700" fill="#64748B" font-family="'JetBrains Mono', monospace">10</text>
+                  <text x="112" y="72" font-size="8" font-weight="700" fill="#64748B" font-family="'JetBrains Mono', monospace">8</text>
+                  <text x="175" y="75" font-size="8" font-weight="700" fill="#64748B" font-family="'JetBrains Mono', monospace">15</text>
+                  <text x="178" y="47" font-size="8" font-weight="700" fill="#2563EB" font-family="'JetBrains Mono', monospace">5</text>
+
+                  <!-- Node 0 (Start - Solid Blue) -->
+                  <circle cx="25" cy="55" r="10.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="2" class="pulse-node" />
+                  <text x="25" y="58.5" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle" font-family="'JetBrains Mono', monospace">0</text>
+
+                  <!-- Node 1 (Visited - White with Blue border) -->
+                  <circle cx="85" cy="20" r="9" fill="#FFFFFF" stroke="#2563EB" stroke-width="2" />
+                  <text x="85" y="23" font-size="8.5" font-weight="700" fill="#2563EB" text-anchor="middle" font-family="'JetBrains Mono', monospace">1</text>
+
+                  <!-- Node 3 (Unvisited) -->
+                  <circle cx="85" cy="85" r="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.8" />
+                  <text x="85" y="88" font-size="8.5" font-weight="700" fill="#475569" text-anchor="middle" font-family="'JetBrains Mono', monospace">3</text>
+
+                  <!-- Node 2 (Active Current - Solid Blue) -->
+                  <circle cx="145" cy="55" r="10.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="2" class="pulse-node" />
+                  <text x="145" y="58.5" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle" font-family="'JetBrains Mono', monospace">2</text>
+
+                  <!-- Node 4 (Unvisited) -->
+                  <circle cx="155" cy="20" r="9" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.8" />
+                  <text x="155" y="23" font-size="8.5" font-weight="700" fill="#475569" text-anchor="middle" font-family="'JetBrains Mono', monospace">4</text>
+
+                  <!-- Node 5 (Target Reached - Solid Blue) -->
+                  <circle cx="215" cy="55" r="11" fill="#2563EB" stroke="#FFFFFF" stroke-width="2" class="pulse-node" />
+                  <text x="215" y="58.5" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle" font-family="'JetBrains Mono', monospace">5</text>
+                </svg>
+              </div>
+
+              <!-- Step Controls Row -->
+              <div class="vis-step-controls">
+                <span style="display:flex; align-items:center; gap:4px; font-weight:700; color:#0F172A;">
+                  <span style="color:#2563EB;">▶</span> Step 3 of 5
+                </span>
+                <div class="vis-slider-track">
+                  <div class="vis-slider-fill"></div>
+                  <div class="vis-slider-thumb"></div>
+                </div>
+                <div class="vis-arrow-buttons">
+                  <span class="vis-arrow-btn">‹</span>
+                  <span class="vis-arrow-btn">›</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Card Bottom Stats Strip -->
+          <div class="card-bottom-metrics">
+            <div class="metric-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              <span>500+ Algorithms</span>
+            </div>
+            <div class="metric-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>120+ Visualizations</span>
+            </div>
+            <div class="metric-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              <span>8+ Subject Areas</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4 FEATURE BADGES (Below the 3D Moving Card - Matching Image 2) -->
+      <div class="features-pill-grid">
+        <!-- 1. Algorithms -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
+          <div class="feature-pill-content">
+            <h4>Algorithms</h4>
+            <p>Visualize &amp; Learn</p>
+          </div>
+        </div>
+
+        <!-- 2. Practice -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </div>
+          <div class="feature-pill-content">
+            <h4>Practice</h4>
+            <p>Solve Problems</p>
+          </div>
+        </div>
+
+        <!-- 3. Roadmaps -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          </div>
+          <div class="feature-pill-content">
+            <h4>Roadmaps</h4>
+            <p>Structured Learning</p>
+          </div>
+        </div>
+
+        <!-- 4. Resources -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </div>
+          <div class="feature-pill-content">
+            <h4>Resources</h4>
+            <p>Notes, Cheatsheets</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- RIGHT COLUMN: PURE WHITE AUTH CARD (Image 2) -->
+    <!-- ========================================== -->
+    <aside class="auth-card-container">
+      
+      <!-- Logo & Tagline -->
+      <div class="auth-brand-header">
+        <div class="auth-logo-row">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#2563EB" />
+            <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#FFFFFF" />
+          </svg>
+          <span class="auth-logo-text">AlgoVerse</span>
+        </div>
+        <div class="auth-logo-tagline">
+          Learn &bull; Visualize &bull; Practice &bull; Grow
+        </div>
+      </div>
+
+      <!-- Main Sign In Headings -->
+      <div class="auth-headings">
+        <h2 class="auth-main-title">Sign In to Continue</h2>
+        <p class="auth-sub-desc">Access your personalized learning workspace</p>
+      </div>
+
+      <!-- Notice Alert if redirected from protected route -->
+      <div class="auth-alert-banner info" id="authNoticeBanner">
+        🔒 Please sign in to access this workspace.
+      </div>
+
+      <!-- Sign In Form -->
+      <form class="auth-form" id="signInForm" onsubmit="handleFormSubmit(event)">
+        
+        <!-- Email Input -->
+        <div class="form-group">
+          <div class="input-wrapper">
+            <span class="input-icon-left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </span>
+            <input 
+              type="email" 
+              id="emailInput" 
+              class="auth-input" 
+              placeholder="Email address" 
+              value="gaurav@algoverse.io" 
+              required 
+              autocomplete="email"
+            />
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <div class="input-wrapper">
+            <span class="input-icon-left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </span>
+            <input 
+              type="password" 
+              id="passwordInput" 
+              class="auth-input" 
+              placeholder="Password" 
+              value="••••••••••••" 
+              required 
+              autocomplete="current-password"
+            />
+            <button type="button" class="input-icon-right" id="togglePasswordBtn" title="Show / Hide Password" onclick="togglePasswordVisibility()">
+              <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Options: Remember Me & Forgot Password -->
+        <div class="form-options-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMeCheckbox" checked />
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" onclick="alert('Password reset link will be sent to your email.'); return false;">
+            Forgot password?
+          </a>
+        </div>
+
+        <!-- Primary Action Button: Sign In -->
+        <button type="submit" class="btn-auth-primary" id="submitBtn">
+          <span>Sign In</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+
+        <!-- 1-Click Instant Demo Login (For immediate testing) -->
+        <button type="button" class="btn-demo-quick" onclick="quickDemoLogin()">
+          <span>⚡ Instant 1-Click Demo Login</span>
+        </button>
+
+      </form>
+
+      <!-- OR Divider -->
+      <div class="auth-divider">
+        <span class="divider-line"></span>
+        <span class="divider-text">OR</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- Continue with Google Button (Official Multicolor G Logo) -->
+      <button type="button" class="btn-google-auth" onclick="handleGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.36 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.04 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.36 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <!-- Footer: Sign Up Link -->
+      <div class="auth-card-footer">
+        New to AlgoVerse? <a href="#" onclick="quickDemoLogin(); return false;">Create Account</a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Auth Script -->
+  <script src="/static/js/auth.js"></script>
+
+  <script>
+    // Check if user is already logged in, redirect them
+    if (AlgoAuth.isAuthenticated()) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect_to');
+      if (redirect && !redirect.includes('signin.html')) {
+        window.location.href = redirect;
+      }
+    }
+
+    // Check if user arrived via redirect from protected page
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('redirect_to')) {
+      const banner = document.getElementById('authNoticeBanner');
+      if (banner) banner.style.display = 'block';
+    }
+
+    // Toggle Password Visibility
+    let passwordVisible = false;
+    function togglePasswordVisibility() {
+      const input = document.getElementById('passwordInput');
+      const eyeIcon = document.getElementById('eyeIcon');
+      passwordVisible = !passwordVisible;
+      
+      if (passwordVisible) {
+        input.type = 'text';
+        eyeIcon.innerHTML = `
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        `;
+      } else {
+        input.type = 'password';
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        `;
+      }
+    }
+
+    // Handle Form Submit
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
+      const remember = document.getElementById('rememberMeCheckbox').checked;
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle></svg>
+        <span>Signing in...</span>
+      `;
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        AlgoAuth.login(email, password, remember);
+      }, 350);
+    }
+
+    // Quick 1-Click Demo Login
+    function quickDemoLogin() {
+      const email = document.getElementById('emailInput').value.trim() || 'gaurav@algoverse.io';
+      AlgoAuth.login(email, 'algoverse123', true);
+    }
+
+    // Google Login
+    function handleGoogleLogin() {
+      AlgoAuth.loginWithGoogle();
+    }
+
+    // -------------------------------------------------------------
+    // 3D Moving State & Mouse-Tracking Interactive Tilt
+    // -------------------------------------------------------------
+    const card = document.getElementById('interactiveCard');
+    const heroWrapper = document.getElementById('leftHeroWrapper');
+    const sheen = document.getElementById('cardSheen');
+
+    let isMouseOver = false;
+    let targetRotateX = 0;
+    let targetRotateY = 0;
+    let currentRotateX = 0;
+    let currentRotateY = 0;
+
+    if (heroWrapper && card) {
+      heroWrapper.addEventListener('mouseenter', () => {
+        isMouseOver = true;
+        // Pause CSS float animation to let mouse interaction take full 3D control smoothly
+        card.style.animation = 'none';
+      });
+
+      heroWrapper.addEventListener('mouseleave', () => {
+        isMouseOver = false;
+        targetRotateX = 0;
+        targetRotateY = 0;
+        // Resume float animation smoothly after a moment
+        setTimeout(() => {
+          if (!isMouseOver) {
+            card.style.animation = 'float3D 6s ease-in-out infinite';
+          }
+        }, 300);
+      });
+
+      heroWrapper.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenterX = rect.left + rect.width / 2;
+        const cardCenterY = rect.top + rect.height / 2;
+
+        const deltaX = (e.clientX - cardCenterX) / (rect.width / 2);
+        const deltaY = (e.clientY - cardCenterY) / (rect.height / 2);
+
+        // Max tilt angles: 12 degrees for dynamic feel
+        targetRotateY = Math.max(-12, Math.min(12, deltaX * 12));
+        targetRotateX = Math.max(-12, Math.min(12, -deltaY * 12));
+
+        // Shift lighting sheen gradient
+        if (sheen) {
+          const sheenX = 50 + deltaX * 30;
+          const sheenY = 50 + deltaY * 30;
+          sheen.style.background = `radial-gradient(circle at ${sheenX}% ${sheenY}%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 65%)`;
+        }
+      });
+
+      // Smooth Lerp loop for fluid physics
+      function animate3DTilt() {
+        if (isMouseOver) {
+          currentRotateX += (targetRotateX - currentRotateX) * 0.12;
+          currentRotateY += (targetRotateY - currentRotateY) * 0.12;
+          card.style.transform = `perspective(1200px) rotateX(${currentRotateX.toFixed(2)}deg) rotateY(${currentRotateY.toFixed(2)}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
+        }
+        requestAnimationFrame(animate3DTilt);
+      }
+      requestAnimationFrame(animate3DTilt);
+    }
+  </script>
+
+</body>
+</html>

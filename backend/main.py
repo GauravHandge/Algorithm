@@ -55,6 +55,21 @@ def read_root():
         return FileResponse(index_path)
     return {"message": "CS Learning Platform Backend is Running!"}
 
+@app.get("/signin")
+@app.get("/login")
+def read_signin():
+    signin_path = os.path.join(frontend_dir, "signin.html")
+    if os.path.exists(signin_path):
+        return FileResponse(signin_path)
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+@app.get("/dashboard")
+def read_dashboard():
+    dash_path = os.path.join(frontend_dir, "dashboard.html")
+    if os.path.exists(dash_path):
+        return FileResponse(dash_path)
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
+
 if __name__ == "__main__":
     import uvicorn
     print("\n" + "="*60)
