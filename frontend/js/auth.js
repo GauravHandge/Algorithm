@@ -24,7 +24,9 @@
 
   const AlgoAuth = {
     isAuthenticated: function () {
-      return true;
+      const token = this.getToken();
+      const user = this.getUser();
+      return Boolean(token && user && user.email);
     },
 
     getUser: function () {
@@ -35,7 +37,7 @@
           if (parsed && parsed.email) return parsed;
         }
       } catch (e) {}
-      return defaultUser;
+      return null;
     },
 
     getToken: function () {
@@ -47,20 +49,19 @@
     },
 
     ensureSession: async function () {
-      if (!this.getToken()) {
-        try {
-          const resp = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: 'gaurav@algoverse.io', password: 'algoverse123' })
-          });
-          const data = await resp.json();
-          if (data && data.token) {
-            localStorage.setItem(TOKEN_KEY, data.token);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data.user));
-          }
-        } catch (e) {}
-      }
+      // Validates stored token without performing automatic fallback login
+      const token = this.getToken();
+      if (!token) return;
+      try {
+        const resp = await fetch('/api/auth/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!resp.ok) {
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(TOKEN_KEY);
+          this.syncNavbars();
+        }
+      } catch (e) {}
     },
 
     /**
@@ -141,7 +142,7 @@
 
     syncNavbars: function () {
       const isAuth = this.isAuthenticated();
-      const user = this.getUser() || defaultUser;
+      const user = this.getUser();
 
       document.querySelectorAll('.auth-nav-action, .header-actions').forEach(container => {
         if (!container) return;

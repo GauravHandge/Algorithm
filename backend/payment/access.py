@@ -18,16 +18,13 @@ def get_current_user_optional(authorization: Optional[str] = Header(None), db: S
     return db.query(User).filter(User.id == payload.get("sub")).first()
 
 def get_current_authenticated_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> User:
-    """Requires a valid authenticated user session with safe fallback for seamless local experience."""
+    """Requires a valid authenticated user session."""
     user = get_current_user_optional(authorization, db)
     if not user:
-        # Check if default demo user exists in db for local testing
-        user = db.query(User).filter(User.email == "gaurav@algoverse.io").first()
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication required. Please sign in to continue."
-            )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required. Please sign in to continue."
+        )
     return user
 
 def require_admin_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> User:
@@ -44,12 +41,10 @@ def require_admin_user(authorization: Optional[str] = Header(None), db: Session 
     return user
 
 def check_user_subject_access(db: Session, user: Optional[User], subject_id: str) -> bool:
-    """Checks whether the user has active premium access to the requested subject."""
+    """Checks whether the user has active premium access to the requested subject.
+    Access is strictly subject-specific: purchasing DSA unlocks DSA only."""
     if not user:
         return False
-    # Administrators have superuser access to all subjects
-    if user.is_admin or user.role == "Admin" or user.email == "gaurav@algoverse.io":
-        return True
 
     # Normalize subject_id if needed
     sid = subject_id.lower().strip()
@@ -76,7 +71,8 @@ def check_user_subject_access(db: Session, user: Optional[User], subject_id: str
     return True
 
 def get_user_access_map(db: Session, user: Optional[User]) -> dict:
-    """Returns access overview for all 4 core subjects for the current user."""
+    """Returns access overview for all 4 core subjects for the current user.
+    Each subject's status is independently checked from the database."""
     subjects = ["ai", "dsa", "ml", "cybersecurity"]
     plans = {p.id: p for p in db.query(SubjectPlan).all()}
     result = {}
@@ -97,18 +93,7 @@ def get_user_access_map(db: Session, user: Optional[User]) -> dict:
             }
             continue
 
-        if user.is_admin or user.role == "Admin" or user.email == "gaurav@algoverse.io":
-            result[sid] = {
-                "subject_id": sid,
-                "name": name,
-                "price": price,
-                "has_access": True,
-                "status": "UNLOCKED",
-                "access_source": "ADMIN_SUPERUSER"
-            }
-            continue
-
-        # Check DB
+        # Check DB strictly for this subject
         sid_candidates = ["ai", "aiml"] if sid == "ai" else [sid]
         record = db.query(UserSubjectAccess).filter(
             UserSubjectAccess.user_id == user.id,

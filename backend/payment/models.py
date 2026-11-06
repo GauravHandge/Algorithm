@@ -2,6 +2,7 @@ import datetime
 from sqlalchemy import Column, Integer, String, Text, Float, DateTime, Boolean, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from backend.database.database import Base
+from backend.auth.models import User
 
 class SubjectPlan(Base):
     __tablename__ = "subject_plans"

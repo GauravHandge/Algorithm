@@ -1542,8 +1542,28 @@
     }
 
     let userHasAiAccess = false;
+    let originalInspectorHTML = null;
+    let currentAiPrice = 20;
+
+    function saveOriginalInspectorMarkup() {
+      if (!originalInspectorHTML) {
+        const body = document.getElementById("inspector-tab-deepdive-body");
+        if (body) originalInspectorHTML = body.innerHTML;
+      }
+    }
 
     async function checkAiAccess() {
+      try {
+        const pRes = await fetch('/api/payment/plans');
+        if (pRes.ok) {
+          const pData = await pRes.json();
+          if (pData.plans) {
+            const aiPlan = pData.plans.find(p => p.id === 'ai');
+            if (aiPlan && aiPlan.price) currentAiPrice = aiPlan.price;
+          }
+        }
+      } catch (e) {}
+
       const token = localStorage.getItem('algoverse_auth_token');
       if (!token) return;
       try {
@@ -1561,6 +1581,7 @@
 
     // Switch Architecture
     function switchArchitecture(archKey) {
+      saveOriginalInspectorMarkup();
       pausePlayback();
       currentArchKey = archKey;
       currentStepIndex = 0;
@@ -1582,31 +1603,104 @@
 
       const arch = getArch();
 
+      // Elements to toggle for strict lock protection
+      const strip = document.querySelector(".controls-strip");
+      const topTabs = document.querySelector(".inspector-top-tabs");
+      const graphstateBody = document.getElementById("inspector-tab-graphstate-body");
+      const comparisonBody = document.getElementById("inspector-tab-comparison-body");
+      const legendBar = document.querySelector(".canvas-legend-bar");
+      const metricsStrip = document.querySelector(".metrics-5-strip");
+      const summaryGrid = document.querySelector(".summary-3-grid");
+
       // Check if locked
       if (archKey !== 'simple_rag' && !userHasAiAccess) {
         document.getElementById("canvas-arch-badge-name").textContent = `${arch.name.toUpperCase()} (LOCKED)`;
         document.getElementById("canvas-topology-text").textContent = `Topology: ${arch.topology} (Premium Required)`;
+
+        // 1. Hide playback controls completely so zero next/prev or steps can be triggered
+        if (strip) strip.style.display = "none";
+
+        // 2. Hide inspector tabs and secondary tab contents
+        if (topTabs) topTabs.style.display = "none";
+        if (graphstateBody) graphstateBody.style.display = "none";
+        if (comparisonBody) comparisonBody.style.display = "none";
+
+        // 3. Hide metrics and summary cards to prevent data leaks
+        if (legendBar) legendBar.style.display = "none";
+        if (metricsStrip) metricsStrip.style.display = "none";
+        if (summaryGrid) summaryGrid.style.display = "none";
+
+        // 4. Lock Right Inspector completely: zero step titles, explanations, or code leak
+        const inspectorBody = document.getElementById("inspector-tab-deepdive-body");
+        if (inspectorBody) {
+          inspectorBody.style.display = "flex";
+          inspectorBody.innerHTML = `
+            <div style="height:100%; min-height:480px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 18px; background:#f8fafc; border-radius:12px; border:1px dashed #cbd5e1;">
+              <div style="width:58px; height:58px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; margin-bottom:14px; font-size:1.8rem;">
+                🔒
+              </div>
+              <h4 style="font-size:1.2rem; font-weight:800; color:#0f172a; margin-bottom:8px;">Content & Steps Locked</h4>
+              <p style="color:#64748b; font-size:0.86rem; line-height:1.55; margin-bottom:20px; max-width:280px;">
+                Step explanations, LangGraph Python code, and state transitions for <strong>${arch.name}</strong> are locked.
+              </p>
+              <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:20px;">
+                Introductory preview is free for <strong>Simple RAG</strong> only.
+              </p>
+              <a href="/static/checkout.html?subject=ai" style="background:#2563eb; color:white; text-decoration:none; padding:11px 22px; border-radius:8px; font-weight:700; font-size:0.88rem; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+                🔒 Unlock AI Access (₹${currentAiPrice}) ➔
+              </a>
+            </div>
+          `;
+        }
+
+        // 5. Lock Left Sidebar pipeline nodes
+        const leftNodes = document.getElementById("nodes-list-container");
+        if (leftNodes) {
+          leftNodes.innerHTML = `
+            <div style="padding:28px 12px; text-align:center; color:#94a3b8; font-size:0.82rem; line-height:1.55;">
+              <div style="font-size:1.6rem; margin-bottom:8px;">🔒</div>
+              <strong>Pipeline Nodes Locked</strong><br>
+              Unlock full access to inspect graph stages and topology.
+            </div>
+          `;
+        }
+
         const track = document.getElementById("canvas-nodes-track");
         if (track) {
           track.innerHTML = `
-            <div style="width:100%; min-height:280px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; background:#ffffff; border-radius:12px;">
-              <div style="width:54px; height:54px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <div style="width:100%; min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:36px; background:#ffffff; border-radius:12px;">
+              <div style="width:60px; height:60px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
               </div>
-              <h3 style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-bottom:6px;">${arch.name} is Locked</h3>
-              <p style="color:#64748b; font-size:0.9rem; max-width:440px; margin-bottom:18px; line-height:1.45;">
-                Simple RAG is free to preview. To execute this architecture along with all 8 RAG pipelines and vector simulations, unlock full Artificial Intelligence access for only <strong>&#8377;20</strong>.
+              <h3 style="font-size:1.4rem; font-weight:800; color:#0f172a; margin-bottom:8px;">${arch.name} is Locked</h3>
+              <p style="color:#64748b; font-size:0.92rem; max-width:460px; margin-bottom:20px; line-height:1.5;">
+                Simple RAG is free to preview. To execute this architecture along with all 8 RAG pipelines, LangGraph code, and vector simulations, unlock full Artificial Intelligence access for only <strong>&#8377;${currentAiPrice}</strong>.
               </p>
-              <a href="/static/checkout.html?subject=ai" style="background:#2563eb; color:white; text-decoration:none; padding:10px 22px; border-radius:10px; font-weight:700; font-size:0.9rem; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
-                <span>🔒 Unlock AI Access for &#8377;20</span> &rarr;
+              <a href="/static/checkout.html?subject=ai" style="background:#2563eb; color:white; text-decoration:none; padding:12px 26px; border-radius:10px; font-weight:700; font-size:0.95rem; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(37,99,235,0.25);">
+                <span>🔒 Unlock AI Access for &#8377;${currentAiPrice}</span> &rarr;
               </a>
             </div>
           `;
         }
         return;
+      }
+
+      // Restore controls if unlocked
+      if (strip) strip.style.display = "flex";
+      if (topTabs) topTabs.style.display = "flex";
+      if (legendBar) legendBar.style.display = "flex";
+      if (metricsStrip) metricsStrip.style.display = "grid";
+      if (summaryGrid) summaryGrid.style.display = "grid";
+
+      // Restore inspector markup if previously locked
+      if (originalInspectorHTML) {
+        const inspectorBody = document.getElementById("inspector-tab-deepdive-body");
+        if (inspectorBody) {
+          inspectorBody.innerHTML = originalInspectorHTML;
+        }
       }
 
       // Update Top Canvas Badge & Topology
@@ -1727,6 +1821,7 @@
 
     // Go to Step
     function goToStep(idx) {
+      if (currentArchKey !== 'simple_rag' && !userHasAiAccess) return;
       const arch = getArch();
       if (idx < 0) idx = 0;
       if (idx >= arch.steps.length) idx = arch.steps.length - 1;
@@ -1768,6 +1863,7 @@
 
     // Render Right Inspector Panel (Matching Image 2)
     function renderInspector() {
+      if (currentArchKey !== 'simple_rag' && !userHasAiAccess) return;
       const arch = getArch();
       const step = arch.steps[currentStepIndex];
       if (!step) return;
@@ -1793,6 +1889,7 @@
 
     // Playback Controls
     function togglePlayback() {
+      if (currentArchKey !== 'simple_rag' && !userHasAiAccess) return;
       if (isPlaying) {
         pausePlayback();
       } else {
@@ -1801,6 +1898,7 @@
     }
 
     function startPlayback() {
+      if (currentArchKey !== 'simple_rag' && !userHasAiAccess) return;
       const arch = getArch();
       if (currentStepIndex >= arch.steps.length - 1) {
         currentStepIndex = 0;

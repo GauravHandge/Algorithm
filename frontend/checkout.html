@@ -691,6 +691,11 @@
       const email = document.getElementById('userEmailInput').value.trim();
       const btn = document.getElementById('btnVerify');
 
+      if (!email) {
+        showAlert('error', 'Please enter your email address to link your purchase.');
+        return;
+      }
+
       btn.disabled = true;
       btn.innerHTML = 'Submitting Request...';
 

@@ -207,6 +207,22 @@
           document.getElementById("algo-title").textContent = `${algorithmId.replace(/_/g, ' ').toUpperCase()} (Premium Locked)`;
           document.getElementById("algo-desc").textContent = lockInfo.message || `Full access to this algorithm requires unlocking ${subName}.`;
           
+          // Lock pseudocode, step panel, and AI tutor so zero code or steps leak
+          const pseudoEl = document.getElementById("pseudocode-container");
+          if (pseudoEl) pseudoEl.textContent = "// Algorithm pseudocode and step logic are locked.\n// Please unlock " + subName + " to access full implementation.";
+
+          const stepPanelEl = document.getElementById("step-panel-container");
+          if (stepPanelEl) stepPanelEl.innerHTML = `<div style="padding:28px 16px; text-align:center; color:#64748b; font-size:0.88rem; line-height:1.5;"><div style="font-size:1.6rem; margin-bottom:8px;">🔒</div><strong>Step Breakdown Locked</strong><br>Unlock ${subName} to view step-by-step state changes.</div>`;
+
+          const aiTutorEl = document.getElementById("ai-tutor-container");
+          if (aiTutorEl) aiTutorEl.innerHTML = `<div style="padding:28px 16px; text-align:center; color:#64748b; font-size:0.88rem; line-height:1.5;"><div style="font-size:1.6rem; margin-bottom:8px;">🔒</div><strong>AI Tutor Locked</strong><br>AI code hints and interactive explanations are available for unlocked subjects.</div>`;
+
+          const inputBar = document.querySelector(".input-bar-card");
+          if (inputBar) {
+            inputBar.style.opacity = "0.4";
+            inputBar.style.pointerEvents = "none";
+          }
+
           const container = document.getElementById("visualizer-container");
           container.innerHTML = `
             <div style="height:100%; min-height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:linear-gradient(180deg, #f8fafc, #ffffff);">

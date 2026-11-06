@@ -57,14 +57,14 @@ def get_plans(authorization: Optional[str] = Header(None), db: Session = Depends
 @router.get("/checkout/{subject_id}")
 def get_checkout_info(subject_id: str, authorization: Optional[str] = Header(None), db: Session = Depends(get_db)):
     """Provides dynamic checkout data including subject details, exact price, and configured UPI QR."""
-    user = get_current_authenticated_user(authorization, db)
+    user = get_current_user_optional(authorization, db)
     sid = subject_id.lower().strip()
     plan = db.query(SubjectPlan).filter(SubjectPlan.id == sid).first()
     if not plan:
         raise HTTPException(status_code=404, detail=f"Subject plan '{subject_id}' not found.")
 
     # Check if already purchased
-    has_access = check_user_subject_access(db, user, sid)
+    has_access = check_user_subject_access(db, user, sid) if user else False
 
     upi_id_setting = db.query(SystemSetting).filter(SystemSetting.key == "upi_id").first()
     qr_setting = db.query(SystemSetting).filter(SystemSetting.key == "upi_qr_url").first()

@@ -116,15 +116,12 @@ def migrate_and_seed_payment_system():
                 db.add(SystemSetting(key=key, value=val, description=desc))
         db.commit()
 
-        # 6. Flag Introductory Free Previews
+        # 6. Flag Introductory Free Previews (Exactly 1 per subject as required)
         free_algo_ids = [
-            "simple_rag",        # AI Free Preview
-            "bubble_sort",       # DSA Free Preview
-            "binary_search",     # DSA Free Preview
-            "linear_search",     # DSA Free Preview
-            "linear_regression", # ML Free Preview
-            "knn",               # ML Free Preview
-            "caesar_cipher"      # Cybersecurity Free Preview
+            "simple_rag",        # AI Free Preview (1 only)
+            "bubble_sort",       # DSA Free Preview (1 only)
+            "linear_regression", # ML Free Preview (1 only)
+            "caesar_cipher"      # Cybersecurity Free Preview (1 only)
         ]
 
         # Reset all to False, then set Free Previews

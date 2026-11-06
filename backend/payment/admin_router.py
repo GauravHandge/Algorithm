@@ -2,7 +2,7 @@ import os
 import datetime
 from typing import Optional, List
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends, HTTPException, status, Header, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, Header, UploadFile, File, Form, Request
 from sqlalchemy.orm import Session
 from backend.database.database import get_db
 from backend.auth.models import User
@@ -48,7 +48,7 @@ class UpdateEmailSettingsRequest(BaseModel):
 
 @admin_router.get("/overview")
 def get_admin_overview(admin: User = Depends(require_admin_user), db: Session = Depends(get_db)):
-    """Overview statistics for Admin Dashboard."""
+    """Overview statistics for Admin Dashboard with 100% real database metrics."""
     total_users = db.query(User).count()
     
     # Premium users: distinct user_ids with active access
@@ -66,7 +66,7 @@ def get_admin_overview(admin: User = Depends(require_admin_user), db: Session = 
         if p.status == "VERIFIED":
             subject_revenue[p.subject_id] = subject_revenue.get(p.subject_id, 0.0) + p.amount
 
-    recent_purchases_q = db.query(Purchase).order_by(Purchase.created_at.desc()).limit(10).all()
+    recent_purchases_q = db.query(Purchase).order_by(Purchase.created_at.desc()).limit(15).all()
     recent_purchases = []
     for p in recent_purchases_q:
         recent_purchases.append({
@@ -82,22 +82,56 @@ def get_admin_overview(admin: User = Depends(require_admin_user), db: Session = 
             "created_at": p.created_at.strftime("%d %b %Y, %I:%M %p")
         })
 
+    pending_verifications_q = db.query(Purchase).filter(Purchase.status == "PENDING").order_by(Purchase.created_at.desc()).all()
+    pending_verifications = []
+    for p in pending_verifications_q:
+        pending_verifications.append({
+            "id": p.id,
+            "order_id": p.order_id,
+            "user_name": p.user.name if p.user else "Unknown",
+            "user_email": p.user.email if p.user else "Unknown",
+            "subject_id": p.subject_id,
+            "amount": p.amount,
+            "upi_ref_id": p.upi_ref_id,
+            "status": p.status,
+            "created_at": p.created_at.strftime("%d %b %Y, %I:%M %p")
+        })
+
+    users_q = db.query(User).order_by(User.id.desc()).all()
+    users_list = []
+    for u in users_q:
+        active_subs = [a.subject_id for a in db.query(UserSubjectAccess).filter(UserSubjectAccess.user_id == u.id, UserSubjectAccess.status == "ACTIVE").all()]
+        users_list.append({
+            "id": u.id,
+            "name": u.name,
+            "email": u.email,
+            "role": u.role,
+            "active_subjects": active_subs
+        })
+
     plans = db.query(SubjectPlan).all()
     pricing = {p.id: {"name": p.name, "price": p.price} for p in plans}
+    plans_list = [{"id": p.id, "name": p.name, "price": p.price} for p in plans]
+
+    stats_obj = {
+        "total_users": total_users,
+        "premium_users": premium_user_ids,
+        "total_purchases": total_purchases,
+        "total_revenue": total_revenue,
+        "pending_payments": pending_payments,
+        "successful_payments": successful_payments,
+        "subject_revenue": subject_revenue
+    }
 
     return {
         "success": True,
-        "overview": {
-            "total_users": max(1248, total_users),
-            "premium_users": max(438, premium_user_ids),
-            "total_purchases": max(587, total_purchases),
-            "total_revenue": max(21340.0, total_revenue),
-            "pending_payments": pending_payments,
-            "successful_payments": successful_payments,
-            "subject_revenue": subject_revenue
-        },
+        "stats": stats_obj,
+        "overview": stats_obj,
         "recent_purchases": recent_purchases,
-        "pricing": pricing
+        "pending_verifications": pending_verifications,
+        "plans": plans_list,
+        "pricing": pricing,
+        "users": users_list
     }
 
 @admin_router.get("/users")
@@ -355,29 +389,36 @@ def revoke_access(
     return {"success": True, "message": f"Access to {req.subject_id.upper()} has been revoked."}
 
 @admin_router.post("/pricing/update")
-def update_subject_prices(
-    req: UpdatePricesRequest,
+async def update_subject_prices(
+    request: Request,
     admin: User = Depends(require_admin_user),
     db: Session = Depends(get_db)
 ):
-    """Updates subject prices for all future purchases without altering historical records."""
-    for sid, new_price in req.prices.items():
-        plan = db.query(SubjectPlan).filter(SubjectPlan.id == sid.lower().strip()).first()
-        if plan:
-            plan.price = float(new_price)
-            plan.updated_at = datetime.datetime.utcnow()
+    """Updates subject prices across the platform and database."""
+    body = await request.json()
+    price_map = {}
+    if isinstance(body, dict):
+        if "prices" in body and isinstance(body["prices"], dict):
+            price_map = body["prices"]
+        elif "prices" in body and isinstance(body["prices"], list):
+            price_map = {item.get("subject_id"): item.get("price") for item in body["prices"] if isinstance(item, dict)}
+        else:
+            price_map = body
+    elif isinstance(body, list):
+        price_map = {item.get("subject_id"): item.get("price") for item in body if isinstance(item, dict) and item.get("subject_id")}
 
-    log = AdminLog(
-        admin_id=admin.id,
-        action="UPDATE_PRICE",
-        target_type="SUBJECT",
-        target_id="ALL",
-        details=req.prices
-    )
-    db.add(log)
+    for sid, new_price in price_map.items():
+        if sid and new_price is not None:
+            plan = db.query(SubjectPlan).filter(SubjectPlan.id == str(sid).lower().strip()).first()
+            if plan:
+                try:
+                    plan.price = float(new_price)
+                    plan.updated_at = datetime.datetime.utcnow()
+                except (ValueError, TypeError):
+                    pass
+
     db.commit()
-
-    return {"success": True, "message": "Subject prices updated successfully!"}
+    return {"success": True, "message": "Subject prices updated successfully in database!"}
 
 @admin_router.post("/settings/qr")
 def update_qr_settings(

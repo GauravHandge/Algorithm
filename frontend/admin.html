@@ -1064,14 +1064,14 @@
         }
         const data = await resp.json();
         if (data.success) {
-          // Update stats
-          const stats = data.stats;
-          document.getElementById("metric-total-users").textContent = stats.total_users;
-          document.getElementById("metric-premium-users").textContent = stats.premium_users;
-          document.getElementById("metric-total-purchases").textContent = stats.total_purchases;
-          document.getElementById("metric-total-revenue").innerHTML = `&#8377;${stats.total_revenue}`;
-          document.getElementById("metric-pending-count").textContent = stats.pending_payments;
-          document.getElementById("pending-badge").textContent = stats.pending_payments;
+          // Update stats with real live database counts
+          const stats = data.stats || data.overview || {};
+          document.getElementById("metric-total-users").textContent = stats.total_users || 0;
+          document.getElementById("metric-premium-users").textContent = stats.premium_users || 0;
+          document.getElementById("metric-total-purchases").textContent = stats.total_purchases || 0;
+          document.getElementById("metric-total-revenue").innerHTML = `&#8377;${stats.total_revenue || 0}`;
+          document.getElementById("metric-pending-count").textContent = stats.pending_payments || 0;
+          document.getElementById("pending-badge").textContent = stats.pending_payments || 0;
 
           // Render recent purchases
           renderRecentPurchases(data.recent_purchases || []);
@@ -1292,6 +1292,14 @@
     }
 
     function openEditPricesModal() {
+      ['ai', 'dsa', 'ml', 'cybersecurity'].forEach(sid => {
+        const badge = document.getElementById(`admin-price-${sid}`);
+        const input = document.getElementById(`input-price-${sid}`);
+        if (badge && input) {
+          const val = parseInt(badge.textContent.replace(/[^\d]/g, ''), 10);
+          if (!isNaN(val)) input.value = val;
+        }
+      });
       document.getElementById("edit-prices-modal").style.display = "flex";
     }
 
