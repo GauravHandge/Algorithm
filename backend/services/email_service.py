@@ -149,3 +149,4 @@ class EmailService:
         </div>
         """
         return cls.send_email(db, user_email, subject, html, "FREE_ACCESS_GRANTED", user_name)
+

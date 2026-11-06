@@ -1027,6 +1027,8 @@
       }
 
       await loadAdminOverview();
+      // Auto-refresh admin panel every 3 seconds so incoming payments appear in real-time
+      setInterval(loadAdminOverview, 3000);
     });
 
     function getAuthHeaders() {
@@ -1174,7 +1176,6 @@
     }
 
     async function approvePurchase(purchaseId) {
-      if (!confirm("Confirm approval of this payment? This will immediately unlock access for the user.")) return;
       try {
         const resp = await fetch('/api/admin/purchases/approve', {
           method: 'POST',
@@ -1183,14 +1184,43 @@
         });
         const data = await resp.json();
         if (resp.ok && data.success) {
-          alert("✓ Payment approved! User access unlocked and confirmation email triggered.");
           await loadAdminOverview();
+          // Visual brief toast notification
+          showAdminNotice("✓ Payment approved! User access unlocked immediately.");
         } else {
           alert(data.detail || "Approval failed.");
         }
       } catch (err) {
         alert("Error approving purchase: " + err.message);
       }
+    }
+
+    function showAdminNotice(msg) {
+      let notice = document.getElementById("admin-floating-notice");
+      if (!notice) {
+        notice = document.createElement("div");
+        notice.id = "admin-floating-notice";
+        notice.style.position = "fixed";
+        notice.style.bottom = "24px";
+        notice.style.right = "24px";
+        notice.style.background = "#10B981";
+        notice.style.color = "#FFFFFF";
+        notice.style.padding = "12px 20px";
+        notice.style.borderRadius = "10px";
+        notice.style.fontWeight = "700";
+        notice.style.fontSize = "0.9rem";
+        notice.style.boxShadow = "0 8px 24px rgba(0,0,0,0.2)";
+        notice.style.zIndex = "9999";
+        notice.style.transition = "opacity 0.3s ease";
+        document.body.appendChild(notice);
+      }
+      notice.textContent = msg;
+      notice.style.display = "block";
+      notice.style.opacity = "1";
+      setTimeout(() => {
+        notice.style.opacity = "0";
+        setTimeout(() => notice.style.display = "none", 300);
+      }, 3000);
     }
 
     async function rejectPurchase(purchaseId) {
@@ -1358,3 +1388,4 @@
   </script>
 </body>
 </html>
+

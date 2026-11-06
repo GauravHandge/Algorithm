@@ -141,3 +141,4 @@ def migrate_and_seed_payment_system():
 
 if __name__ == "__main__":
     migrate_and_seed_payment_system()
+

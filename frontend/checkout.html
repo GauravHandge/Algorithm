@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
@@ -23,6 +23,7 @@
       --bg-card: #FFFFFF;
       --color-success: #16A34A;
       --color-warning: #D97706;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     * {
@@ -32,13 +33,12 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: var(--font-sans);
       background-color: var(--bg-page);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      -webkit-font-smoothing: antialiased;
     }
 
     /* Top Navbar */
@@ -49,33 +49,47 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 2rem;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
 
-    .brand-logo {
+    .brand-logo-checkout {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       text-decoration: none;
       color: var(--text-main);
+      font-size: 1.25rem;
       font-weight: 800;
-      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-logo-checkout .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #2563EB, #38BDF8);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
     }
 
     /* Main Container */
     .checkout-container {
-      max-width: 1080px;
+      max-width: 980px;
+      margin: 28px auto 60px auto;
+      padding: 0 20px;
       width: 100%;
-      margin: 2.5rem auto;
-      padding: 0 1.5rem;
     }
 
-    /* Back link and Page Title */
-    .page-title-row {
-      margin-bottom: 1.75rem;
+    .back-btn-row {
+      margin-bottom: 12px;
     }
 
-    .back-btn {
+    .back-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -83,92 +97,98 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
-      margin-bottom: 0.65rem;
-      transition: color 0.15s ease;
+      transition: color 0.15s;
     }
 
-    .back-btn:hover {
+    .back-link:hover {
       color: var(--primary-blue);
     }
 
-    .main-title {
+    .page-title {
       font-size: 1.75rem;
       font-weight: 800;
       color: var(--text-main);
-      letter-spacing: -0.025em;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
     }
 
-    .sub-title {
-      color: var(--text-secondary);
+    .page-subtitle {
       font-size: 0.95rem;
-      margin-top: 0.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
     }
 
-    /* 2-Column Checkout Layout (Matching Reference Image 1) */
+    /* Two Column Checkout Card */
     .checkout-grid {
       display: grid;
-      grid-template-columns: 1.05fr 1.35fr;
-      gap: 2rem;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 24px;
       align-items: start;
     }
 
-    @media (max-width: 860px) {
-      .checkout-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* LEFT: Subject Information Card */
-    .subject-info-card {
-      background: #FFFFFF;
+    /* Left Card: Subject Details */
+    .subject-summary-card {
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .subject-header-badge {
+    .subject-header-row {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 16px;
     }
 
-    .subject-large-icon {
-      width: 52px;
-      height: 52px;
+    .subject-icon-box {
+      width: 54px;
+      height: 54px;
       border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 1.6rem;
+      font-weight: 800;
       flex-shrink: 0;
     }
 
-    .subject-title-area h3 {
+    .subject-meta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .subject-title {
       font-size: 1.25rem;
       font-weight: 800;
       color: var(--text-main);
+      line-height: 1.2;
     }
 
-    .premium-badge-tag {
+    .subject-badge-pill {
       display: inline-flex;
       align-items: center;
       gap: 4px;
       background: #FEF3C7;
-      color: #92400E;
+      color: #D97706;
+      border: 1px solid #FDE68A;
       font-size: 0.72rem;
       font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 9999px;
-      margin-top: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      width: fit-content;
     }
 
     .feature-check-list {
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-      margin: 1.75rem 0;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
     }
 
     .feature-item {
@@ -177,280 +197,308 @@
       gap: 10px;
       font-size: 0.88rem;
       color: #334155;
-      font-weight: 500;
     }
 
     .feature-item svg {
-      color: var(--color-success);
+      color: #10B981;
       flex-shrink: 0;
     }
 
     .amount-summary-box {
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 1.25rem;
       display: flex;
-      align-items: center;
+      align-items: baseline;
       justify-content: space-between;
-      margin-top: 1.5rem;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
     }
 
     .amount-label {
       font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .amount-value {
-      font-size: 1.85rem;
-      font-weight: 900;
+      font-weight: 700;
       color: var(--text-main);
     }
 
-    /* RIGHT: UPI Payment Card */
+    .amount-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    /* Right Card: UPI Payment */
     .upi-payment-card {
-      background: #FFFFFF;
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2.25rem 2.25rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
     .upi-section-title {
       font-size: 1.15rem;
       font-weight: 800;
       color: var(--text-main);
-      text-align: center;
-      margin-bottom: 1.25rem;
+      margin-bottom: 16px;
     }
 
-    /* QR Code Display Box */
     .qr-frame-box {
-      width: 210px;
-      height: 210px;
-      margin: 0 auto 1.25rem auto;
-      padding: 10px;
       background: #FFFFFF;
       border: 2px dashed #CBD5E1;
       border-radius: 16px;
-      display: flex;
+      padding: 12px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      margin-bottom: 12px;
     }
 
     .qr-frame-box img {
-      width: 100%;
-      height: 100%;
+      width: 175px;
+      height: 175px;
       object-fit: contain;
-      border-radius: 10px;
+      border-radius: 8px;
+      display: block;
     }
 
-    /* UPI ID Pill with Copy button */
     .upi-id-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       background: #F1F5F9;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.6rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 340px;
-      margin: 0 auto 1.5rem auto;
-      font-size: 0.88rem;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
     }
 
-    .upi-id-pill span.id-text {
+    .upi-id-pill .id-text {
       font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
       font-weight: 700;
-      color: #0F172A;
+      color: var(--primary-blue);
     }
 
     .copy-btn {
-      background: transparent;
-      border: none;
-      color: var(--primary-blue);
-      cursor: pointer;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      color: var(--text-main);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
       font-weight: 700;
-      font-size: 0.8rem;
-      display: flex;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: #E2E8F0;
     }
 
     /* Instructions Box */
     .payment-instructions-box {
-      background: #EFF6FF;
-      border: 1px solid #BFDBFE;
+      width: 100%;
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 1rem 1.15rem;
-      margin-bottom: 1.5rem;
+      padding: 14px 16px;
+      text-align: left;
+      margin-bottom: 18px;
     }
 
     .instructions-heading {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: #1E40AF;
-      margin-bottom: 0.5rem;
     }
 
     .instructions-list {
-      font-size: 0.8rem;
-      color: #1E3A8A;
+      padding-left: 20px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
       line-height: 1.5;
-      padding-left: 1.25rem;
     }
 
-    /* Input & Submit button */
+    .instructions-list strong {
+      color: var(--text-main);
+    }
+
+    /* Verification Form */
     .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .ref-input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .ref-prefix-icon {
-      position: absolute;
-      left: 14px;
-      color: #94A3B8;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .ref-input {
       width: 100%;
-      height: 48px;
-      padding: 0 14px 0 36px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #0F172A;
-      background: #FFFFFF;
-      border: 1.5px solid #CBD5E1;
-      border-radius: 10px;
-      outline: none;
-      transition: all 0.2s ease;
+      margin-bottom: 12px;
+      text-align: left;
     }
 
-    .ref-input:focus {
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    .custom-input {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .custom-input:focus {
       border-color: var(--primary-blue);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
     }
 
     .btn-verify-payment {
       width: 100%;
-      height: 48px;
-      background: var(--primary-blue);
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
       color: #FFFFFF;
       border: none;
+      padding: 12px 18px;
       border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+      transition: all 0.15s ease;
+      margin-top: 6px;
     }
 
     .btn-verify-payment:hover {
-      background: var(--primary-blue-hover);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+      transform: translateY(-1px);
     }
 
     .btn-verify-payment:disabled {
-      opacity: 0.65;
+      opacity: 0.6;
       cursor: not-allowed;
+      transform: none;
     }
 
-    /* Alert Banner */
+    /* Alert Box */
     .checkout-alert-box {
-      display: none;
-      padding: 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
+      padding: 14px 18px;
       font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-      line-height: 1.5;
+      margin-bottom: 20px;
+      line-height: 1.45;
+      display: none;
     }
 
     .checkout-alert-box.success {
-      display: block;
-      background: #F0FDF4;
-      color: #166534;
-      border: 1px solid #BBF7D0;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      color: #065F46;
+    }
+
+    .checkout-alert-box.warning {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      color: #92400E;
     }
 
     .checkout-alert-box.error {
-      display: block;
       background: #FEF2F2;
-      color: #991B1B;
       border: 1px solid #FECACA;
+      color: #991B1B;
     }
 
-    .checkout-alert-box.info {
-      display: block;
-      background: #EFF6FF;
-      color: #1E40AF;
-      border: 1px solid #BFDBFE;
+    /* Pulse animation */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.9); }
+    }
+    .pulsing-dot {
+      display: inline-block;
+      animation: pulse 1.5s infinite;
+      color: #D97706;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+      .checkout-container {
+        padding: 0 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header -->
+  <!-- Top Bar -->
   <header class="checkout-header">
-    <a href="/static/dashboard.html" class="brand-logo">
-      <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-        <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#2563EB" />
-        <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#FFFFFF" />
-      </svg>
+    <a href="/static/dashboard.html" class="brand-logo-checkout">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="12 2 2 22 22 22" fill="#ffffff" stroke="none"/>
+        </svg>
+      </div>
       <span>AlgoVerse</span>
     </a>
 
-    <div id="userProfileNav">
-      <!-- Injected by auth.js -->
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="/static/admin.html" style="font-size:0.8rem; font-weight:700; color:#D97706; background:#FEF3C7; padding:5px 10px; border-radius:6px; text-decoration:none; border:1px solid #FDE68A;">
+        Admin Panel
+      </a>
+      <a href="/static/dashboard.html" style="font-size:0.85rem; color:var(--text-secondary); text-decoration:none; font-weight:600;">
+        Dashboard
+      </a>
     </div>
   </header>
 
+  <!-- Checkout View -->
   <main class="checkout-container">
-    
-    <div class="page-title-row">
-      <a href="/static/dashboard.html" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        Back to Dashboard
+    <div class="back-btn-row">
+      <a href="/static/dashboard.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Back to Dashboard</span>
       </a>
-      <h1 class="main-title">Complete Your Purchase</h1>
-      <p class="sub-title">Scan the QR code, make the payment, and submit your reference ID to unlock full lifetime access.</p>
     </div>
 
+    <h1 class="page-title">Complete Your Purchase</h1>
+    <p class="page-subtitle">Scan the QR code, complete payment, and submit for instant admin verification.</p>
+
     <!-- Alert Banner -->
-    <div class="checkout-alert-box" id="alertBox"></div>
+    <div id="alertBox" class="checkout-alert-box"></div>
 
     <div class="checkout-grid">
-
-      <!-- LEFT: Subject Information Card -->
-      <div class="subject-info-card">
-        <div class="subject-header-badge">
-          <div class="subject-large-icon" id="subjectIconBox" style="background:#F5F3FF; color:#7C3AED;">
+      <!-- LEFT: Subject Summary -->
+      <div class="subject-summary-card">
+        <div class="subject-header-row">
+          <div class="subject-icon-box" id="subjectIconBox" style="background:#F5F3FF; color:#7C3AED;">
             🧠
           </div>
-          <div class="subject-title-area">
-            <h3 id="subjectTitle">Artificial Intelligence (AI)</h3>
-            <span class="premium-badge-tag">👑 Premium Access</span>
+          <div class="subject-meta-col">
+            <h2 class="subject-title" id="subjectTitle">Artificial Intelligence (AI)</h2>
+            <span class="subject-badge-pill">★ Premium Access</span>
           </div>
         </div>
 
         <p style="color:#64748B; font-size:0.88rem; line-height:1.5;" id="subjectDescription">
-          Learn AI concepts, models, and real-world applications with 8 RAG Architectures & LangGraph Studio.
+          Learn AI concepts, models, and real-world applications with 8 RAG Architectures &amp; LangGraph Studio.
         </p>
 
         <div class="feature-check-list" id="featureCheckList">
@@ -464,26 +512,26 @@
           </div>
           <div class="feature-item">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Detailed algorithmic code & pseudocode</span>
+            <span>Detailed algorithmic code &amp; pseudocode</span>
           </div>
           <div class="feature-item">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Practice challenges & assessment quizzes</span>
+            <span>Practice challenges &amp; assessment quizzes</span>
           </div>
           <div class="feature-item">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Lifetime access & free updates</span>
+            <span>Lifetime access &amp; free updates</span>
           </div>
         </div>
 
         <div class="amount-summary-box">
           <span class="amount-label">Amount to Pay</span>
-          <span class="amount-value" id="amountDisplay">₹20</span>
+          <span class="amount-value" id="amountDisplay">&#8377;20</span>
         </div>
       </div>
 
       <!-- RIGHT: Scan & Pay via UPI -->
-      <div class="upi-payment-card">
+      <div class="upi-payment-card" id="rightPaymentCard">
         <h3 class="upi-section-title">Scan &amp; Pay via UPI</h3>
 
         <!-- Actual User PhonePe QR Code -->
@@ -509,32 +557,44 @@
           </div>
           <ol class="instructions-list">
             <li>Scan the QR code using any UPI app (GPay / PhonePe / Paytm).</li>
-            <li>Pay the exact amount: <strong id="instructionAmount">₹20</strong>.</li>
-            <li>Enter the UPI Transaction ID (UTR / Reference) below and click Verify.</li>
+            <li>Pay the exact amount: <strong id="instructionAmount">&#8377;20</strong>.</li>
+            <li>Click the button below to submit. The admin panel will be updated immediately for approval.</li>
           </ol>
         </div>
 
         <!-- Verification Form -->
-        <form id="paymentForm" onsubmit="submitPayment(event)">
+        <form id="paymentForm" onsubmit="submitPayment(event)" style="width:100%;">
           <div class="form-group">
-            <div class="ref-input-wrapper">
-              <span class="ref-prefix-icon">#</span>
-              <input 
-                type="text" 
-                id="upiRefInput" 
-                class="ref-input" 
-                placeholder="Enter UPI Transaction ID (e.g. 432187654321)" 
-                required 
-                autocomplete="off"
-              />
-            </div>
+            <label class="form-label">Your Registered Email (for account access):</label>
+            <input 
+              type="email" 
+              id="userEmailInput" 
+              class="custom-input" 
+              placeholder="e.g. gaurav@algoverse.io" 
+              value="gaurav@algoverse.io" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">UPI Reference / UTR ID (Optional):</label>
+            <input 
+              type="text" 
+              id="upiRefInput" 
+              class="custom-input" 
+              placeholder="Optional UPI Ref / Transaction ID (or leave blank)" 
+              autocomplete="off"
+            />
           </div>
 
           <button type="submit" class="btn-verify-payment" id="btnVerify">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Verify Payment</span>
+            <span>I Have Made Payment &mdash; Submit for Approval</span>
           </button>
         </form>
+
+        <!-- Live Status Container (Appears after submission) -->
+        <div id="liveStatusContainer" style="display:none; width:100%; margin-top:16px;"></div>
 
       </div>
 
@@ -545,14 +605,10 @@
   <script src="/static/js/auth.js"></script>
 
   <script>
-    // Require authentication to access checkout
-    if (!AlgoAuth.requireAuth()) {
-      // halts
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
     const subjectId = urlParams.get('subject') || 'ai';
     let currentPrice = 20.0;
+    let pollInterval = null;
 
     function showAlert(type, message) {
       const box = document.getElementById('alertBox');
@@ -569,14 +625,21 @@
       setTimeout(() => copySpan.innerText = 'Copy', 2000);
     }
 
+    // Auto-fill user email on load
+    document.addEventListener("DOMContentLoaded", () => {
+      AlgoAuth.ensureSession();
+      const user = AlgoAuth.getUser();
+      if (user && user.email) {
+        document.getElementById('userEmailInput').value = user.email;
+      }
+    });
+
     // Load checkout information dynamically from Python Backend
     async function loadCheckoutData() {
       try {
         const token = AlgoAuth.getToken();
         const res = await fetch(`/api/payment/checkout/${subjectId}`, {
-          headers: {
-            'Authorization': token ? `Bearer ${token}` : ''
-          }
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
         });
         const data = await res.json();
 
@@ -589,8 +652,8 @@
           document.getElementById('subjectTitle').innerText = data.subject.name;
           document.getElementById('subjectDescription').innerText = data.subject.description || '';
           currentPrice = data.subject.price;
-          document.getElementById('amountDisplay').innerText = `₹${currentPrice}`;
-          document.getElementById('instructionAmount').innerText = `₹${currentPrice}`;
+          document.getElementById('amountDisplay').innerHTML = `&#8377;${currentPrice}`;
+          document.getElementById('instructionAmount').innerHTML = `&#8377;${currentPrice}`;
           document.getElementById('upiIdText').innerText = data.payment_config.upi_id;
           if (data.payment_config.qr_image_url) {
             document.getElementById('upiQrImage').src = data.payment_config.qr_image_url;
@@ -621,25 +684,27 @@
       }
     }
 
-    // Submit payment reference ID to Backend
+    // Submit payment reference to Backend
     async function submitPayment(e) {
       e.preventDefault();
       const upiRef = document.getElementById('upiRefInput').value.trim();
+      const email = document.getElementById('userEmailInput').value.trim();
       const btn = document.getElementById('btnVerify');
 
       btn.disabled = true;
-      btn.innerHTML = 'Verifying...';
+      btn.innerHTML = 'Submitting Request...';
 
       try {
         const token = AlgoAuth.getToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
         const res = await fetch('/api/payment/order', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
-          },
+          headers: headers,
           body: JSON.stringify({
             subject_id: subjectId,
+            user_email: email,
             upi_ref_id: upiRef,
             amount: currentPrice
           })
@@ -650,22 +715,68 @@
           throw new Error(data.detail || 'Failed to submit payment reference.');
         }
 
-        showAlert('success', `
-          <div style="font-size:1rem; font-weight:800; margin-bottom:4px;">🎉 Payment Submitted Successfully!</div>
-          <p style="margin:4px 0;">Order Reference: <strong>${data.purchase.order_id}</strong> | Status: <span style="color:#D97706; font-weight:700;">Pending Verification</span></p>
-          <p style="margin:4px 0; font-size:0.84rem;">Our administrator verifies transactions promptly. Once verified, full access will be automatically unlocked and confirmation sent to your email.</p>
-          <div style="margin-top:10px;">
-            <a href="/static/dashboard.html" style="background:#166534; color:#fff; text-decoration:none; padding:6px 14px; border-radius:6px; font-weight:700; display:inline-block;">Return to Dashboard</a>
-          </div>
-        `);
-
+        // Hide payment form
         document.getElementById('paymentForm').style.display = 'none';
+
+        // Show live pending status box
+        const statusBox = document.getElementById('liveStatusContainer');
+        statusBox.style.display = 'block';
+        statusBox.innerHTML = `
+          <div style="background:#FFFBEB; border:2px solid #FDE68A; border-radius:14px; padding:22px; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:8px;">⏳</div>
+            <h3 style="color:#92400E; font-size:1.2rem; font-weight:800; margin-bottom:6px;">Payment Request Submitted!</h3>
+            <p style="color:#78350F; font-size:0.9rem; margin-bottom:10px;">Order ID: <strong>${data.purchase.order_id}</strong></p>
+            <p style="color:#92400E; font-size:0.85rem; line-height:1.5; margin-bottom:14px;">
+              Your request is now visible in the <strong>Admin Panel</strong> under Pending Payments. As soon as the administrator clicks <strong>Approve</strong>, full access will be automatically unlocked right here!
+            </p>
+            <div style="display:inline-flex; align-items:center; gap:8px; background:#FEF3C7; padding:6px 14px; border-radius:999px; font-size:0.8rem; font-weight:700; color:#B45309;">
+              <span class="pulsing-dot">●</span> Waiting for Admin Approval...
+            </div>
+          </div>
+        `;
+
+        showAlert('warning', `Payment submitted! Order ID: <strong>${data.purchase.order_id}</strong> is pending administrator verification.`);
+
+        // Start live polling to check when admin clicks Approve
+        startStatusPolling(data.purchase.order_id);
 
       } catch (err) {
         showAlert('error', `✗ ${err.message}`);
         btn.disabled = false;
-        btn.innerHTML = 'Verify Payment';
+        btn.innerHTML = 'I Have Made Payment &mdash; Submit for Approval';
       }
+    }
+
+    function startStatusPolling(orderId) {
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(async () => {
+        try {
+          const resp = await fetch(`/api/payment/order-status/${orderId}`);
+          if (resp.ok) {
+            const result = await resp.json();
+            if (result.success && result.is_approved) {
+              clearInterval(pollInterval);
+              // Transform to approved success screen
+              const statusBox = document.getElementById('liveStatusContainer');
+              statusBox.innerHTML = `
+                <div style="background:#ECFDF5; border:2px solid #A7F3D0; border-radius:14px; padding:24px; text-align:center;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#10B981; color:white; font-size:1.6rem; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;">✓</div>
+                  <h3 style="color:#065F46; font-size:1.3rem; font-weight:800; margin-bottom:6px;">Payment Approved! Access Granted!</h3>
+                  <p style="color:#047857; font-size:0.9rem; line-height:1.5; margin-bottom:18px;">
+                    The administrator has approved your transaction. Full lifetime access to this subject is now active!
+                  </p>
+                  <a href="/static/dashboard.html" style="background:#10B981; color:white; padding:10px 22px; border-radius:10px; font-weight:700; font-size:0.92rem; text-decoration:none; display:inline-block; box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+                    Open Learning Dashboard ➔
+                  </a>
+                </div>
+              `;
+              showAlert('success', `✓ Transaction verified and approved by admin! Full subject access is now unlocked.`);
+            }
+          }
+        } catch (e) {
+          console.error("Polling error:", e);
+        }
+      }, 2500);
     }
 
     loadCheckoutData();

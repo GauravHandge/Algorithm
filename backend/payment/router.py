@@ -20,7 +20,9 @@ router = APIRouter(prefix="/api/payment", tags=["Payment & Checkout"])
 
 class CreateOrderRequest(BaseModel):
     subject_id: str
-    upi_ref_id: str
+    user_email: Optional[str] = None
+    user_name: Optional[str] = None
+    upi_ref_id: Optional[str] = None
     amount: Optional[float] = None
 
 class WebhookRequest(BaseModel):
@@ -95,30 +97,41 @@ def create_purchase_order(
     authorization: Optional[str] = Header(None),
     db: Session = Depends(get_db)
 ):
-    """Submits a payment verification request with user transaction ID."""
-    user = get_current_authenticated_user(authorization, db)
+    """Submits a payment verification request. Accessible with auth token or by user email."""
+    user = get_current_user_optional(authorization, db)
+    
+    # If not authenticated via token, resolve by user_email or local fallback
+    if not user:
+        raw_email = (req.user_email or "").strip().lower()
+        if not raw_email:
+            raw_email = "gaurav@algoverse.io"
+        user = db.query(User).filter(User.email == raw_email).first()
+        if not user:
+            from backend.auth.security import hash_password
+            hashed, salt = hash_password("algoverse123")
+            display_name = req.user_name.strip() if req.user_name else raw_email.split("@")[0].capitalize()
+            user = User(
+                name=display_name,
+                email=raw_email,
+                hashed_password=hashed,
+                salt=salt,
+                role="Learner"
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+
     sid = req.subject_id.lower().strip()
     plan = db.query(SubjectPlan).filter(SubjectPlan.id == sid).first()
     if not plan:
         raise HTTPException(status_code=404, detail="Subject plan not found.")
 
-    ref_id = req.upi_ref_id.strip()
-    if len(ref_id) < 6:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Please provide a valid UPI transaction reference ID (UTR / Reference number)."
-        )
-
-    # Check if this exact UPI reference has already been used
-    duplicate = db.query(Purchase).filter(
-        Purchase.upi_ref_id == ref_id,
-        Purchase.status.in_(["PENDING", "VERIFIED"])
-    ).first()
-    if duplicate:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This UPI Transaction ID has already been submitted. Please check your purchase status or contact support."
-        )
+    # Generate or sanitize UPI Reference ID
+    raw_ref = (req.upi_ref_id or "").strip()
+    if raw_ref:
+        ref_id = raw_ref
+    else:
+        ref_id = f"UPI_{datetime.datetime.utcnow().strftime('%y%m%d%H%M%S')}_{uuid.uuid4().hex[:4].upper()}"
 
     order_id = f"ORD_{datetime.datetime.utcnow().strftime('%Y%m%d%H%M')}_{uuid.uuid4().hex[:6].upper()}"
 
@@ -137,7 +150,7 @@ def create_purchase_order(
 
     return {
         "success": True,
-        "message": "Payment details submitted successfully! Your access will be automatically unlocked once verified by admin.",
+        "message": "Payment submitted successfully! Your order has been placed for admin verification.",
         "purchase": {
             "id": purchase.id,
             "order_id": purchase.order_id,
@@ -147,6 +160,23 @@ def create_purchase_order(
             "status": purchase.status,
             "created_at": purchase.created_at.isoformat()
         }
+    }
+
+@router.get("/order-status/{order_id}")
+def check_order_status(order_id: str, db: Session = Depends(get_db)):
+    """Allows frontend checkout to poll status in real-time until approved by admin."""
+    purchase = db.query(Purchase).filter(Purchase.order_id == order_id).first()
+    if not purchase:
+        raise HTTPException(status_code=404, detail="Order not found.")
+
+    return {
+        "success": True,
+        "order_id": purchase.order_id,
+        "status": purchase.status,
+        "is_approved": purchase.status == "VERIFIED",
+        "subject_id": purchase.subject_id,
+        "amount": purchase.amount,
+        "verified_at": purchase.verified_at.isoformat() if purchase.verified_at else None
     }
 
 @router.get("/my-access")

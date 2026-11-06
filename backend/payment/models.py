@@ -89,3 +89,4 @@ class EmailNotification(Base):
     email_type = Column(String, nullable=False, index=True) # "ADMIN_PAYMENT_VERIFIED", "USER_PAYMENT_CONFIRMATION", "FREE_ACCESS_GRANTED", "PAYMENT_REJECTED"
     status = Column(String, default="SENT") # "SENT", "PENDING", "FAILED"
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
