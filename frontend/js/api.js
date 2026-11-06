@@ -1,15 +1,24 @@
 /* Frontend API Service Layer */
 const API_BASE = "/api";
 
+function getAuthHeaders(extra = {}) {
+  const token = localStorage.getItem('algoverse_auth_token');
+  const headers = { ...extra };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export const API = {
   async getSubjects() {
-    const res = await fetch(`${API_BASE}/subjects`);
+    const res = await fetch(`${API_BASE}/subjects`, { headers: getAuthHeaders() });
     return await res.json();
   },
 
   async getTopics(subjectId = "") {
     const url = subjectId ? `${API_BASE}/topics?subject_id=${subjectId}` : `${API_BASE}/topics`;
-    const res = await fetch(url);
+    const res = await fetch(url, { headers: getAuthHeaders() });
     return await res.json();
   },
 
@@ -20,22 +29,30 @@ export const API = {
     if (filters.difficulty) params.append("difficulty", filters.difficulty);
     if (filters.search) params.append("search", filters.search);
 
-    const res = await fetch(`${API_BASE}/algorithms?${params.toString()}`);
+    const res = await fetch(`${API_BASE}/algorithms?${params.toString()}`, { headers: getAuthHeaders() });
     return await res.json();
   },
 
   async getAlgorithmDetail(algorithmId) {
-    const res = await fetch(`${API_BASE}/algorithms/${algorithmId}`);
-    return await res.json();
+    const res = await fetch(`${API_BASE}/algorithms/${algorithmId}`, { headers: getAuthHeaders() });
+    const data = await res.json();
+    if (!res.ok) {
+      return { success: false, status: res.status, ...data };
+    }
+    return data;
   },
 
   async executeAlgorithm(algorithmId, inputData = {}) {
     const res = await fetch(`${API_BASE}/algorithms/${algorithmId}/execute`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ input_data: inputData })
     });
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) {
+      return { success: false, status: res.status, ...data };
+    }
+    return data;
   },
 
   async explainStep(algorithmId, stepState) {

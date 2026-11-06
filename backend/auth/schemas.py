@@ -15,6 +15,7 @@ class UserResponse(BaseModel):
     name: str
     email: str
     role: str
+    is_admin: bool = False
     avatar: Optional[str] = None
 
 class AuthResponse(BaseModel):

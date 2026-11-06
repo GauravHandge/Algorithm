@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from backend.database.database import Base
 
 class User(Base):
@@ -10,7 +10,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     salt = Column(String, nullable=False)
-    role = Column(String, default="Learner")
+    role = Column(String, default="Learner") # "Admin" or "Learner"
+    is_admin = Column(Boolean, default=False)
     avatar = Column(String, default="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-

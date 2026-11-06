@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Complete Your Purchase - AlgoVerse</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-blue: #2563EB;
+      --primary-blue-hover: #1D4ED8;
+      --primary-blue-subtle: #EFF6FF;
+      --text-main: #0F172A;
+      --text-secondary: #64748B;
+      --border-color: #E2E8F0;
+      --border-subtle: #F1F5F9;
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Navbar */
+    .checkout-header {
+      height: 64px;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+
+    /* Main Container */
+    .checkout-container {
+      max-width: 1080px;
+      width: 100%;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Back link and Page Title */
+    .page-title-row {
+      margin-bottom: 1.75rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.65rem;
+      transition: color 0.15s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--primary-blue);
+    }
+
+    .main-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.025em;
+    }
+
+    .sub-title {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    /* 2-Column Checkout Layout (Matching Reference Image 1) */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.35fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LEFT: Subject Information Card */
+    .subject-info-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .subject-header-badge {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .subject-large-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .subject-title-area h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .premium-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #FEF3C7;
+      color: #92400E;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      margin-top: 4px;
+    }
+
+    .feature-check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin: 1.75rem 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .feature-item svg {
+      color: var(--color-success);
+      flex-shrink: 0;
+    }
+
+    .amount-summary-box {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+
+    .amount-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .amount-value {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+
+    /* RIGHT: UPI Payment Card */
+    .upi-payment-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.25rem 2.25rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .upi-section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    /* QR Code Display Box */
+    .qr-frame-box {
+      width: 210px;
+      height: 210px;
+      margin: 0 auto 1.25rem auto;
+      padding: 10px;
+      background: #FFFFFF;
+      border: 2px dashed #CBD5E1;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .qr-frame-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    /* UPI ID Pill with Copy button */
+    .upi-id-pill {
+      background: #F1F5F9;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 340px;
+      margin: 0 auto 1.5rem auto;
+      font-size: 0.88rem;
+    }
+
+    .upi-id-pill span.id-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: none;
+      color: var(--primary-blue);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Instructions Box */
+    .payment-instructions-box {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .instructions-heading {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #1E40AF;
+      margin-bottom: 0.5rem;
+    }
+
+    .instructions-list {
+      font-size: 0.8rem;
+      color: #1E3A8A;
+      line-height: 1.5;
+      padding-left: 1.25rem;
+    }
+
+    /* Input & Submit button */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .ref-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .ref-prefix-icon {
+      position: absolute;
+      left: 14px;
+      color: #94A3B8;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ref-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px 0 36px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0F172A;
+      background: #FFFFFF;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .ref-input:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .btn-verify-payment {
+      width: 100%;
+      height: 48px;
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-verify-payment:hover {
+      background: var(--primary-blue-hover);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-verify-payment:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Alert Banner */
+    .checkout-alert-box {
+      display: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .checkout-alert-box.success {
+      display: block;
+      background: #F0FDF4;
+      color: #166534;
+      border: 1px solid #BBF7D0;
+    }
+
+    .checkout-alert-box.error {
+      display: block;
+      background: #FEF2F2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    .checkout-alert-box.info {
+      display: block;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="checkout-header">
+    <a href="/static/dashboard.html" class="brand-logo">
+      <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#2563EB" />
+        <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#FFFFFF" />
+      </svg>
+      <span>AlgoVerse</span>
+    </a>
+
+    <div id="userProfileNav">
+      <!-- Injected by auth.js -->
+    </div>
+  </header>
+
+  <main class="checkout-container">
+    
+    <div class="page-title-row">
+      <a href="/static/dashboard.html" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Back to Dashboard
+      </a>
+      <h1 class="main-title">Complete Your Purchase</h1>
+      <p class="sub-title">Scan the QR code, make the payment, and submit your reference ID to unlock full lifetime access.</p>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="checkout-alert-box" id="alertBox"></div>
+
+    <div class="checkout-grid">
+
+      <!-- LEFT: Subject Information Card -->
+      <div class="subject-info-card">
+        <div class="subject-header-badge">
+          <div class="subject-large-icon" id="subjectIconBox" style="background:#F5F3FF; color:#7C3AED;">
+            🧠
+          </div>
+          <div class="subject-title-area">
+            <h3 id="subjectTitle">Artificial Intelligence (AI)</h3>
+            <span class="premium-badge-tag">👑 Premium Access</span>
+          </div>
+        </div>
+
+        <p style="color:#64748B; font-size:0.88rem; line-height:1.5;" id="subjectDescription">
+          Learn AI concepts, models, and real-world applications with 8 RAG Architectures & LangGraph Studio.
+        </p>
+
+        <div class="feature-check-list" id="featureCheckList">
+          <div class="feature-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>All curriculum learning modules</span>
+          </div>
+          <div class="feature-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Step-by-step interactive visualizations</span>
+          </div>
+          <div class="feature-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Detailed algorithmic code & pseudocode</span>
+          </div>
+          <div class="feature-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Practice challenges & assessment quizzes</span>
+          </div>
+          <div class="feature-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Lifetime access & free updates</span>
+          </div>
+        </div>
+
+        <div class="amount-summary-box">
+          <span class="amount-label">Amount to Pay</span>
+          <span class="amount-value" id="amountDisplay">₹20</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Scan & Pay via UPI -->
+      <div class="upi-payment-card">
+        <h3 class="upi-section-title">Scan &amp; Pay via UPI</h3>
+
+        <!-- Actual User PhonePe QR Code -->
+        <div class="qr-frame-box">
+          <img src="/static/assets/qr/upi_qr.jpg" alt="UPI Payment QR Code" id="upiQrImage" />
+        </div>
+
+        <!-- Configured UPI ID -->
+        <div class="upi-id-pill">
+          <span style="color:#64748B; font-size:0.8rem;">UPI ID:</span>
+          <span class="id-text" id="upiIdText">gauravhandge@oksbi</span>
+          <button class="copy-btn" onclick="copyUpiId()" title="Copy UPI ID">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="copyText">Copy</span>
+          </button>
+        </div>
+
+        <!-- Payment Instructions -->
+        <div class="payment-instructions-box">
+          <div class="instructions-heading">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span>Payment Instructions</span>
+          </div>
+          <ol class="instructions-list">
+            <li>Scan the QR code using any UPI app (GPay / PhonePe / Paytm).</li>
+            <li>Pay the exact amount: <strong id="instructionAmount">₹20</strong>.</li>
+            <li>Enter the UPI Transaction ID (UTR / Reference) below and click Verify.</li>
+          </ol>
+        </div>
+
+        <!-- Verification Form -->
+        <form id="paymentForm" onsubmit="submitPayment(event)">
+          <div class="form-group">
+            <div class="ref-input-wrapper">
+              <span class="ref-prefix-icon">#</span>
+              <input 
+                type="text" 
+                id="upiRefInput" 
+                class="ref-input" 
+                placeholder="Enter UPI Transaction ID (e.g. 432187654321)" 
+                required 
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-verify-payment" id="btnVerify">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Verify Payment</span>
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="/static/js/auth.js"></script>
+
+  <script>
+    // Require authentication to access checkout
+    if (!AlgoAuth.requireAuth()) {
+      // halts
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const subjectId = urlParams.get('subject') || 'ai';
+    let currentPrice = 20.0;
+
+    function showAlert(type, message) {
+      const box = document.getElementById('alertBox');
+      box.className = 'checkout-alert-box ' + type;
+      box.innerHTML = message;
+      box.style.display = 'block';
+    }
+
+    function copyUpiId() {
+      const text = document.getElementById('upiIdText').innerText;
+      navigator.clipboard.writeText(text);
+      const copySpan = document.getElementById('copyText');
+      copySpan.innerText = 'Copied!';
+      setTimeout(() => copySpan.innerText = 'Copy', 2000);
+    }
+
+    // Load checkout information dynamically from Python Backend
+    async function loadCheckoutData() {
+      try {
+        const token = AlgoAuth.getToken();
+        const res = await fetch(`/api/payment/checkout/${subjectId}`, {
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : ''
+          }
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          if (data.already_unlocked) {
+            showAlert('success', `✓ You already have active premium access to <strong>${data.subject.name}</strong>! <a href="/static/dashboard.html" style="color:#166534; font-weight:700;">Open Dashboard ➔</a>`);
+            document.getElementById('btnVerify').disabled = true;
+          }
+
+          document.getElementById('subjectTitle').innerText = data.subject.name;
+          document.getElementById('subjectDescription').innerText = data.subject.description || '';
+          currentPrice = data.subject.price;
+          document.getElementById('amountDisplay').innerText = `₹${currentPrice}`;
+          document.getElementById('instructionAmount').innerText = `₹${currentPrice}`;
+          document.getElementById('upiIdText').innerText = data.payment_config.upi_id;
+          if (data.payment_config.qr_image_url) {
+            document.getElementById('upiQrImage').src = data.payment_config.qr_image_url;
+          }
+
+          // Dynamic icon
+          const iconBox = document.getElementById('subjectIconBox');
+          if (subjectId === 'dsa') {
+            iconBox.style.background = '#ECFEFF';
+            iconBox.style.color = '#0891B2';
+            iconBox.innerText = '</>';
+          } else if (subjectId === 'ml') {
+            iconBox.style.background = '#FFFBEB';
+            iconBox.style.color = '#D97706';
+            iconBox.innerText = '📊';
+          } else if (subjectId === 'cybersecurity') {
+            iconBox.style.background = '#FEF2F2';
+            iconBox.style.color = '#DC2626';
+            iconBox.innerText = '🛡️';
+          } else {
+            iconBox.style.background = '#F5F3FF';
+            iconBox.style.color = '#7C3AED';
+            iconBox.innerText = '🧠';
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load checkout:', err);
+      }
+    }
+
+    // Submit payment reference ID to Backend
+    async function submitPayment(e) {
+      e.preventDefault();
+      const upiRef = document.getElementById('upiRefInput').value.trim();
+      const btn = document.getElementById('btnVerify');
+
+      btn.disabled = true;
+      btn.innerHTML = 'Verifying...';
+
+      try {
+        const token = AlgoAuth.getToken();
+        const res = await fetch('/api/payment/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+          },
+          body: JSON.stringify({
+            subject_id: subjectId,
+            upi_ref_id: upiRef,
+            amount: currentPrice
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || 'Failed to submit payment reference.');
+        }
+
+        showAlert('success', `
+          <div style="font-size:1rem; font-weight:800; margin-bottom:4px;">🎉 Payment Submitted Successfully!</div>
+          <p style="margin:4px 0;">Order Reference: <strong>${data.purchase.order_id}</strong> | Status: <span style="color:#D97706; font-weight:700;">Pending Verification</span></p>
+          <p style="margin:4px 0; font-size:0.84rem;">Our administrator verifies transactions promptly. Once verified, full access will be automatically unlocked and confirmation sent to your email.</p>
+          <div style="margin-top:10px;">
+            <a href="/static/dashboard.html" style="background:#166534; color:#fff; text-decoration:none; padding:6px 14px; border-radius:6px; font-weight:700; display:inline-block;">Return to Dashboard</a>
+          </div>
+        `);
+
+        document.getElementById('paymentForm').style.display = 'none';
+
+      } catch (err) {
+        showAlert('error', `✗ ${err.message}`);
+        btn.disabled = false;
+        btn.innerHTML = 'Verify Payment';
+      }
+    }
+
+    loadCheckoutData();
+  </script>
+
+</body>
+</html>

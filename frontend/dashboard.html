@@ -3,160 +3,1364 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Learning Resources & Progress - AlgoVerse</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
-  <link rel="stylesheet" href="/static/css/layout.css" />
-  <link rel="stylesheet" href="/static/css/components.css" />
-  <link rel="stylesheet" href="/static/css/responsive.css" />
+  <title>Learner Dashboard - AlgoVerse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="/static/js/auth.js"></script>
+  <style>
+    :root {
+      --bg-body: #f8fafc;
+      --sidebar-bg: #0b1329;
+      --sidebar-hover: #1e293b;
+      --sidebar-active: #2563eb;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.06);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Left Sidebar */
+    .dashboard-sidebar {
+      width: 250px;
+      background-color: var(--sidebar-bg);
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 16px;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px 24px 8px;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      list-style: none;
+      flex: 1;
+    }
+
+    .sidebar-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-item a:hover {
+      background-color: var(--sidebar-hover);
+      color: #ffffff;
+    }
+
+    .sidebar-item.active a {
+      background-color: var(--sidebar-active);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    .sidebar-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .admin-pill {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Sidebar Upgrade Box */
+    .sidebar-upgrade-card {
+      background: radial-gradient(circle at 100% 0%, rgba(37,99,235,0.2), transparent 70%), #131c36;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .upgrade-crown {
+      width: 38px;
+      height: 38px;
+      background: rgba(245, 158, 11, 0.15);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #f59e0b;
+      margin-bottom: 10px;
+    }
+
+    .upgrade-title {
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .upgrade-desc {
+      color: #94a3b8;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .upgrade-btn {
+      display: block;
+      width: 100%;
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .upgrade-btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* Main Container */
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      height: 70px;
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 9px 16px;
+      width: 380px;
+      color: var(--text-muted);
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      width: 100%;
+    }
+
+    .search-box input::placeholder {
+      color: #94a3b8;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .notification-btn {
+      position: relative;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #475569;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background-color: #ef4444;
+      color: white;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .user-avatar-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e2e8f0;
+    }
+
+    .user-info-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .user-role-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .signout-btn {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #dc2626;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .signout-btn:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    /* Content Area */
+    .dashboard-content {
+      padding: 28px 32px 60px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Welcome Section */
+    .welcome-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .welcome-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .welcome-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .welcome-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-access {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .btn-access:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-upgrade-plan {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-upgrade-plan:hover {
+      box-shadow: 0 6px 16px rgba(37,99,235,0.35);
+      transform: translateY(-1px);
+    }
+
+    /* 4 Stat Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-blue { background: #eff6ff; color: #2563eb; }
+    .stat-green { background: #ecfdf5; color: #10b981; }
+    .stat-purple { background: #f5f3ff; color: #8b5cf6; }
+    .stat-cyan { background: #ecfeff; color: #06b6d4; }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-number {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Our Learning Subjects Section */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .section-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-link:hover {
+      text-decoration: underline;
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .subject-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .subject-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+      border-color: #cbd5e1;
+    }
+
+    /* Subject Icon Box with Soft Gradient Background */
+    .subject-icon-box {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .subject-card-ai .subject-icon-box {
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+      color: #7c3aed;
+    }
+    .subject-card-dsa .subject-icon-box {
+      background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+      color: #0284c7;
+    }
+    .subject-card-ml .subject-icon-box {
+      background: linear-gradient(135deg, #ffedd5, #fed7aa);
+      color: #ea580c;
+    }
+    .subject-card-cybersecurity .subject-icon-box {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #dc2626;
+    }
+
+    .subject-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .subject-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      min-height: 38px;
+      margin-bottom: 16px;
+    }
+
+    .badge-pill-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .badge-free {
+      background-color: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-premium {
+      background-color: #fef3c7;
+      color: #d97706;
+      border: 1px solid #fde68a;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .card-footer-action {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .price-tag-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .price-number {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .price-period {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Buttons for Subject Cards */
+    .btn-unlock-subject {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid #2563eb;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-unlock-subject:hover {
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    }
+
+    .btn-purchased-badge {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1.5px solid #10b981;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Secondary Analytics Section */
+    .analytics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .analytics-panel {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-heading {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .progress-bar-track {
+      height: 8px;
+      background-color: #f1f5f9;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+
+    /* Access Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-body {
+      padding: 24px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .analytics-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .dashboard-sidebar { display: none; }
+      .subjects-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .search-box { width: 100%; }
+      .top-bar { padding: 0 16px; }
+      .dashboard-content { padding: 16px; }
+    }
+  </style>
 </head>
-<body style="background-color: #ffffff !important; color: #0f172a !important;">
-  <header class="app-header">
-    <a href="/static/index.html" class="brand-logo">
+<body>
+
+  <!-- LEFT DARK SIDEBAR (Matches Reference UI) -->
+  <aside class="dashboard-sidebar">
+    <a href="/static/index.html" class="sidebar-brand">
       <div class="brand-icon">
-        <svg viewBox="0 0 32 32" fill="none">
-          <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="url(#brandGrad)" />
-          <path d="M12.5 21H19.5L16 14L12.5 21Z" fill="#ffffff" opacity="0.9" />
-          <defs>
-            <linearGradient id="brandGrad" x1="3" y1="2" x2="29" y2="28" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0052FF" />
-              <stop offset="1" stop-color="#38BDF8" />
-            </linearGradient>
-          </defs>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="12 2 2 22 22 22" fill="#ffffff" stroke="none"/>
         </svg>
       </div>
       <span>AlgoVerse</span>
     </a>
 
-    <nav>
-      <ul class="nav-links">
-        <li><a href="/static/index.html">Home</a></li>
-        <li><a href="/static/algorithms.html">Explore</a></li>
-        <li><a href="/static/rag_visualizer.html" class="nav-rag-highlight"><span style="color:#0052ff;">✦</span> AI Visualizations</a></li>
-        <li><a href="/static/practice.html">Practice</a></li>
-        <li><a href="/static/quiz.html">Roadmaps</a></li>
-        <li><a href="/static/dashboard.html" class="active">Resources</a></li>
-      </ul>
-    </nav>
+    <ul class="sidebar-menu">
+      <li class="sidebar-item active">
+        <a href="/static/dashboard.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Dashboard
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="/static/algorithms.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          My Learning
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#subjects-section">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16.5 9.4 7.55 4.24"></polyline>
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.29 7 12 12.67 20.71 7"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          Subjects
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="/static/practice.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          Practice
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="/static/rag_visualizer.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Visualizations
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="/static/quiz.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          Roadmaps
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="/static/dashboard.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          Resources
+        </a>
+      </li>
 
-    <div class="header-actions auth-nav-action">
-      <button class="action-icon-btn" title="Search algorithms">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      <!-- Admin Link if User is Admin -->
+      <li class="sidebar-item" id="sidebar-admin-item" style="display:none; margin-top:8px;">
+        <a href="/static/admin.html" style="background:rgba(245,158,11,0.12); color:#f59e0b; border:1px solid rgba(245,158,11,0.25);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          Admin Panel
+          <span class="admin-pill">Admin</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Upgrade Box -->
+    <div class="sidebar-upgrade-card">
+      <div class="upgrade-crown">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
         </svg>
-      </button>
-      <a href="/static/signin.html" class="btn btn-secondary" style="padding:0.45rem 1rem; font-size:0.85rem;">Sign In</a>
-      <a href="/static/signin.html?mode=signup" class="btn btn-primary" style="padding:0.45rem 1.15rem; font-size:0.85rem;">Get Started</a>
+      </div>
+      <div class="upgrade-title">Upgrade to Premium</div>
+      <div class="upgrade-desc">Unlock full access to all subjects with verified UPI checkout</div>
+      <a href="#subjects-section" class="upgrade-btn">View Plans &rarr;</a>
     </div>
-  </header>
+  </aside>
 
-  <main class="main-container">
-    <div style="margin-bottom:2.5rem; text-align:center;">
-      <div class="section-tag" style="justify-content:center;">LEARNER ANALYTICS & HUB</div>
-      <h1 style="font-size:2.5rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem; letter-spacing:-0.03em;">
-        Resources & <span style="color:#0052ff;">Dashboard</span>
-      </h1>
-      <p style="color:#475569; font-size:1.05rem; max-width:640px; margin:0 auto;">Track your algorithm visualizer history, subject mastery certificates, and recommended next steps.</p>
-    </div>
+  <!-- MAIN AREA -->
+  <main class="dashboard-main">
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" placeholder="Search topics, algorithms, visualizations..." id="dashboard-search-input" />
+      </div>
 
-    <!-- Summary Metrics Bar -->
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1.25rem; margin-bottom:2rem;">
-      <div class="glass-panel" style="padding:1.25rem; border-left:4px solid var(--accent-primary);">
-        <div style="color:var(--text-muted); font-size:0.85rem;">Total Catalog Algorithms</div>
-        <div id="stat-total-algos" style="font-size:2rem; font-weight:bold; color:var(--text-main);">0</div>
-      </div>
-      <div class="glass-panel" style="padding:1.25rem; border-left:4px solid var(--accent-secondary);">
-        <div style="color:var(--text-muted); font-size:0.85rem;">Algorithms Explored</div>
-        <div id="stat-viewed-algos" style="font-size:2rem; font-weight:bold; color:var(--text-main);">0</div>
-      </div>
-      <div class="glass-panel" style="padding:1.25rem; border-left:4px solid var(--accent-success);">
-        <div style="color:var(--text-muted); font-size:0.85rem;">Completion Percentage</div>
-        <div id="stat-completion-pct" style="font-size:2rem; font-weight:bold; color:var(--accent-success);">0%</div>
-      </div>
-    </div>
+      <div class="top-bar-right">
+        <button class="notification-btn" title="Notifications" onclick="alert('You have 1 pending message: Welcome to AlgoVerse Premium Platform!')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge">1</span>
+        </button>
 
-    <!-- Subject Completion Progress -->
-    <div class="glass-panel" style="padding:1.5rem; margin-bottom:2rem;">
-      <h3 style="font-size:1.2rem; margin-bottom:1.25rem;">Subject Completion Breakdown</h3>
-      <div id="subject-progress-bars" style="display:flex; flex-direction:column; gap:1rem;">
-        <!-- Dynamically rendered -->
-      </div>
-    </div>
+        <div class="user-profile-badge">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="user-avatar-img" id="user-avatar-header" />
+          <div class="user-info-text">
+            <span class="user-name-label" id="user-name-header">Gaurav Handge</span>
+            <span class="user-role-label" id="user-role-header">Learner</span>
+          </div>
+        </div>
 
-    <!-- Recent Quiz Attempts Table -->
-    <div class="glass-panel" style="padding:1.5rem;">
-      <h3 style="font-size:1.2rem; margin-bottom:1rem;">Recent Quiz Attempts</h3>
-      <div id="quiz-history-container" style="overflow-x:auto;">
-        <!-- Dynamically rendered -->
+        <button class="signout-btn" onclick="AlgoAuth.logout()">Sign Out</button>
       </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="dashboard-content">
+      <!-- Welcome Header -->
+      <section class="welcome-header">
+        <div>
+          <h1 class="welcome-title" id="welcome-greeting">Welcome Back, Gaurav! 👋</h1>
+          <p class="welcome-sub">Continue your learning journey with AlgoVerse</p>
+        </div>
+        <div class="welcome-actions">
+          <button class="btn-access" onclick="openAccessModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            My Access
+          </button>
+          <a href="#subjects-section" class="btn-upgrade-plan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+            </svg>
+            Upgrade Plans
+          </a>
+        </div>
+      </section>
+
+      <!-- 4 Stat Metric Cards (Matching reference) -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon-wrapper stat-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="metric-subjects-count">4</div>
+            <div class="stat-label">Subjects</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper stat-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="metric-unlocked-count">0 Unlocked</div>
+            <div class="stat-label">Active Access</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper stat-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="metric-lessons-completed">18</div>
+            <div class="stat-label">Lessons Completed</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper stat-cyan">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="metric-overall-progress">42%</div>
+            <div class="stat-label">Overall Progress</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OUR LEARNING SUBJECTS SECTION -->
+      <section id="subjects-section">
+        <div class="section-header-row">
+          <h2 class="section-title">Our Learning Subjects</h2>
+          <a href="/static/algorithms.html" class="section-link">
+            View All Subjects
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <div class="subjects-grid" style="margin-top:16px;">
+          <!-- 1. Artificial Intelligence -->
+          <div class="subject-card subject-card-ai" id="subject-card-ai">
+            <div class="subject-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"></path>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"></path>
+              </svg>
+            </div>
+            <h3 class="subject-name">Artificial Intelligence</h3>
+            <p class="subject-desc">Learn AI concepts, models, and real-world applications.</p>
+            <div class="badge-pill-row">
+              <span class="badge-free">Free Preview</span>
+              <span class="badge-premium">★ Premium</span>
+            </div>
+            <div class="card-footer-action">
+              <div class="price-tag-row">
+                <span class="price-number" id="price-ai">&#8377;20</span>
+                <span class="price-period">One-time purchase</span>
+              </div>
+              <div id="btn-container-ai">
+                <a href="/static/checkout.html?subject=ai" class="btn-unlock-subject">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  Unlock Full Access
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Data Structures & Algorithms -->
+          <div class="subject-card subject-card-dsa" id="subject-card-dsa">
+            <div class="subject-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+            </div>
+            <h3 class="subject-name">Data Structures &amp; Algorithms</h3>
+            <p class="subject-desc">Master DSA with visualizations, practice and real problems.</p>
+            <div class="badge-pill-row">
+              <span class="badge-free">Free Preview</span>
+              <span class="badge-premium">★ Premium</span>
+            </div>
+            <div class="card-footer-action">
+              <div class="price-tag-row">
+                <span class="price-number" id="price-dsa">&#8377;40</span>
+                <span class="price-period">One-time purchase</span>
+              </div>
+              <div id="btn-container-dsa">
+                <a href="/static/checkout.html?subject=dsa" class="btn-unlock-subject">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  Unlock Full Access
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Machine Learning -->
+          <div class="subject-card subject-card-ml" id="subject-card-ml">
+            <div class="subject-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <h3 class="subject-name">Machine Learning</h3>
+            <p class="subject-desc">Learn ML algorithms, models and practical implementations.</p>
+            <div class="badge-pill-row">
+              <span class="badge-free">Free Preview</span>
+              <span class="badge-premium">★ Premium</span>
+            </div>
+            <div class="card-footer-action">
+              <div class="price-tag-row">
+                <span class="price-number" id="price-ml">&#8377;20</span>
+                <span class="price-period">One-time purchase</span>
+              </div>
+              <div id="btn-container-ml">
+                <a href="/static/checkout.html?subject=ml" class="btn-unlock-subject">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  Unlock Full Access
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Cybersecurity -->
+          <div class="subject-card subject-card-cybersecurity" id="subject-card-cybersecurity">
+            <div class="subject-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <h3 class="subject-name">Cybersecurity</h3>
+            <p class="subject-desc">Learn security, threats, tools and hands-on concepts.</p>
+            <div class="badge-pill-row">
+              <span class="badge-free">Free Preview</span>
+              <span class="badge-premium">★ Premium</span>
+            </div>
+            <div class="card-footer-action">
+              <div class="price-tag-row">
+                <span class="price-number" id="price-cybersecurity">&#8377;10</span>
+                <span class="price-period">One-time purchase</span>
+              </div>
+              <div id="btn-container-cybersecurity">
+                <a href="/static/checkout.html?subject=cybersecurity" class="btn-unlock-subject">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  Unlock Full Access
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Secondary Analytics Panels (Preserving existing learner data) -->
+      <section class="analytics-row">
+        <!-- Subject Progress Breakdown -->
+        <div class="analytics-panel">
+          <div class="panel-heading">
+            <span>Subject Mastery Breakdown</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Self-paced</span>
+          </div>
+          <div id="subject-progress-bars" style="display:flex; flex-direction:column; gap:16px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
+                <span>Data Structures &amp; Algorithms</span>
+                <span style="color:var(--primary);">31.2%</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" style="width:31.2%; background:linear-gradient(90deg, #2563eb, #38bdf8);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
+                <span>Artificial Intelligence &amp; RAG</span>
+                <span style="color:#7c3aed;">15.0%</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" style="width:15%; background:linear-gradient(90deg, #7c3aed, #a78bfa);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
+                <span>Machine Learning</span>
+                <span style="color:#ea580c;">20.0%</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" style="width:20%; background:linear-gradient(90deg, #ea580c, #fb923c);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
+                <span>Cybersecurity &amp; Ciphers</span>
+                <span style="color:#dc2626;">25.0%</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" style="width:25%; background:linear-gradient(90deg, #dc2626, #f87171);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Quiz History -->
+        <div class="analytics-panel">
+          <div class="panel-heading">
+            <span>Recent Quiz Attempts</span>
+            <a href="/static/quiz.html" style="font-size:0.82rem; color:var(--primary); text-decoration:none; font-weight:600;">Take Quiz &rarr;</a>
+          </div>
+          <div id="quiz-history-container" style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse;">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--text-muted); font-size:0.8rem;">
+                  <th style="padding:8px;">Subject</th>
+                  <th style="padding:8px;">Score</th>
+                  <th style="padding:8px;">Percentage</th>
+                  <th style="padding:8px;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #f1f5f9; font-size:0.85rem;">
+                  <td style="padding:10px 8px; font-weight:600;">DSA - Sorting Basics</td>
+                  <td style="padding:10px 8px;">9 / 10</td>
+                  <td style="padding:10px 8px; color:var(--accent-green); font-weight:700;">90%</td>
+                  <td style="padding:10px 8px;"><span style="background:#ecfdf5; color:#059669; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;">Passed</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #f1f5f9; font-size:0.85rem;">
+                  <td style="padding:10px 8px; font-weight:600;">AI - Vector Embeddings</td>
+                  <td style="padding:10px 8px;">8 / 10</td>
+                  <td style="padding:10px 8px; color:var(--accent-green); font-weight:700;">80%</td>
+                  <td style="padding:10px 8px;"><span style="background:#ecfdf5; color:#059669; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;">Passed</span></td>
+                </tr>
+                <tr style="font-size:0.85rem;">
+                  <td style="padding:10px 8px; font-weight:600;">ML - Linear Regression</td>
+                  <td style="padding:10px 8px;">7 / 10</td>
+                  <td style="padding:10px 8px; color:var(--accent-green); font-weight:700;">70%</td>
+                  <td style="padding:10px 8px;"><span style="background:#ecfdf5; color:#059669; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;">Passed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
-  <script type="module">
-    import { API } from '/static/js/api.js';
+  <!-- Access Details Modal -->
+  <div class="modal-overlay" id="access-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1.15rem; font-weight:800;">My Learning Permissions</h3>
+        <button class="modal-close-btn" onclick="closeAccessModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="access-modal-content">
+        <p style="color:var(--text-muted); font-size:0.9rem;">Loading access permissions...</p>
+      </div>
+    </div>
+  </div>
 
-    async function loadDashboard() {
+  <script>
+    // Security check: require authenticated user
+    document.addEventListener("DOMContentLoaded", async () => {
       if (!AlgoAuth.requireAuth()) return;
+      
+      const user = AlgoAuth.getUser();
+      if (user) {
+        document.getElementById("user-name-header").textContent = user.name || "Gaurav Handge";
+        document.getElementById("welcome-greeting").textContent = `Welcome Back, ${user.name ? user.name.split(' ')[0] : 'Gaurav'}! 👋`;
+        if (user.avatar) document.getElementById("user-avatar-header").src = user.avatar;
+        if (user.role) document.getElementById("user-role-header").textContent = user.role;
+
+        // If user is Admin, show Admin link in sidebar
+        if (user.is_admin || user.role === 'Admin' || user.email === 'gaurav@algoverse.io') {
+          const adminItem = document.getElementById("sidebar-admin-item");
+          if (adminItem) adminItem.style.display = "block";
+        }
+      }
+
+      await loadPlansAndAccess();
+    });
+
+    let currentAccessData = null;
+
+    async function loadPlansAndAccess() {
+      const token = AlgoAuth.getToken();
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
       try {
-        const data = await API.getProgress();
-        if (data.success) {
-          const p = data.progress;
-          document.getElementById("stat-total-algos").textContent = p.total_algorithms;
-          document.getElementById("stat-viewed-algos").textContent = p.viewed_algorithms;
-          document.getElementById("stat-completion-pct").textContent = `${p.completion_percentage}%`;
-
-          // Render subject progress
-          const barsContainer = document.getElementById("subject-progress-bars");
-          barsContainer.innerHTML = Object.entries(p.subject_progress).map(([subj, pct]) => `
-            <div>
-              <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; font-size:0.9rem;">
-                <strong style="color:var(--text-main);">${subj}</strong>
-                <span style="color:var(--accent-secondary); font-weight:600;">${pct}%</span>
-              </div>
-              <div style="height:10px; background:rgba(255,255,255,0.1); border-radius:6px; overflow:hidden;">
-                <div style="height:100%; width:${pct}%; background:linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));"></div>
-              </div>
-            </div>
-          `).join('');
-
-          // Render quiz history table
-          const historyContainer = document.getElementById("quiz-history-container");
-          if (p.recent_quizzes.length === 0) {
-            historyContainer.innerHTML = `<div style="color:var(--text-muted); font-style:italic;">No quiz attempts recorded yet. Take a quiz to view results here!</div>`;
-          } else {
-            historyContainer.innerHTML = `
-              <table style="width:100%; border-collapse:collapse;">
-                <thead>
-                  <tr style="border-bottom:1px solid var(--border-color); text-align:left; color:var(--text-muted); font-size:0.85rem;">
-                    <th style="padding:0.75rem;">Date</th>
-                    <th style="padding:0.75rem;">Subject</th>
-                    <th style="padding:0.75rem;">Score</th>
-                    <th style="padding:0.75rem;">Percentage</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${p.recent_quizzes.map(q => `
-                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                      <td style="padding:0.75rem; color:var(--text-muted); font-size:0.9rem;">${q.date}</td>
-                      <td style="padding:0.75rem; color:var(--text-main); font-weight:600;">${q.subject_id || 'General'}</td>
-                      <td style="padding:0.75rem; color:var(--text-main);">${q.score} / ${q.total}</td>
-                      <td style="padding:0.75rem; color:var(--accent-success); font-weight:bold;">${q.percentage}%</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            `;
+        // 1. Fetch dynamic pricing plans
+        const plansResp = await fetch('/api/payment/plans');
+        if (plansResp.ok) {
+          const plansData = await plansResp.json();
+          if (plansData.success && plansData.plans) {
+            plansData.plans.forEach(p => {
+              const priceEl = document.getElementById(`price-${p.id}`);
+              if (priceEl) priceEl.innerHTML = `&#8377;${p.price}`;
+            });
           }
         }
-      } catch (e) {
-        console.error("Dashboard load error:", e);
+
+        // 2. Fetch user's subject access
+        const accessResp = await fetch('/api/payment/my-access', { headers });
+        if (accessResp.ok) {
+          const accessData = await accessResp.json();
+          if (accessData.success) {
+            currentAccessData = accessData;
+            renderAccessUI(accessData);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load plans & access:", err);
       }
     }
 
-    loadDashboard();
+    function renderAccessUI(data) {
+      const access = data.access || {};
+      const metrics = data.metrics || {};
+
+      // Update stat cards
+      if (metrics.unlocked_subjects !== undefined) {
+        document.getElementById("metric-unlocked-count").textContent = `${metrics.unlocked_subjects} Unlocked`;
+      }
+      if (metrics.lessons_completed !== undefined) {
+        document.getElementById("metric-lessons-completed").textContent = metrics.lessons_completed;
+      }
+      if (metrics.overall_progress_pct !== undefined) {
+        document.getElementById("metric-overall-progress").textContent = `${metrics.overall_progress_pct}%`;
+      }
+
+      // Update buttons for each subject
+      ['ai', 'dsa', 'ml', 'cybersecurity'].forEach(subId => {
+        const info = access[subId];
+        const container = document.getElementById(`btn-container-${subId}`);
+        if (!container) return;
+
+        if (info && info.has_access) {
+          container.innerHTML = `
+            <div class="btn-purchased-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Purchased & Active
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <a href="/static/checkout.html?subject=${subId}" class="btn-unlock-subject">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              Unlock Full Access
+            </a>
+          `;
+        }
+      });
+    }
+
+    function openAccessModal() {
+      const modal = document.getElementById("access-modal");
+      const content = document.getElementById("access-modal-content");
+      modal.style.display = "flex";
+
+      if (!currentAccessData || !currentAccessData.access) {
+        content.innerHTML = `<p style="color:var(--text-muted);">No access data available.</p>`;
+        return;
+      }
+
+      const access = currentAccessData.access;
+      let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
+
+      for (const [subId, info] of Object.entries(access)) {
+        const isUnlocked = info.has_access;
+        html += `
+          <div style="border:1px solid var(--border); border-radius:12px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; background:${isUnlocked ? '#f0fdf4' : '#ffffff'};">
+            <div>
+              <div style="font-weight:700; font-size:0.95rem; color:var(--text-main); text-transform:uppercase;">${subId}</div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">
+                ${isUnlocked ? (info.source === 'ADMIN_GRANTED' ? '🎁 Granted Free Access by Admin' : '✓ Verified Purchase Access') : '🔒 Free Preview Only (Restricted)'}
+              </div>
+            </div>
+            <div>
+              ${isUnlocked ? '<span style="background:#10b981; color:white; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:20px;">ACTIVE</span>' : `<a href="/static/checkout.html?subject=${subId}" style="background:#2563eb; color:white; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:20px; text-decoration:none;">UNLOCK</a>`}
+            </div>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      content.innerHTML = html;
+    }
+
+    function closeAccessModal() {
+      document.getElementById("access-modal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("access-modal");
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
   </script>
 </body>
 </html>

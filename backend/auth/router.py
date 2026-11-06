@@ -76,6 +76,7 @@ def register(req: UserRegisterRequest, db: Session = Depends(get_db)):
             name=new_user.name,
             email=new_user.email,
             role=new_user.role,
+            is_admin=bool(getattr(new_user, "is_admin", False) or new_user.role == "Admin"),
             avatar=new_user.avatar
         ),
         token=token
@@ -111,6 +112,7 @@ def login(req: UserLoginRequest, db: Session = Depends(get_db)):
             name=user.name,
             email=user.email,
             role=user.role,
+            is_admin=bool(getattr(user, "is_admin", False) or user.role == "Admin"),
             avatar=user.avatar
         ),
         token=token
@@ -138,6 +140,7 @@ def get_current_user(authorization: str = Header(None), db: Session = Depends(ge
             name=user.name,
             email=user.email,
             role=user.role,
+            is_admin=bool(getattr(user, "is_admin", False) or user.role == "Admin"),
             avatar=user.avatar
         ),
         token=token

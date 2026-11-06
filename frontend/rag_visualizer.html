@@ -1541,6 +1541,24 @@
       return RAG_ARCHITECTURES[currentArchKey];
     }
 
+    let userHasAiAccess = false;
+
+    async function checkAiAccess() {
+      const token = localStorage.getItem('algoverse_auth_token');
+      if (!token) return;
+      try {
+        const res = await fetch('/api/payment/my-access', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.access?.ai?.has_access) {
+            userHasAiAccess = true;
+          }
+        }
+      } catch (e) {}
+    }
+
     // Switch Architecture
     function switchArchitecture(archKey) {
       pausePlayback();
@@ -1563,6 +1581,33 @@
       });
 
       const arch = getArch();
+
+      // Check if locked
+      if (archKey !== 'simple_rag' && !userHasAiAccess) {
+        document.getElementById("canvas-arch-badge-name").textContent = `${arch.name.toUpperCase()} (LOCKED)`;
+        document.getElementById("canvas-topology-text").textContent = `Topology: ${arch.topology} (Premium Required)`;
+        const track = document.getElementById("canvas-nodes-track");
+        if (track) {
+          track.innerHTML = `
+            <div style="width:100%; min-height:280px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; background:#ffffff; border-radius:12px;">
+              <div style="width:54px; height:54px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <h3 style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-bottom:6px;">${arch.name} is Locked</h3>
+              <p style="color:#64748b; font-size:0.9rem; max-width:440px; margin-bottom:18px; line-height:1.45;">
+                Simple RAG is free to preview. To execute this architecture along with all 8 RAG pipelines and vector simulations, unlock full Artificial Intelligence access for only <strong>&#8377;20</strong>.
+              </p>
+              <a href="/static/checkout.html?subject=ai" style="background:#2563eb; color:white; text-decoration:none; padding:10px 22px; border-radius:10px; font-weight:700; font-size:0.9rem; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+                <span>🔒 Unlock AI Access for &#8377;20</span> &rarr;
+              </a>
+            </div>
+          `;
+        }
+        return;
+      }
 
       // Update Top Canvas Badge & Topology
       document.getElementById("canvas-arch-badge-name").textContent = arch.name.toUpperCase();
@@ -1882,13 +1927,16 @@
     });
 
     // Initial Load
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialArch = urlParams.get("arch");
-    if (initialArch && RAG_ARCHITECTURES[initialArch]) {
-      switchArchitecture(initialArch);
-    } else {
-      switchArchitecture("simple_rag");
-    }
+    (async function initRag() {
+      await checkAiAccess();
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialArch = urlParams.get("arch");
+      if (initialArch && RAG_ARCHITECTURES[initialArch]) {
+        switchArchitecture(initialArch);
+      } else {
+        switchArchitecture("simple_rag");
+      }
+    })();
   </script>
 </body>
 </html>

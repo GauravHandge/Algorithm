@@ -7,6 +7,9 @@ from fastapi.responses import FileResponse
 from backend.database.init_db import seed_database
 from backend.api import algorithms, ai, questions, progress
 from backend.auth import auth_router
+from backend.payment.router import router as payment_router
+from backend.payment.admin_router import admin_router
+from backend.payment.init_plans import migrate_and_seed_payment_system
 
 app = FastAPI(
     title="Interactive Computer Science Learning & Algorithm Visualization Platform API",
@@ -34,6 +37,8 @@ async def add_no_cache_headers(request, call_next):
 
 # Include Routers
 app.include_router(auth_router)
+app.include_router(payment_router)
+app.include_router(admin_router)
 app.include_router(algorithms.router)
 app.include_router(ai.router)
 app.include_router(questions.router)
@@ -44,6 +49,7 @@ app.include_router(progress.router)
 def startup_event():
     print("[Server Startup] Seeding database if necessary...")
     seed_database()
+    migrate_and_seed_payment_system()
 
 # Serve static frontend files
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
@@ -72,6 +78,20 @@ def read_dashboard():
         return FileResponse(dash_path)
     return FileResponse(os.path.join(frontend_dir, "index.html"))
 
+@app.get("/checkout")
+def read_checkout():
+    checkout_path = os.path.join(frontend_dir, "checkout.html")
+    if os.path.exists(checkout_path):
+        return FileResponse(checkout_path)
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+@app.get("/admin")
+def read_admin():
+    admin_path = os.path.join(frontend_dir, "admin.html")
+    if os.path.exists(admin_path):
+        return FileResponse(admin_path)
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
+
 if __name__ == "__main__":
     import uvicorn
     print("\n" + "="*60)
@@ -79,5 +99,3 @@ if __name__ == "__main__":
     print("👉 Open in browser: http://localhost:8080")
     print("="*60 + "\n")
     uvicorn.run("backend.main:app", host="127.0.0.1", port=8080, reload=True)
-
-

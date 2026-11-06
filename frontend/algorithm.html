@@ -198,6 +198,41 @@
       // 2. Fetch Algorithm Detail
       try {
         const detailRes = await API.getAlgorithmDetail(algorithmId);
+        if (!detailRes.success && (detailRes.status === 403 || detailRes.detail?.error === 'PREMIUM_LOCKED')) {
+          const lockInfo = detailRes.detail || {};
+          const subId = lockInfo.subject_id || 'dsa';
+          const subName = lockInfo.subject_name || subId.toUpperCase();
+          const price = lockInfo.price || 20;
+
+          document.getElementById("algo-title").textContent = `${algorithmId.replace(/_/g, ' ').toUpperCase()} (Premium Locked)`;
+          document.getElementById("algo-desc").textContent = lockInfo.message || `Full access to this algorithm requires unlocking ${subName}.`;
+          
+          const container = document.getElementById("visualizer-container");
+          container.innerHTML = `
+            <div style="height:100%; min-height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:linear-gradient(180deg, #f8fafc, #ffffff);">
+              <div style="width:68px; height:68px; border-radius:50%; background:rgba(37,99,235,0.1); color:#2563eb; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <h2 style="font-size:1.6rem; font-weight:800; color:#0f172a; margin-bottom:8px;">${subName} is Locked</h2>
+              <p style="color:#64748b; font-size:0.95rem; max-width:480px; margin-bottom:24px; line-height:1.5;">
+                This algorithm and interactive simulation belong to the <strong>${subName}</strong> track. Unlock complete lifetime access for just <strong>&#8377;${price}</strong> via instant UPI QR payment.
+              </p>
+              <a href="/static/checkout.html?subject=${subId}" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; text-decoration:none; padding:12px 28px; border-radius:12px; font-weight:700; font-size:1rem; box-shadow:0 4px 14px rgba(37,99,235,0.3); display:inline-flex; align-items:center; gap:8px;">
+                <span>🔒 Unlock Full Access for &#8377;${price}</span>
+                <span>&rarr;</span>
+              </a>
+              <div style="margin-top:14px; font-size:0.8rem; color:#94a3b8;">
+                One-time payment &bull; Verified UPI checkout &bull; Instant activation
+              </div>
+            </div>
+          `;
+          showToast(`This algorithm is part of premium ${subName}`, "info");
+          return;
+        }
+
         if (detailRes.success) {
           currentAlgoDetail = detailRes.algorithm;
           document.getElementById("algo-title").textContent = currentAlgoDetail.name;
@@ -262,6 +297,13 @@
     async function runAlgorithmSimulation(inputData) {
       try {
         const execRes = await API.executeAlgorithm(algorithmId, inputData);
+        if (execRes.status === 403 || execRes.detail?.error === 'PREMIUM_LOCKED') {
+          const lockInfo = execRes.detail || {};
+          const subId = lockInfo.subject_id || 'dsa';
+          showToast(`Full access is locked. Please unlock ${subId.toUpperCase()} to run simulation.`, "error");
+          window.location.href = `/static/checkout.html?subject=${subId}`;
+          return;
+        }
         if (execRes.success && execRes.steps) {
           globalPlayer.loadExecution(algorithmId, execRes.steps);
           showToast(`Loaded ${execRes.steps.length} execution states`, "info");

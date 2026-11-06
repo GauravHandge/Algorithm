@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Float, DateTime, JSON
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Float, DateTime, JSON, Boolean
 from sqlalchemy.orm import relationship
 from backend.database.database import Base
 
@@ -41,6 +41,7 @@ class Algorithm(Base):
     pseudocode = Column(Text, nullable=True)
     visualizer_type = Column(String, default="array") # graph, array, grid, crypto, ml
     default_input = Column(JSON, nullable=True)
+    is_free_preview = Column(Boolean, default=False) # True = Free for all learners, False = Requires Premium Access
 
     topic = relationship("Topic", back_populates="algorithms")
     questions = relationship("Question", back_populates="algorithm", cascade="all, delete-orphan")
