@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +11,9 @@
   <link rel="stylesheet" href="/static/css/responsive.css?v=20261104" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <script src="/static/js/auth.js"></script>
   <style>
     /* Global Page Styling */
@@ -90,29 +93,30 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      height: 72px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 2rem;
+      padding: 0 1.5rem;
     }
 
     .brand-logo-wrap {
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .nav-pill-active {
       background: #0052ff !important;
       color: #ffffff !important;
       border-radius: 9999px !important;
-      padding: 0.45rem 1.25rem !important;
+      padding: 0.38rem 1.1rem !important;
       font-weight: 700 !important;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      font-size: 0.88rem;
       box-shadow: 0 4px 14px rgba(0, 82, 255, 0.3);
       transition: all 0.2s ease;
     }
@@ -121,12 +125,12 @@
       color: #334155;
       font-weight: 600;
       text-decoration: none;
-      font-size: 0.92rem;
-      padding: 0.45rem 0.9rem;
+      font-size: 0.86rem;
+      padding: 0.38rem 0.75rem;
       border-radius: 8px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s ease;
     }
 
@@ -139,11 +143,11 @@
     .hero-container {
       max-width: 1340px;
       margin: 0 auto;
-      padding: 3rem 1.5rem 1.5rem 1.5rem;
+      padding: 1.25rem 1.5rem 0.5rem 1.5rem;
       display: grid;
-      grid-template-columns: 1.05fr 1.15fr;
+      grid-template-columns: 1.05fr 1fr;
       align-items: center;
-      gap: 2.5rem;
+      gap: 2rem;
       position: relative;
       z-index: 2;
     }
@@ -151,7 +155,8 @@
     @media (max-width: 1080px) {
       .hero-container {
         grid-template-columns: 1fr;
-        gap: 3.5rem;
+        gap: 2rem;
+        padding: 1rem 1rem;
       }
     }
 
@@ -159,31 +164,31 @@
     .hero-tag-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 9999px;
-      padding: 6px 16px;
-      font-size: 0.82rem;
+      padding: 4px 12px;
+      font-size: 0.74rem;
       font-weight: 700;
       color: #0f172a;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      margin-bottom: 0.75rem;
     }
 
     .hero-tag-pill .sparkle-icon {
       color: #7c3aed;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
 
     /* Main Heading */
     .hero-main-title {
-      font-size: 3.6rem;
-      line-height: 1.14;
+      font-size: 2.35rem;
+      line-height: 1.18;
       font-weight: 800;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.035em;
       color: #0f172a;
-      margin: 0 0 1.25rem 0;
+      margin: 0 0 0.5rem 0;
     }
 
     .hero-gradient-text {
@@ -196,49 +201,57 @@
 
     .hero-heading-accent-line {
       display: block;
-      width: 280px;
-      height: 6px;
+      width: 220px;
+      height: 4px;
       background: linear-gradient(90deg, #0052ff, #a855f7);
       border-radius: 4px;
       margin-top: 4px;
       opacity: 0.75;
     }
 
+    .hero-sub-tagline {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0284c7;
+      margin: 0.5rem 0 0.4rem 0;
+      letter-spacing: -0.01em;
+    }
+
     .hero-lead-text {
-      font-size: 1.12rem;
+      font-size: 0.92rem;
       color: #475569;
-      line-height: 1.65;
-      margin: 0 0 2.2rem 0;
-      max-width: 520px;
+      line-height: 1.55;
+      margin: 0 0 1.25rem 0;
+      max-width: 500px;
     }
 
     /* CTA Buttons */
     .hero-actions-row {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
+      gap: 0.85rem;
       flex-wrap: wrap;
-      margin-bottom: 3rem;
+      margin-bottom: 1.5rem;
     }
 
     .btn-hero-play {
       background: linear-gradient(135deg, #0052ff 0%, #0045d8 100%);
       color: #ffffff !important;
-      padding: 0.95rem 1.85rem;
-      font-size: 1rem;
+      padding: 0.72rem 1.45rem;
+      font-size: 0.9rem;
       font-weight: 700;
       border-radius: 9999px;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 24px rgba(0, 82, 255, 0.35);
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(0, 82, 255, 0.3);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
     }
 
     .btn-hero-play:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(0, 82, 255, 0.45);
+      box-shadow: 0 10px 24px rgba(0, 82, 255, 0.4);
       background: linear-gradient(135deg, #0045d8 0%, #0036ab 100%);
     }
 
@@ -246,14 +259,14 @@
       background: #ffffff;
       color: #0f172a !important;
       border: 1px solid #cbd5e1;
-      padding: 0.95rem 1.75rem;
-      font-size: 1rem;
+      padding: 0.72rem 1.35rem;
+      font-size: 0.9rem;
       font-weight: 700;
       border-radius: 9999px;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      gap: 7px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       transition: all 0.25s ease;
       text-decoration: none;
     }
@@ -268,35 +281,35 @@
     .hero-stats-cards-row {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
     }
 
     .stat-badge-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 0.7rem 1.15rem;
+      border-radius: 10px;
+      padding: 0.45rem 0.85rem;
       display: flex;
       align-items: center;
-      gap: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
       transition: transform 0.2s ease;
     }
 
     .stat-badge-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 82, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 82, 255, 0.08);
     }
 
     .stat-badge-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.82rem;
       font-weight: 800;
       flex-shrink: 0;
     }
@@ -317,14 +330,14 @@
     }
 
     .stat-badge-num {
-      font-size: 1.05rem;
+      font-size: 0.92rem;
       font-weight: 800;
       color: #0f172a;
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
     .stat-badge-lbl {
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       color: #64748b;
       font-weight: 600;
     }
@@ -335,372 +348,42 @@
     .scene-3d-wrapper {
       position: relative;
       width: 100%;
-      min-height: 560px;
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 1400px;
     }
 
-    /* Glowing Pedestal / Platform */
-    .pedestal-base {
-      position: absolute;
-      bottom: 25px;
-      width: 490px;
-      height: 110px;
-      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 40%, #1e1b4b 100%);
-      border-radius: 55px;
-      box-shadow: 
-        0 30px 60px rgba(37, 99, 235, 0.35),
-        0 15px 30px rgba(59, 130, 246, 0.4),
-        inset 0 4px 12px rgba(255, 255, 255, 0.6);
-      transform: rotateX(58deg) rotateZ(-12deg);
-      border: 3px solid #60a5fa;
-      animation: pedestal-glow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes pedestal-glow {
-      0% {
-        box-shadow: 0 30px 60px rgba(37, 99, 235, 0.35), 0 15px 30px rgba(59, 130, 246, 0.4), inset 0 4px 12px rgba(255, 255, 255, 0.6);
-      }
-      100% {
-        box-shadow: 0 40px 80px rgba(37, 99, 235, 0.5), 0 20px 45px rgba(6, 182, 212, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.9);
-      }
-    }
-
-    /* 3D Realistic Laptop Assembly */
-    .laptop-3d-assembly {
+    .laptop-3d-render-wrap {
       position: relative;
-      width: 490px;
-      transform-style: preserve-3d;
-      transform: rotateX(10deg) rotateY(-14deg) rotateZ(2deg);
-      animation: laptop-float 6s ease-in-out infinite;
-      z-index: 10;
+      width: 100%;
+      max-width: 530px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: hero-3d-float 5s ease-in-out infinite;
+      filter: drop-shadow(0 16px 30px rgba(37, 99, 235, 0.16));
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @keyframes laptop-float {
+    .laptop-3d-render-wrap:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .laptop-3d-render-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      border-radius: 14px;
+    }
+
+    @keyframes hero-3d-float {
       0%, 100% {
-        transform: rotateX(10deg) rotateY(-14deg) rotateZ(2deg) translateY(0);
+        transform: translateY(0);
       }
       50% {
-        transform: rotateX(8deg) rotateY(-12deg) rotateZ(1deg) translateY(-14px);
+        transform: translateY(-7px);
       }
-    }
-
-    /* Laptop Screen (Upper Chassis) */
-    .laptop-screen-chassis {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border-radius: 18px 18px 6px 6px;
-      padding: 10px;
-      box-shadow: 
-        0 20px 50px rgba(15, 23, 42, 0.45),
-        0 0 0 2px #334155,
-        inset 0 1px 2px rgba(255, 255, 255, 0.3);
-      position: relative;
-      border: 1px solid #475569;
-    }
-
-    /* Camera Notch */
-    .laptop-camera-dot {
-      width: 6px;
-      height: 6px;
-      background: #0284c7;
-      border-radius: 50%;
-      margin: 0 auto 6px auto;
-      box-shadow: 0 0 6px #38bdf8;
-    }
-
-    /* Glass Screen Inside Chassis */
-    .laptop-display-glass {
-      background: #090d16;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 0 30px rgba(0, 82, 255, 0.15);
-    }
-
-    /* Screen Topbar */
-    .screen-header-bar {
-      background: rgba(15, 23, 42, 0.95);
-      padding: 8px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .screen-header-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #f8fafc;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .screen-header-title .compass-icon {
-      color: #38bdf8;
-    }
-
-    /* Screen Body Grid */
-    .screen-body-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      padding: 12px;
-      gap: 10px;
-      align-items: center;
-      min-height: 200px;
-    }
-
-    /* Graph Canvas Box */
-    .screen-graph-canvas {
-      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-      border-radius: 10px;
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      padding: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Algorithm Steps Card */
-    .screen-steps-card {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 8px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .screen-steps-heading {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-    }
-
-    .screen-step-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.74rem;
-      font-weight: 600;
-      color: #94a3b8;
-      padding: 3px 6px;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .screen-step-pill.completed {
-      color: #10b981;
-    }
-
-    .screen-step-pill.active {
-      background: #0284c7;
-      color: #ffffff;
-      font-weight: 700;
-      box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
-    }
-
-    /* Screen Bottom Control Bar */
-    .screen-footer-ctrls {
-      background: rgba(15, 23, 42, 0.95);
-      padding: 7px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-      font-size: 0.75rem;
-      color: #cbd5e1;
-    }
-
-    .screen-play-btn {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #0284c7;
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      cursor: pointer;
-      box-shadow: 0 0 8px #0284c7;
-    }
-
-    /* Interactive Step Progress Slider */
-    .screen-slider-bar {
-      width: 100px;
-      height: 4px;
-      background: #334155;
-      border-radius: 2px;
-      position: relative;
-      margin: 0 8px;
-    }
-
-    .screen-slider-fill {
-      width: 60%;
-      height: 100%;
-      background: #38bdf8;
-      border-radius: 2px;
-      box-shadow: 0 0 6px #38bdf8;
-    }
-
-    .screen-slider-thumb {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 8px #38bdf8;
-      position: absolute;
-      top: -3px;
-      left: 60%;
-      transform: translateX(-50%);
-    }
-
-    /* Laptop Lower Keyboard Base */
-    .laptop-base-chassis {
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-      height: 72px;
-      border-radius: 4px 4px 18px 18px;
-      transform: rotateX(64deg);
-      transform-origin: top;
-      position: relative;
-      border: 1px solid #475569;
-      box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.6),
-        inset 0 2px 4px rgba(255, 255, 255, 0.3);
-      padding: 6px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* Keyboard Grid Mockup */
-    .laptop-keyboard-grid {
-      width: 90%;
-      height: 38px;
-      background: #090d16;
-      border-radius: 6px;
-      display: grid;
-      grid-template-columns: repeat(14, 1fr);
-      gap: 2px;
-      padding: 3px;
-      box-shadow: inset 0 0 6px rgba(56, 189, 248, 0.3);
-    }
-
-    .kb-key {
-      background: #1e293b;
-      border-radius: 2px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    }
-
-    /* Trackpad with Engraved AlgoVerse Logo */
-    .laptop-trackpad {
-      width: 110px;
-      height: 18px;
-      background: #182234;
-      border-radius: 4px;
-      border: 1px solid #334155;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: #94a3b8;
-      letter-spacing: 0.8px;
-    }
-
-    /* =========================================================
-       FLOATING 3D OBJECTS AROUND LAPTOP (Matching Reference Image)
-       ========================================================= */
-    .floating-3d-obj {
-      position: absolute;
-      filter: drop-shadow(0 15px 25px rgba(15, 23, 42, 0.22));
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-
-    .floating-3d-obj:hover {
-      transform: scale(1.1) translateY(-6px) !important;
-    }
-
-    /* 1. Code Cube </> (Top Left) */
-    .obj-code-cube {
-      top: -30px;
-      left: -45px;
-      width: 74px;
-      height: 74px;
-      animation: float-obj-1 5s ease-in-out infinite;
-      z-index: 15;
-    }
-
-    /* 2. AI Chip (Top Right) */
-    .obj-ai-chip {
-      top: -35px;
-      right: -30px;
-      width: 80px;
-      height: 80px;
-      animation: float-obj-2 5.5s ease-in-out infinite 0.5s;
-      z-index: 15;
-    }
-
-    /* 3. ML Chart Cube (Middle Left) */
-    .obj-ml-chart {
-      top: 170px;
-      left: -65px;
-      width: 76px;
-      height: 76px;
-      animation: float-obj-3 6s ease-in-out infinite 1s;
-      z-index: 15;
-    }
-
-    /* 4. Cybersecurity Shield (Middle Right) */
-    .obj-shield {
-      top: 160px;
-      right: -45px;
-      width: 78px;
-      height: 78px;
-      animation: float-obj-4 5.2s ease-in-out infinite 1.5s;
-      z-index: 15;
-    }
-
-    /* 5. Data Structure Stack (Bottom Right) */
-    .obj-ds-stack {
-      bottom: 20px;
-      right: -25px;
-      width: 72px;
-      height: 72px;
-      animation: float-obj-5 5.8s ease-in-out infinite 2s;
-      z-index: 15;
-    }
-
-    @keyframes float-obj-1 {
-      0%, 100% { transform: translateY(0) rotate(2deg); }
-      50% { transform: translateY(-16px) rotate(-4deg); }
-    }
-    @keyframes float-obj-2 {
-      0%, 100% { transform: translateY(0) rotate(-3deg); }
-      50% { transform: translateY(-14px) rotate(4deg); }
-    }
-    @keyframes float-obj-3 {
-      0%, 100% { transform: translateY(0) rotate(4deg); }
-      50% { transform: translateY(-18px) rotate(-2deg); }
-    }
-    @keyframes float-obj-4 {
-      0%, 100% { transform: translateY(0) rotate(-2deg); }
-      50% { transform: translateY(-15px) rotate(3deg); }
-    }
-    @keyframes float-obj-5 {
-      0%, 100% { transform: translateY(0) rotate(3deg); }
-      50% { transform: translateY(-12px) rotate(-3deg); }
     }
 
     /* =========================================================
@@ -708,7 +391,7 @@
        ========================================================= */
     .subjects-horizontal-strip-wrapper {
       max-width: 1340px;
-      margin: 1.5rem auto 5rem auto;
+      margin: 0.75rem auto 3rem auto;
       padding: 0 1.5rem;
       position: relative;
       z-index: 5;
@@ -717,9 +400,9 @@
     .subjects-glass-bar {
       background: #ffffff;
       border: 1px solid rgba(226, 232, 240, 0.95);
-      border-radius: 20px;
-      box-shadow: 
-        0 20px 45px -10px rgba(0, 82, 255, 0.08),
+      border-radius: 18px;
+      box-shadow:
+        0 14px 35px -8px rgba(0, 82, 255, 0.08),
         0 1px 3px rgba(0, 0, 0, 0.04);
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -739,7 +422,7 @@
     }
 
     .subject-bar-item {
-      padding: 1.35rem 1.6rem;
+      padding: 0.95rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -761,18 +444,18 @@
     .subject-bar-item-left {
       display: flex;
       align-items: center;
-      gap: 1.1rem;
+      gap: 0.85rem;
     }
 
     .subject-bar-icon-box {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       transition: transform 0.25s ease;
     }
 
@@ -781,21 +464,21 @@
     }
 
     .subject-bar-code {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: #0f172a;
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
     .subject-bar-name {
-      font-size: 0.84rem;
+      font-size: 0.78rem;
       color: #64748b;
       font-weight: 600;
     }
 
     .subject-bar-arrow {
       color: #94a3b8;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       transition: all 0.2s ease;
     }
@@ -806,6 +489,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Ambient Soft Blue Gradient Waves in Background -->
@@ -813,8 +497,10 @@
     <div class="hero-bg-blob-1"></div>
     <div class="hero-bg-blob-2"></div>
     <svg class="hero-bg-curve-svg" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="none">
-      <path d="M-100 450 C 300 320, 600 680, 1100 380 C 1300 250, 1500 400, 1600 350 L 1600 900 L -100 900 Z" fill="rgba(240, 246, 255, 0.7)"/>
-      <path d="M-100 600 C 400 480, 800 780, 1200 520 C 1400 420, 1550 550, 1600 500 L 1600 900 L -100 900 Z" fill="rgba(230, 242, 255, 0.45)"/>
+      <path d="M-100 450 C 300 320, 600 680, 1100 380 C 1300 250, 1500 400, 1600 350 L 1600 900 L -100 900 Z"
+        fill="rgba(240, 246, 255, 0.7)" />
+      <path d="M-100 600 C 400 480, 800 780, 1200 520 C 1400 420, 1550 550, 1600 500 L 1600 900 L -100 900 Z"
+        fill="rgba(230, 242, 255, 0.45)" />
     </svg>
   </div>
 
@@ -831,30 +517,63 @@
     <!-- Center Navigation Links (Matching Reference UI) -->
     <nav>
       <ul style="display:flex; align-items:center; gap:0.6rem; list-style:none; margin:0; padding:0;">
-        <li><a href="/static/index.html" class="nav-pill-active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</a></li>
-        <li><a href="/static/algorithms.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Explore</a></li>
-        <li><a href="/static/algorithms.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Visualizations</a></li>
-        <li><a href="/static/practice.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Practice</a></li>
-        <li><a href="/static/quiz.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Roadmaps</a></li>
-        <li><a href="/static/dashboard.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> Resources</a></li>
+        <li><a href="/static/index.html" class="nav-pill-active"><svg width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg> Home</a></li>
+        <li><a href="/static/algorithms.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg> Explore</a></li>
+        <li><a href="/static/algorithms.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg> Visualizations</a></li>
+        <li><a href="/static/practice.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg> Practice</a></li>
+        <li><a href="/static/quiz.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg> Roadmaps</a></li>
+        <li><a href="/static/dashboard.html" class="nav-pill-link"><svg width="15" height="15" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg> Resources</a></li>
       </ul>
     </nav>
 
     <!-- Header Actions with Notification & Profile Sync -->
     <div style="display:flex; align-items:center; gap:1rem;">
       <!-- Bell Notification with Red Badge (Matching Reference) -->
-      <button style="position:relative; background:#ffffff; border:1px solid #e2e8f0; border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center; color:#475569; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.03);" title="Notifications">
+      <button
+        style="position:relative; background:#ffffff; border:1px solid #e2e8f0; border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center; color:#475569; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.03);"
+        title="Notifications">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
-        <span style="position:absolute; top:2px; right:2px; width:15px; height:15px; background:#ef4444; color:white; border-radius:50%; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid #ffffff;">1</span>
+        <span
+          style="position:absolute; top:2px; right:2px; width:15px; height:15px; background:#ef4444; color:white; border-radius:50%; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid #ffffff;">1</span>
       </button>
 
       <!-- User Profile / Auth Action (Synced by AlgoAuth) -->
       <div class="auth-nav-action" style="display:flex; align-items:center; gap:0.75rem;">
-        <a href="/static/signin.html" style="text-decoration:none; background:#ffffff; color:#0f172a; border:1px solid #e2e8f0; padding:0.45rem 1.15rem; font-size:0.88rem; font-weight:600; border-radius:8px;">Sign In</a>
-        <a href="/static/signin.html?mode=signup" style="text-decoration:none; background:#0052ff; color:#ffffff; padding:0.45rem 1.25rem; font-size:0.88rem; font-weight:700; border-radius:8px; box-shadow:0 2px 8px rgba(0,82,255,0.25);">Get Started</a>
+        <a href="/static/signin.html"
+          style="text-decoration:none; background:#ffffff; color:#0f172a; border:1px solid #e2e8f0; padding:0.45rem 1.15rem; font-size:0.88rem; font-weight:600; border-radius:8px;">Sign
+          In</a>
+        <a href="/static/signin.html?mode=signup"
+          style="text-decoration:none; background:#0052ff; color:#ffffff; padding:0.45rem 1.25rem; font-size:0.88rem; font-weight:700; border-radius:8px; box-shadow:0 2px 8px rgba(0,82,255,0.25);">Get
+          Started</a>
       </div>
     </div>
   </header>
@@ -870,14 +589,17 @@
         </div>
 
         <h1 class="hero-main-title">
-          Learn Computer Science<br>
-          by<br>
-          <span class="hero-gradient-text">Seeing How It Works.</span>
+          Your Journey Into the World of<br>
+          <span class="hero-gradient-text">Computer Science.</span>
           <span class="hero-heading-accent-line"></span>
         </h1>
 
+        <div class="hero-sub-tagline">
+          One platform. Endless possibilities. Interactive learning.
+        </div>
+
         <p class="hero-lead-text">
-          Interactive visualizations, step-by-step execution and real-world examples for Algorithms, AI/ML, Cybersecurity and core CS subjects.
+          Learn Computer Science by seeing how it works &mdash; interactive visualizations, step-by-step execution and real-world examples for Algorithms, AI/ML, Cybersecurity and core CS subjects.
         </p>
 
         <!-- CTA Buttons -->
@@ -926,239 +648,10 @@
         </div>
       </div>
 
-      <!-- Right Column: 3D Scene with Laptop & Floating Objects -->
+      <!-- Right Column: 3D Scene with Laptop & Floating Objects Matching Reference -->
       <div class="scene-3d-wrapper">
-        <!-- Glowing Ambient Pedestal Platform -->
-        <div class="pedestal-base"></div>
-
-        <!-- FLOATING 3D OBJECT 1: Code Cube </> (Top Left) -->
-        <div class="floating-3d-obj obj-code-cube" title="Algorithms & Code">
-          <svg viewBox="0 0 80 80" width="100%" height="100%">
-            <defs>
-              <linearGradient id="cubeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#818cf8"/>
-                <stop offset="50%" stop-color="#6366f1"/>
-                <stop offset="100%" stop-color="#4338ca"/>
-              </linearGradient>
-            </defs>
-            <rect x="6" y="6" width="68" height="68" rx="20" fill="url(#cubeGrad)" filter="drop-shadow(0 12px 18px rgba(99,102,241,0.45))"/>
-            <rect x="8" y="8" width="64" height="64" rx="18" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-            <text x="40" y="47" font-size="24" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="'JetBrains Mono', monospace">&lt;/&gt;</text>
-          </svg>
-        </div>
-
-        <!-- FLOATING 3D OBJECT 2: AI Chip (Top Right) -->
-        <div class="floating-3d-obj obj-ai-chip" title="Artificial Intelligence">
-          <svg viewBox="0 0 84 84" width="100%" height="100%">
-            <defs>
-              <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#38bdf8"/>
-                <stop offset="50%" stop-color="#0284c7"/>
-                <stop offset="100%" stop-color="#0369a1"/>
-              </linearGradient>
-            </defs>
-            <!-- Chip Pins Top/Bottom/Left/Right -->
-            <rect x="22" y="2" width="6" height="8" rx="2" fill="#94a3b8"/>
-            <rect x="38" y="2" width="6" height="8" rx="2" fill="#94a3b8"/>
-            <rect x="54" y="2" width="6" height="8" rx="2" fill="#94a3b8"/>
-            <rect x="22" y="74" width="6" height="8" rx="2" fill="#94a3b8"/>
-            <rect x="38" y="74" width="6" height="8" rx="2" fill="#94a3b8"/>
-            <rect x="54" y="74" width="6" height="8" rx="2" fill="#94a3b8"/>
-            <rect x="2" y="22" width="8" height="6" rx="2" fill="#94a3b8"/>
-            <rect x="2" y="38" width="8" height="6" rx="2" fill="#94a3b8"/>
-            <rect x="2" y="54" width="8" height="6" rx="2" fill="#94a3b8"/>
-            <rect x="74" y="22" width="8" height="6" rx="2" fill="#94a3b8"/>
-            <rect x="74" y="38" width="8" height="6" rx="2" fill="#94a3b8"/>
-            <rect x="74" y="54" width="8" height="6" rx="2" fill="#94a3b8"/>
-            <!-- Chip Body -->
-            <rect x="8" y="8" width="68" height="68" rx="16" fill="url(#chipGrad)" filter="drop-shadow(0 12px 20px rgba(2,132,199,0.45))"/>
-            <rect x="12" y="12" width="60" height="60" rx="13" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.8"/>
-            <!-- Core Text -->
-            <text x="42" y="47" font-size="20" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif">AI</text>
-          </svg>
-        </div>
-
-        <!-- FLOATING 3D OBJECT 3: ML Bar Chart Cube (Middle Left) -->
-        <div class="floating-3d-obj obj-ml-chart" title="Machine Learning">
-          <svg viewBox="0 0 80 80" width="100%" height="100%">
-            <defs>
-              <linearGradient id="chartBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="100%" stop-color="#e0e7ff"/>
-              </linearGradient>
-            </defs>
-            <rect x="6" y="6" width="68" height="68" rx="18" fill="url(#chartBg)" filter="drop-shadow(0 14px 22px rgba(99,102,241,0.25))"/>
-            <rect x="6" y="6" width="68" height="68" rx="18" fill="none" stroke="#cbd5e1" stroke-width="1.5"/>
-            <!-- 3D Bar 1 (Yellow) -->
-            <rect x="20" y="42" width="10" height="20" rx="3" fill="#f59e0b"/>
-            <!-- 3D Bar 2 (Orange) -->
-            <rect x="35" y="30" width="10" height="32" rx="3" fill="#ea580c"/>
-            <!-- 3D Bar 3 (Blue) -->
-            <rect x="50" y="18" width="10" height="44" rx="3" fill="#3b82f6"/>
-          </svg>
-        </div>
-
-        <!-- FLOATING 3D OBJECT 4: Cybersecurity Shield (Middle Right) -->
-        <div class="floating-3d-obj obj-shield" title="Cybersecurity & Encryption">
-          <svg viewBox="0 0 80 80" width="100%" height="100%">
-            <defs>
-              <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#60a5fa"/>
-                <stop offset="60%" stop-color="#2563eb"/>
-                <stop offset="100%" stop-color="#1d4ed8"/>
-              </linearGradient>
-            </defs>
-            <!-- Shield Path -->
-            <path d="M40 8 C55 8, 68 14, 68 28 C68 48, 54 64, 40 72 C26 64, 12 48, 12 28 C12 14, 25 8, 40 8 Z" fill="url(#shieldGrad)" filter="drop-shadow(0 14px 22px rgba(37,99,235,0.4))"/>
-            <path d="M40 12 C52 12, 64 17, 64 28 C64 46, 52 59, 40 67 C28 59, 16 46, 16 28 C16 17, 28 12, 40 12 Z" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-            <!-- Lock Icon in Center -->
-            <rect x="33" y="37" width="14" height="12" rx="3" fill="#ffffff"/>
-            <path d="M36 37 V32 C36 29.8, 37.8 28, 40 28 C42.2 28, 44 29.8, 44 32 V37" stroke="#ffffff" stroke-width="2.5" fill="none"/>
-          </svg>
-        </div>
-
-        <!-- FLOATING 3D OBJECT 5: Layered Data Stack (Bottom Right) -->
-        <div class="floating-3d-obj obj-ds-stack" title="Data Structures">
-          <svg viewBox="0 0 76 76" width="100%" height="100%">
-            <defs>
-              <linearGradient id="stackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#0284c7"/>
-              </linearGradient>
-            </defs>
-            <!-- Layer 1 Bottom -->
-            <polygon points="38,42 66,28 38,14 10,28" fill="#0284c7" opacity="0.6" transform="translate(0, 24)"/>
-            <!-- Layer 2 Middle -->
-            <polygon points="38,42 66,28 38,14 10,28" fill="#0ea5e9" opacity="0.8" transform="translate(0, 12)"/>
-            <!-- Layer 3 Top -->
-            <polygon points="38,42 66,28 38,14 10,28" fill="url(#stackGrad)" filter="drop-shadow(0 8px 14px rgba(2,132,199,0.35))"/>
-          </svg>
-        </div>
-
-        <!-- 3D LAPTOP HARDWARE ASSEMBLY -->
-        <div class="laptop-3d-assembly">
-          <!-- Screen Display Chassis -->
-          <div class="laptop-screen-chassis">
-            <div class="laptop-camera-dot"></div>
-
-            <!-- Glass Screen with Live Dijkstra Visualizer -->
-            <div class="laptop-display-glass">
-              <!-- Screen Header -->
-              <div class="screen-header-bar">
-                <div class="screen-header-title">
-                  <span class="compass-icon">🧭</span>
-                  <span>Dijkstra's Shortest Path</span>
-                </div>
-                <div style="font-size:0.68rem; font-weight:700; background:#0284c7; color:white; padding:2px 8px; border-radius:4px;">
-                  Interactive Demo
-                </div>
-              </div>
-
-              <!-- Screen Body: Canvas + Checklist -->
-              <div class="screen-body-grid">
-                <!-- Dijkstra Interactive Graph SVG (Matching Reference Image) -->
-                <div class="screen-graph-canvas">
-                  <svg width="220" height="175" viewBox="0 0 240 185">
-                    <!-- Edge Lines -->
-                    <line x1="35" y1="90" x2="85" y2="40" stroke="#0052ff" stroke-width="3" />
-                    <line x1="35" y1="90" x2="85" y2="140" stroke="#334155" stroke-width="2" />
-                    <line x1="85" y1="40" x2="155" y2="40" stroke="#334155" stroke-width="2" />
-                    <line x1="85" y1="40" x2="155" y2="90" stroke="#0052ff" stroke-width="3" />
-                    <line x1="85" y1="140" x2="155" y2="90" stroke="#334155" stroke-width="2" />
-                    <line x1="85" y1="140" x2="205" y2="90" stroke="#334155" stroke-width="2" />
-                    <line x1="155" y1="40" x2="155" y2="90" stroke="#334155" stroke-width="2" />
-                    <line x1="155" y1="90" x2="205" y2="90" stroke="#0052ff" stroke-width="3" />
-
-                    <!-- Edge Weight Badges -->
-                    <text x="54" y="60" font-size="10" fill="#38bdf8" font-weight="700">4</text>
-                    <text x="54" y="125" font-size="10" fill="#64748b" font-weight="600">11</text>
-                    <text x="120" y="32" font-size="10" fill="#64748b" font-weight="600">10</text>
-                    <text x="125" y="72" font-size="10" fill="#38bdf8" font-weight="700">2</text>
-                    <text x="115" y="122" font-size="10" fill="#64748b" font-weight="600">8</text>
-                    <text x="145" y="65" font-size="10" fill="#64748b" font-weight="600">3</text>
-                    <text x="178" y="80" font-size="10" fill="#38bdf8" font-weight="700">5</text>
-                    <text x="145" y="135" font-size="10" fill="#64748b" font-weight="600">15</text>
-
-                    <!-- Glowing Graph Nodes -->
-                    <!-- Node 0: Cyan Source -->
-                    <circle cx="35" cy="90" r="13" fill="#0284c7" filter="drop-shadow(0 0 8px #38bdf8)" />
-                    <text x="35" y="94" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">0</text>
-
-                    <!-- Node 1: Blue Active -->
-                    <circle cx="85" cy="40" r="13" fill="#38bdf8" filter="drop-shadow(0 0 6px #38bdf8)" />
-                    <text x="85" y="44" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">1</text>
-
-                    <!-- Node 3: Slate -->
-                    <circle cx="85" cy="140" r="13" fill="#1e293b" stroke="#475569" stroke-width="2" />
-                    <text x="85" y="144" font-size="11" font-weight="700" fill="#cbd5e1" text-anchor="middle">3</text>
-
-                    <!-- Node 4: Slate -->
-                    <circle cx="155" cy="40" r="13" fill="#1e293b" stroke="#475569" stroke-width="2" />
-                    <text x="155" y="44" font-size="11" font-weight="700" fill="#cbd5e1" text-anchor="middle">4</text>
-
-                    <!-- Node 2: Blue Target Intermediate -->
-                    <circle cx="155" cy="90" r="13" fill="#0284c7" filter="drop-shadow(0 0 8px #38bdf8)" />
-                    <text x="155" y="94" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">2</text>
-
-                    <!-- Node 5: Bright Orange Destination -->
-                    <circle cx="205" cy="90" r="13" fill="#f97316" filter="drop-shadow(0 0 10px #f97316)" />
-                    <text x="205" y="94" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">5</text>
-                  </svg>
-                </div>
-
-                <!-- Steps Checklist (Matching Reference) -->
-                <div class="screen-steps-card">
-                  <div class="screen-steps-heading">Algorithm Steps</div>
-                  <div class="screen-step-pill completed">
-                    <span>✓</span> <span>Initialize</span>
-                  </div>
-                  <div class="screen-step-pill completed">
-                    <span>✓</span> <span>Pick Node</span>
-                  </div>
-                  <div class="screen-step-pill active">
-                    <span>▶</span> <span>Update Neighbors</span>
-                  </div>
-                  <div class="screen-step-pill">
-                    <span>○</span> <span>Repeat</span>
-                  </div>
-                  <div class="screen-step-pill">
-                    <span>○</span> <span>Shortest Path</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Footer Controls Bar with Interactive Controls -->
-              <div class="screen-footer-ctrls">
-                <div style="display:flex; align-items:center; gap:6px;">
-                  <button class="screen-play-btn" id="dijkstra-play-toggle">⏸</button>
-                  <span id="dijkstra-step-text" style="font-weight:700; color:#ffffff;">Step 3 of 5</span>
-                  
-                  <div class="screen-slider-bar">
-                    <div class="screen-slider-fill" id="dijkstra-slider-fill"></div>
-                    <div class="screen-slider-thumb" id="dijkstra-slider-thumb"></div>
-                  </div>
-                </div>
-
-                <a href="/static/algorithm.html?id=dijkstra" style="color:#38bdf8; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
-                  Open Full View ↗
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Lower Keyboard Base with Palmrest & Engraved AlgoVerse Logo -->
-          <div class="laptop-base-chassis">
-            <!-- Illuminated Backlit Keyboard Keys -->
-            <div class="laptop-keyboard-grid">
-              <div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
-              <div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
-            </div>
-
-            <!-- Engraved Palmrest Logo -->
-            <div class="laptop-trackpad">
-              AlgoVerse
-            </div>
-          </div>
+        <div class="laptop-3d-render-wrap">
+          <img src="/static/assets/3d/laptop_3d_blend.png" alt="AlgoVerse 3D Interactive Platform" class="laptop-3d-render-img">
         </div>
       </div>
     </section>
@@ -1169,11 +662,8 @@
         <!-- 1. AI: Artificial Intelligence -->
         <a href="/static/rag_visualizer.html" class="subject-bar-item">
           <div class="subject-bar-item-left">
-            <div class="subject-bar-icon-box" style="background:#f5f3ff; color:#7c3aed;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"/>
-                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"/>
-              </svg>
+            <div class="subject-bar-icon-box" style="background:#f5f3ff;">
+              <img src="/static/assets/3d/icon_ai.png" alt="AI" style="width:34px; height:34px; object-fit:contain;">
             </div>
             <div>
               <div class="subject-bar-code">AI</div>
@@ -1186,12 +676,8 @@
         <!-- 2. DSA: Data Structures & Algorithms -->
         <a href="/static/algorithms.html?subject_id=dsa" class="subject-bar-item">
           <div class="subject-bar-item-left">
-            <div class="subject-bar-icon-box" style="background:#eff6ff; color:#0284c7;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-              </svg>
+            <div class="subject-bar-icon-box" style="background:#eff6ff;">
+              <img src="/static/assets/3d/icon_dsa.png" alt="DSA" style="width:34px; height:34px; object-fit:contain;">
             </div>
             <div>
               <div class="subject-bar-code">DSA</div>
@@ -1204,12 +690,8 @@
         <!-- 3. ML: Machine Learning -->
         <a href="/static/algorithms.html?subject_id=ml" class="subject-bar-item">
           <div class="subject-bar-item-left">
-            <div class="subject-bar-icon-box" style="background:#fffbeb; color:#d97706;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="20" x2="18" y2="10"></line>
-                <line x1="12" y1="20" x2="12" y2="4"></line>
-                <line x1="6" y1="20" x2="6" y2="14"></line>
-              </svg>
+            <div class="subject-bar-icon-box" style="background:#fffbeb;">
+              <img src="/static/assets/3d/icon_ml.png" alt="ML" style="width:34px; height:34px; object-fit:contain;">
             </div>
             <div>
               <div class="subject-bar-code">ML</div>
@@ -1222,10 +704,8 @@
         <!-- 4. Cybersecurity: Security & Ethical Hacking -->
         <a href="/static/algorithms.html?subject_id=cybersecurity" class="subject-bar-item">
           <div class="subject-bar-item-left">
-            <div class="subject-bar-icon-box" style="background:#fef2f2; color:#dc2626;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
+            <div class="subject-bar-icon-box" style="background:#fef2f2;">
+              <img src="/static/assets/3d/icon_cyber.png" alt="Cybersecurity" style="width:34px; height:34px; object-fit:contain;">
             </div>
             <div>
               <div class="subject-bar-code">Cybersecurity</div>
@@ -1239,36 +719,49 @@
 
     <!-- FEATURED LIVE AI STUDIO SPOTLIGHT -->
     <section style="max-width:1340px; margin:0 auto 5rem auto; padding:0 1.5rem;">
-      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:24px; padding:2.8rem; box-shadow:0 10px 30px rgba(0,0,0,0.03); display:grid; grid-template-columns:1.2fr 1fr; gap:2.5rem; align-items:center;">
+      <div
+        style="background:#ffffff; border:1px solid #e2e8f0; border-radius:24px; padding:2.8rem; box-shadow:0 10px 30px rgba(0,0,0,0.03); display:grid; grid-template-columns:1.2fr 1fr; gap:2.5rem; align-items:center;">
         <div>
-          <div style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#0052ff; font-weight:800; font-size:0.75rem; padding:0.35rem 0.85rem; border-radius:8px; margin-bottom:1rem; letter-spacing:0.5px;">
+          <div
+            style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#0052ff; font-weight:800; font-size:0.75rem; padding:0.35rem 0.85rem; border-radius:8px; margin-bottom:1rem; letter-spacing:0.5px;">
             ✦ LIVE ARCHITECTURE STUDIO
           </div>
           <h3 style="font-size:2rem; font-weight:800; color:#0f172a; margin:0 0 0.85rem 0; letter-spacing:-0.03em;">
             LangGraph &amp; Advanced AI Architectures
           </h3>
           <p style="color:#475569; font-size:0.98rem; line-height:1.65; margin:0 0 1.75rem 0;">
-            Step through <strong>Simple RAG, Advanced RAG, Self-RAG, CRAG, Agentic RAG, Graph RAG, Multimodal RAG</strong>, and <strong>Vectorless RAG</strong>. See live StateGraph node tokens, hallucination correction loops, and multi-tool agentic reasoning with plain-English definitions.
+            Step through <strong>Simple RAG, Advanced RAG, Self-RAG, CRAG, Agentic RAG, Graph RAG, Multimodal
+              RAG</strong>, and <strong>Vectorless RAG</strong>. See live StateGraph node tokens, hallucination
+            correction loops, and multi-tool agentic reasoning with plain-English definitions.
           </p>
-          <a href="/static/rag_visualizer.html" class="btn-hero-play" style="padding:0.8rem 1.6rem; border-radius:10px;">
+          <a href="/static/rag_visualizer.html" class="btn-hero-play"
+            style="padding:0.8rem 1.6rem; border-radius:10px;">
             Launch AI Studio Visualizer &rarr;
           </a>
         </div>
 
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:1.75rem; box-shadow:inset 0 1px 3px rgba(0,0,0,0.02);">
-          <div style="font-size:0.8rem; font-weight:800; color:#0052ff; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:0.5rem;">
+        <div
+          style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:1.75rem; box-shadow:inset 0 1px 3px rgba(0,0,0,0.02);">
+          <div
+            style="font-size:0.8rem; font-weight:800; color:#0052ff; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:0.5rem;">
             Highlighted Architecture
           </div>
           <h4 style="font-size:1.2rem; font-weight:800; color:#0f172a; margin:0 0 0.6rem 0;">
             Autonomous Agentic RAG (LangGraph)
           </h4>
           <p style="font-size:0.88rem; color:#475569; line-height:1.55; margin:0 0 1.25rem 0;">
-            The LLM itself decides when to search, which tools to call (Calculator, Python REPL, Web), grades document relevance, and terminates autonomously.
+            The LLM itself decides when to search, which tools to call (Calculator, Python REPL, Web), grades document
+            relevance, and terminates autonomously.
           </p>
           <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <span style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#0f172a; padding:4px 10px; border-radius:6px;">8 Nodes</span>
-            <span style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#059669; padding:4px 10px; border-radius:6px;">Conditional Edges</span>
-            <span style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#0052ff; padding:4px 10px; border-radius:6px;">StateGraph</span>
+            <span
+              style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#0f172a; padding:4px 10px; border-radius:6px;">8
+              Nodes</span>
+            <span
+              style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#059669; padding:4px 10px; border-radius:6px;">Conditional
+              Edges</span>
+            <span
+              style="background:#ffffff; border:1px solid #e2e8f0; font-size:0.75rem; font-weight:700; color:#0052ff; padding:4px 10px; border-radius:6px;">StateGraph</span>
           </div>
         </div>
       </div>
@@ -1277,13 +770,15 @@
 
   <!-- SaaS Footer -->
   <footer style="background:#ffffff; border-top:1px solid #e2e8f0; padding:2.5rem 1.5rem; margin-top:2rem;">
-    <div style="max-width:1340px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
+    <div
+      style="max-width:1340px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
       <div style="display:flex; align-items:center; gap:10px;">
         <svg viewBox="0 0 32 32" width="26" height="26" fill="none">
           <path d="M16 2L3 28H10.5L16 16.5L21.5 28H29L16 2Z" fill="#0052ff" />
         </svg>
         <span style="font-weight:800; color:#0f172a; font-size:1.15rem;">AlgoVerse</span>
-        <span style="color:#94a3b8; font-size:0.85rem; margin-left:8px;">Interactive Computer Science Learning Platform</span>
+        <span style="color:#94a3b8; font-size:0.85rem; margin-left:8px;">Interactive Computer Science Learning
+          Platform</span>
       </div>
       <div style="font-size:0.85rem; color:#64748b;">
         &copy; 2026 AlgoVerse. All rights reserved.
@@ -1291,71 +786,24 @@
     </div>
   </footer>
 
-  <!-- Subtle 3D Parallax & Dijkstra Simulation Script -->
+  <!-- Subtle 3D Parallax & Session Sync Script -->
   <script>
-    // 1. Subtle 3D Mouse Parallax
+    // 1. Subtle 3D Mouse Parallax on Laptop Render
     const scene = document.querySelector('.scene-3d-wrapper');
-    const laptop = document.querySelector('.laptop-3d-assembly');
+    const laptopWrap = document.querySelector('.laptop-3d-render-wrap');
 
-    if (scene && laptop) {
+    if (scene && laptopWrap) {
       window.addEventListener('mousemove', (e) => {
         const xPercent = (e.clientX / window.innerWidth - 0.5) * 2;
         const yPercent = (e.clientY / window.innerHeight - 0.5) * 2;
-        
-        // Gentle tilt without breaking the perspective
-        const rotX = 10 - yPercent * 6;
-        const rotY = -14 + xPercent * 8;
-        laptop.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(1deg)`;
+
+        const rotX = -yPercent * 4;
+        const rotY = xPercent * 5;
+        laptopWrap.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-2px)`;
       });
 
       window.addEventListener('mouseleave', () => {
-        laptop.style.transform = `rotateX(10deg) rotateY(-14deg) rotateZ(2deg)`;
-      });
-    }
-
-    // 2. Interactive Dijkstra Playback Cycle
-    let dijkstraStep = 3;
-    let isPlaying = true;
-    const stepText = document.getElementById('dijkstra-step-text');
-    const sliderFill = document.getElementById('dijkstra-slider-fill');
-    const sliderThumb = document.getElementById('dijkstra-slider-thumb');
-    const playToggleBtn = document.getElementById('dijkstra-play-toggle');
-    const stepPills = document.querySelectorAll('.screen-step-pill');
-
-    function updateDijkstraUI(step) {
-      dijkstraStep = step;
-      if (stepText) stepText.textContent = `Step ${step} of 5`;
-      const pct = (step / 5) * 100;
-      if (sliderFill) sliderFill.style.width = `${pct}%`;
-      if (sliderThumb) sliderThumb.style.left = `${pct}%`;
-
-      // Update pills
-      stepPills.forEach((pill, idx) => {
-        pill.classList.remove('active', 'completed');
-        if (idx + 1 < step) {
-          pill.classList.add('completed');
-          pill.querySelector('span:first-child').textContent = '✓';
-        } else if (idx + 1 === step) {
-          pill.classList.add('active');
-          pill.querySelector('span:first-child').textContent = '▶';
-        } else {
-          pill.querySelector('span:first-child').textContent = '○';
-        }
-      });
-    }
-
-    let intervalId = setInterval(() => {
-      if (isPlaying) {
-        let next = dijkstraStep + 1;
-        if (next > 5) next = 1;
-        updateDijkstraUI(next);
-      }
-    }, 2400);
-
-    if (playToggleBtn) {
-      playToggleBtn.addEventListener('click', () => {
-        isPlaying = !isPlaying;
-        playToggleBtn.textContent = isPlaying ? '⏸' : '▶';
+        laptopWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
       });
     }
 
@@ -1367,4 +815,5 @@
     });
   </script>
 </body>
+
 </html>
