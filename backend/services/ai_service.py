@@ -3,6 +3,12 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
 from backend.schemas.ai import AIResponse
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 class AIProvider(ABC):
     @abstractmethod
     def explain_step(self, algorithm_id: str, step_state: Dict[str, Any], context: Optional[str] = None) -> AIResponse:
