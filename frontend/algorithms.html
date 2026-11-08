@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="/static/css/components.css?v=20261104" />
   <link rel="stylesheet" href="/static/css/responsive.css?v=20261104" />
   <script src="/static/js/auth.js"></script>
+  <script>
+    if (window.AlgoAuth && !AlgoAuth.isAuthenticated()) {
+      AlgoAuth.requireAuth();
+    }
+  </script>
   <style>
     .algo-card {
       background: #ffffff;

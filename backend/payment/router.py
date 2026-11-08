@@ -100,39 +100,41 @@ def create_purchase_order(
     """Submits a payment verification request. Accessible with auth token or by user email."""
     user = get_current_user_optional(authorization, db)
     
-    # If not authenticated via token, resolve by user_email or local fallback
+    # 1. Require Authenticated User (No anonymous orders)
+    user = get_current_user_optional(authorization, db)
     if not user:
         raw_email = (req.user_email or "").strip().lower()
-        if not raw_email:
-            raw_email = "gaurav@algoverse.io"
-        user = db.query(User).filter(User.email == raw_email).first()
-        if not user:
-            from backend.auth.security import hash_password
-            hashed, salt = hash_password("algoverse123")
-            display_name = req.user_name.strip() if req.user_name else raw_email.split("@")[0].capitalize()
-            user = User(
-                name=display_name,
-                email=raw_email,
-                hashed_password=hashed,
-                salt=salt,
-                role="Learner"
-            )
-            db.add(user)
-            db.commit()
-            db.refresh(user)
+        if raw_email:
+            user = db.query(User).filter(User.email == raw_email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required. Please sign in to your AlgoVerse account before purchasing."
+        )
 
     sid = req.subject_id.lower().strip()
     plan = db.query(SubjectPlan).filter(SubjectPlan.id == sid).first()
     if not plan:
         raise HTTPException(status_code=404, detail="Subject plan not found.")
 
-    # Generate or sanitize UPI Reference ID
+    # 2. Strict UPI Reference ID (UTR) Validation: Must be provided, no fake auto-generation
     raw_ref = (req.upi_ref_id or "").strip()
-    if raw_ref:
-        ref_id = raw_ref
-    else:
-        ref_id = f"UPI_{datetime.datetime.utcnow().strftime('%y%m%d%H%M%S')}_{uuid.uuid4().hex[:4].upper()}"
+    if not raw_ref or len(raw_ref) < 6:
+        raise HTTPException(
+            status_code=400,
+            detail="A valid 12-digit UPI Reference Number / Transaction ID (UTR) is required to verify your payment. Please make the payment and paste the receipt UTR."
+        )
 
+    # 3. Prevent duplicate submission of the same UPI transaction ID
+    existing_utr = db.query(Purchase).filter(Purchase.upi_ref_id == raw_ref).first()
+    if existing_utr:
+        raise HTTPException(
+            status_code=400,
+            detail=f"This UPI Transaction ID has already been submitted (Order: {existing_utr.order_id}). If you have already paid, please wait for admin approval."
+        )
+
+    ref_id = raw_ref
     order_id = f"ORD_{datetime.datetime.utcnow().strftime('%Y%m%d%H%M')}_{uuid.uuid4().hex[:6].upper()}"
 
     purchase = Purchase(

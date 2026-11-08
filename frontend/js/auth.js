@@ -131,13 +131,30 @@
 
     redirectAfterLogin: function () {
       const urlParams = new URLSearchParams(window.location.search);
-      const destination = urlParams.get('redirect_to') || '/static/dashboard.html';
+      const destination = urlParams.get('redirect_to') || '/static/index.html';
       window.location.href = destination;
     },
 
-    requireAuth: function () {
-      this.ensureSession();
+    requireAuth: function (redirectTo = null) {
+      if (!this.isAuthenticated()) {
+        const currentPath = window.location.pathname + window.location.search;
+        const target = redirectTo || currentPath;
+        if (!window.location.pathname.includes('signin.html')) {
+          window.location.replace('/static/signin.html?redirect_to=' + encodeURIComponent(target));
+        }
+        return false;
+      }
       return true;
+    },
+
+    checkAutoLogin: function () {
+      if (this.isAuthenticated()) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const destination = urlParams.get('redirect_to') || '/static/index.html';
+        window.location.replace(destination);
+        return true;
+      }
+      return false;
     },
 
     syncNavbars: function () {

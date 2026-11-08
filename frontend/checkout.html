@@ -565,26 +565,39 @@
         <!-- Verification Form -->
         <form id="paymentForm" onsubmit="submitPayment(event)" style="width:100%;">
           <div class="form-group">
-            <label class="form-label">Your Registered Email (for account access):</label>
-            <input 
-              type="email" 
-              id="userEmailInput" 
-              class="custom-input" 
-              placeholder="e.g. yourname@example.com" 
-              value="" 
-              required 
-            />
+            <label class="form-label">Your Registered Email (Logged In):</label>
+            <div style="position:relative;">
+              <input 
+                type="email" 
+                id="userEmailInput" 
+                class="custom-input" 
+                placeholder="your-email@example.com" 
+                value="" 
+                readonly 
+                style="background:#F8FAFC; color:#334155; font-weight:600; cursor:not-allowed;"
+                required 
+              />
+              <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:0.75rem; color:#10B981; font-weight:700;">🔒 Verified Account</span>
+            </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">UPI Reference / UTR ID (Optional):</label>
+            <label class="form-label" style="font-weight:700; color:#0F172A;">
+              UPI Reference / Transaction ID (UTR) <span style="color:#DC2626;">* Required</span>:
+            </label>
             <input 
               type="text" 
               id="upiRefInput" 
               class="custom-input" 
-              placeholder="Optional UPI Ref / Transaction ID (or leave blank)" 
+              placeholder="Enter 12-digit UPI Reference Number / UTR" 
+              required
+              minlength="6"
+              maxlength="30"
               autocomplete="off"
             />
+            <p style="font-size:0.75rem; color:#64748B; margin-top:5px; line-height:1.4;">
+              💡 <strong>How to find it:</strong> Open your UPI app (GPay / PhonePe / Paytm / BHIM) &rarr; View receipt &rarr; Copy the 12-digit <strong>UPI Ref No. / UTR</strong>. Admin cross-checks this with bank records to grant access.
+            </p>
           </div>
 
           <button type="submit" class="btn-verify-payment" id="btnVerify">
@@ -625,13 +638,14 @@
       setTimeout(() => copySpan.innerText = 'Copy', 2000);
     }
 
-    // Auto-fill user email on load
+    // Enforce authentication on load
     document.addEventListener("DOMContentLoaded", () => {
-      AlgoAuth.ensureSession();
+      if (window.AlgoAuth && !AlgoAuth.requireAuth()) return;
       const user = AlgoAuth.getUser();
       if (user && user.email) {
         document.getElementById('userEmailInput').value = user.email;
       }
+      loadCheckoutData();
     });
 
     // Load checkout information dynamically from Python Backend
@@ -692,7 +706,12 @@
       const btn = document.getElementById('btnVerify');
 
       if (!email) {
-        showAlert('error', 'Please enter your email address to link your purchase.');
+        showAlert('error', 'Please sign in to your AlgoVerse account before purchasing.');
+        return;
+      }
+
+      if (!upiRef || upiRef.length < 6) {
+        showAlert('error', 'Please enter your valid 12-digit UPI Reference Number / Transaction ID (UTR) from your payment receipt before submitting.');
         return;
       }
 

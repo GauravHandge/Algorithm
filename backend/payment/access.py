@@ -28,12 +28,15 @@ def get_current_authenticated_user(authorization: Optional[str] = Header(None), 
     return user
 
 def require_admin_user(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> User:
-    """Enforces administrator role-based access control with seamless local developer support."""
+    """Enforces administrator role-based access control."""
     user = get_current_user_optional(authorization, db)
     if not user:
-        user = db.query(User).filter(User.email == "gaurav@algoverse.io").first()
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required. Please sign in as Administrator."
+        )
 
-    if not user or not (user.is_admin or user.role == "Admin" or user.email == "gaurav@algoverse.io"):
+    if not (user.is_admin or user.role == "Admin"):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied. Administrator privileges required."
