@@ -35,6 +35,9 @@ class RevokeAccessRequest(BaseModel):
     subject_id: str
     reason: Optional[str] = "Administrative revocation"
 
+class DeleteUserRequest(BaseModel):
+    user_id: int
+
 class UpdatePricesRequest(BaseModel):
     prices: dict # e.g. {"ai": 20.0, "dsa": 40.0, "ml": 20.0, "cybersecurity": 10.0}
 
@@ -387,6 +390,48 @@ def revoke_access(
         raise HTTPException(status_code=404, detail="No active access found for this user and subject.")
 
     return {"success": True, "message": f"Access to {req.subject_id.upper()} has been revoked."}
+
+@admin_router.post("/users/delete")
+def delete_user(
+    req: DeleteUserRequest,
+    admin: User = Depends(require_admin_user),
+    db: Session = Depends(get_db)
+):
+    """Permanently deletes a user account, purchases, and access from the database."""
+    if req.user_id == admin.id:
+        raise HTTPException(status_code=400, detail="Cannot delete your own administrator account.")
+
+    target_user = db.query(User).filter(User.id == req.user_id).first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    if target_user.is_admin or target_user.role == "Admin":
+        raise HTTPException(status_code=403, detail="Cannot delete an administrator account.")
+
+    user_name = target_user.name
+    user_email = target_user.email
+
+    # 1. Clean up user subject accesses
+    db.query(UserSubjectAccess).filter(UserSubjectAccess.user_id == req.user_id).delete()
+
+    # 2. Clean up purchases
+    db.query(Purchase).filter(Purchase.user_id == req.user_id).delete()
+
+    # 3. Clean up user progress if exists
+    try:
+        from backend.database.models import UserProgress
+        db.query(UserProgress).filter(UserProgress.user_id == req.user_id).delete()
+    except Exception:
+        pass
+
+    # 4. Delete user record
+    db.delete(target_user)
+    db.commit()
+
+    return {
+        "success": True,
+        "message": f"User {user_name} ({user_email}) has been permanently deleted from database."
+    }
 
 @admin_router.post("/pricing/update")
 async def update_subject_prices(

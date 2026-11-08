@@ -1159,20 +1159,76 @@
       const tbody = document.getElementById("users-tbody");
       if (!tbody) return;
 
-      tbody.innerHTML = users.map(u => `
-        <tr>
-          <td>${u.id}</td>
-          <td style="font-weight:700;">${u.name}</td>
-          <td>${u.email}</td>
-          <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:0.75rem;">${u.role}</span></td>
-          <td>
-            ${(u.active_subjects && u.active_subjects.length > 0) ? u.active_subjects.map(s => `<span style="background:#ecfdf5; color:#059669; font-size:0.72rem; font-weight:700; padding:2px 6px; border-radius:4px; margin-right:4px; text-transform:uppercase;">${s}</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.75rem;">Free Preview Only</span>'}
-          </td>
-          <td>
-            <button onclick="quickGrantToUser('${u.email}')" style="background:#2563eb; color:white; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer; font-weight:600;">Grant Free</button>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = users.map(u => {
+        const isAdmin = u.role === 'Admin' || u.is_admin || u.id === 1;
+        const activeSubjectsHtml = (u.active_subjects && u.active_subjects.length > 0)
+          ? u.active_subjects.map(s => `
+              <span style="display:inline-flex; align-items:center; gap:4px; background:#ecfdf5; color:#059669; font-size:0.72rem; font-weight:700; padding:2px 7px; border-radius:4px; margin-right:4px; margin-bottom:2px; text-transform:uppercase;">
+                ${s}
+                <span onclick="revokeUserSubjectAccess(${u.id}, '${u.email}', '${s}')" title="Revoke ${s} access" style="cursor:pointer; color:#ef4444; font-weight:900; font-size:0.8rem; margin-left:3px;">&times;</span>
+              </span>
+            `).join('')
+          : '<span style="color:var(--text-muted); font-size:0.75rem;">Free Preview Only</span>';
+
+        return `
+          <tr>
+            <td>${u.id}</td>
+            <td style="font-weight:700;">${u.name}</td>
+            <td>${u.email}</td>
+            <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:0.75rem; font-weight:600;">${u.role}</span></td>
+            <td>${activeSubjectsHtml}</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <button onclick="quickGrantToUser('${u.email}')" style="background:#2563eb; color:white; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer; font-weight:600;" title="Grant access">+ Grant</button>
+                ${(u.active_subjects && u.active_subjects.length > 0) ? `<button onclick="revokeUserSubjectAccess(${u.id}, '${u.email}')" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer; font-weight:600;" title="Revoke access">Revoke</button>` : ''}
+                ${!isAdmin ? `<button onclick="deleteUser(${u.id}, '${u.name}')" style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer; font-weight:600;" title="Permanently delete user from database">Delete</button>` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function deleteUser(userId, userName) {
+      if (!confirm(`Are you sure you want to PERMANENTLY delete user "${userName}" from the database?\n\nThis will remove their account, purchase records, and all access.`)) return;
+      try {
+        const resp = await fetch('/api/admin/users/delete', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ user_id: userId })
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          showAdminNotice(`✓ ${data.message || "User deleted successfully!"}`);
+          await loadAdminOverview();
+        } else {
+          alert(data.detail || "Failed to delete user.");
+        }
+      } catch (err) {
+        alert("Error deleting user: " + err.message);
+      }
+    }
+
+    async function revokeUserSubjectAccess(userId, userEmail, subjectId) {
+      const sub = subjectId || prompt(`Enter subject ID to revoke for ${userEmail} (ai, dsa, ml, cybersecurity):`);
+      if (!sub) return;
+      if (!confirm(`Revoke access to ${sub.toUpperCase()} for ${userEmail}?`)) return;
+      try {
+        const resp = await fetch('/api/admin/access/revoke', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ user_id: userId, user_email: userEmail, subject_id: sub.toLowerCase().trim() })
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          showAdminNotice(`✓ Access to ${sub.toUpperCase()} has been revoked!`);
+          await loadAdminOverview();
+        } else {
+          alert(data.detail || "Failed to revoke access.");
+        }
+      } catch (err) {
+        alert("Error revoking access: " + err.message);
+      }
     }
 
     async function approvePurchase(purchaseId) {
