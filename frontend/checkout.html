@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   
   <style>
     :root {
@@ -530,83 +531,117 @@
         </div>
       </div>
 
-      <!-- RIGHT: Scan & Pay via UPI -->
-      <div class="upi-payment-card" id="rightPaymentCard">
-        <h3 class="upi-section-title">Scan &amp; Pay via UPI</h3>
-
-        <!-- Actual User PhonePe QR Code -->
-        <div class="qr-frame-box">
-          <img src="/static/assets/qr/upi_qr.jpg" alt="UPI Payment QR Code" id="upiQrImage" />
-        </div>
-
-        <!-- Configured UPI ID -->
-        <div class="upi-id-pill">
-          <span style="color:#64748B; font-size:0.8rem;">UPI ID:</span>
-          <span class="id-text" id="upiIdText">gauravhandge@oksbi</span>
-          <button class="copy-btn" onclick="copyUpiId()" title="Copy UPI ID">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            <span id="copyText">Copy</span>
-          </button>
-        </div>
-
-        <!-- Payment Instructions -->
-        <div class="payment-instructions-box">
-          <div class="instructions-heading">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span>Payment Instructions</span>
-          </div>
-          <ol class="instructions-list">
-            <li>Scan the QR code using any UPI app (GPay / PhonePe / Paytm).</li>
-            <li>Pay the exact amount: <strong id="instructionAmount">&#8377;20</strong>.</li>
-            <li>Click the button below to submit. The admin panel will be updated immediately for approval.</li>
-          </ol>
-        </div>
-
-        <!-- Verification Form -->
-        <form id="paymentForm" onsubmit="submitPayment(event)" style="width:100%;">
-          <div class="form-group">
-            <label class="form-label">Your Registered Email (Logged In):</label>
-            <div style="position:relative;">
-              <input 
-                type="email" 
-                id="userEmailInput" 
-                class="custom-input" 
-                placeholder="your-email@example.com" 
-                value="" 
-                readonly 
-                style="background:#F8FAFC; color:#334155; font-weight:600; cursor:not-allowed;"
-                required 
-              />
-              <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:0.75rem; color:#10B981; font-weight:700;">🔒 Verified Account</span>
+      <!-- RIGHT: Automated Razorpay Checkout -->
+      <div class="upi-payment-card" id="rightPaymentCard" style="text-align:left; align-items:stretch;">
+        
+        <!-- Header -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:32px; height:32px; border-radius:8px; background:#EFF6FF; color:#2563EB; display:flex; align-items:center; justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <div>
+              <h3 style="font-size:1.15rem; font-weight:800; color:#0F172A; line-height:1.2;">Automated Checkout</h3>
+              <span style="font-size:0.75rem; color:#64748B;">Powered by Razorpay Payments</span>
             </div>
           </div>
+          <span style="display:inline-flex; align-items:center; gap:5px; background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; font-size:0.72rem; font-weight:700; padding:3px 9px; border-radius:999px;">
+            <span style="width:6px; height:6px; background:#10B981; border-radius:50%;"></span>
+            Instant Unlock
+          </span>
+        </div>
 
-          <div class="form-group">
-            <label class="form-label" style="font-weight:700; color:#0F172A;">
-              UPI Reference / Transaction ID (UTR) <span style="color:#DC2626;">* Required</span>:
-            </label>
-            <input 
-              type="text" 
-              id="upiRefInput" 
-              class="custom-input" 
-              placeholder="Enter 12-digit UPI Reference Number / UTR" 
-              required
-              minlength="6"
-              maxlength="30"
-              autocomplete="off"
-            />
-            <p style="font-size:0.75rem; color:#64748B; margin-top:5px; line-height:1.4;">
-              💡 <strong>How to find it:</strong> Open your UPI app (GPay / PhonePe / Paytm / BHIM) &rarr; View receipt &rarr; Copy the 12-digit <strong>UPI Ref No. / UTR</strong>. Admin cross-checks this with bank records to grant access.
-            </p>
+        <!-- Logged-in User Account Card -->
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:12px 14px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:0.85rem;" id="checkoutAvatar">U</div>
+              <div>
+                <div style="font-weight:700; font-size:0.88rem; color:#0F172A;" id="checkoutUserName">Logged-in User</div>
+                <div style="font-size:0.78rem; color:#64748B;" id="checkoutUserEmail">user@example.com</div>
+              </div>
+            </div>
+            <span style="font-size:0.72rem; color:#059669; background:#D1FAE5; padding:3px 8px; border-radius:6px; font-weight:700;">✓ Verified</span>
           </div>
+        </div>
 
-          <button type="submit" class="btn-verify-payment" id="btnVerify">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>I Have Made Payment &mdash; Submit for Approval</span>
+        <!-- Order Summary Card -->
+        <div style="background:#FFFFFF; border:1.5px solid #E2E8F0; border-radius:12px; padding:16px; margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:#475569;">
+            <span>Package Selected:</span>
+            <strong style="color:#0F172A;" id="summarySubjectName">Artificial Intelligence (AI)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:#475569;">
+            <span>Access Duration:</span>
+            <strong style="color:#059669;">Lifetime Unlimited</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:#475569;">
+            <span>Processing / Gateway Fees:</span>
+            <span style="color:#10B981; font-weight:700;">FREE (&#8377;0.00)</span>
+          </div>
+          <div style="height:1px; background:#E2E8F0; margin:10px 0;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:800; font-size:0.95rem; color:#0F172A;">Total Amount:</span>
+            <span style="font-weight:900; font-size:1.6rem; color:#2563EB;" id="totalPayableDisplay">&#8377;20</span>
+          </div>
+        </div>
+
+        <!-- Main Razorpay Action Button -->
+        <button type="button" class="btn-verify-payment" id="btnRazorpayPay" onclick="startRazorpayPayment()" style="margin-top:0; padding:14px; font-size:1rem; border-radius:12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span id="btnPayText">⚡ Pay &#8377;20 via Razorpay (Instant Unlock)</span>
+        </button>
+
+        <!-- Supported Methods -->
+        <div style="margin-top:16px; text-align:center;">
+          <div style="font-size:0.75rem; color:#64748B; margin-bottom:8px; font-weight:600;">Supports all Indian payment apps &amp; cards:</div>
+          <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px;">
+            <span style="background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#334155;">Google Pay</span>
+            <span style="background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#334155;">PhonePe</span>
+            <span style="background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#334155;">Paytm</span>
+            <span style="background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#334155;">BHIM UPI</span>
+            <span style="background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#334155;">Credit / Debit Cards</span>
+            <span style="background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#334155;">NetBanking</span>
+          </div>
+        </div>
+
+        <!-- Security Guarantee -->
+        <div style="margin-top:14px; display:flex; align-items:center; justify-content:center; gap:6px; color:#64748B; font-size:0.74rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>100% Secure 256-bit SSL encrypted transaction</span>
+        </div>
+
+        <!-- Manual UPI Fallback Accordion -->
+        <div style="margin-top:18px; border-top:1px dashed #E2E8F0; padding-top:12px; text-align:center;">
+          <button type="button" onclick="toggleManualUpi()" style="background:none; border:none; color:#64748B; font-size:0.78rem; text-decoration:underline; cursor:pointer; font-weight:600;">
+            Prefer manual UPI QR scanning instead? Click here
           </button>
-        </form>
+        </div>
 
-        <!-- Live Status Container (Appears after submission) -->
+        <!-- Collapsible Manual UPI Section -->
+        <div id="manualUpiSection" style="display:none; margin-top:16px; border-top:1px solid #E2E8F0; padding-top:14px; text-align:center;">
+          <div class="qr-frame-box" style="margin-bottom:8px;">
+            <img src="/static/assets/qr/upi_qr.jpg" alt="UPI Payment QR Code" id="upiQrImage" style="width:140px; height:140px;" />
+          </div>
+          <div class="upi-id-pill" style="margin-bottom:12px;">
+            <span style="color:#64748B; font-size:0.78rem;">UPI ID:</span>
+            <span class="id-text" id="upiIdText">gauravhandge@oksbi</span>
+            <button class="copy-btn" onclick="copyUpiId()" title="Copy UPI ID">
+              <span id="copyText">Copy</span>
+            </button>
+          </div>
+          <form id="paymentForm" onsubmit="submitPayment(event)" style="width:100%; text-align:left;">
+            <div class="form-group">
+              <label class="form-label" style="font-size:0.78rem;">UPI Transaction ID / UTR:</label>
+              <input type="text" id="upiRefInput" class="custom-input" placeholder="Enter 12-digit UPI Reference Number" minlength="6" maxlength="30" />
+            </div>
+            <button type="submit" class="btn-verify-payment" id="btnVerify" style="padding:10px; font-size:0.85rem;">
+              Submit Manual UTR for Approval
+            </button>
+          </form>
+        </div>
+
+        <!-- Live Status Container (Appears after submission or approval) -->
         <div id="liveStatusContainer" style="display:none; width:100%; margin-top:16px;"></div>
 
       </div>
@@ -621,6 +656,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const subjectId = urlParams.get('subject') || 'ai';
     let currentPrice = 20.0;
+    let currentSubjectName = 'Artificial Intelligence (AI)';
     let pollInterval = null;
 
     function showAlert(type, message) {
@@ -628,6 +664,11 @@
       box.className = 'checkout-alert-box ' + type;
       box.innerHTML = message;
       box.style.display = 'block';
+    }
+
+    function toggleManualUpi() {
+      const el = document.getElementById('manualUpiSection');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
     function copyUpiId() {
@@ -638,12 +679,29 @@
       setTimeout(() => copySpan.innerText = 'Copy', 2000);
     }
 
+    function getSubjectRedirectUrl(sid) {
+      if (sid === 'ai') return '/static/rag_visualizer.html';
+      if (sid === 'dsa') return '/static/algorithms.html?subject_id=dsa';
+      if (sid === 'ml') return '/static/algorithms.html?subject_id=ml';
+      if (sid === 'cybersecurity') return '/static/algorithms.html?subject_id=cybersecurity';
+      return '/static/dashboard.html';
+    }
+
     // Enforce authentication on load
     document.addEventListener("DOMContentLoaded", () => {
       if (window.AlgoAuth && !AlgoAuth.requireAuth()) return;
       const user = AlgoAuth.getUser();
-      if (user && user.email) {
-        document.getElementById('userEmailInput').value = user.email;
+      if (user) {
+        if (user.email) {
+          const emailEl = document.getElementById('checkoutUserEmail');
+          if (emailEl) emailEl.innerText = user.email;
+        }
+        if (user.name) {
+          const nameEl = document.getElementById('checkoutUserName');
+          if (nameEl) nameEl.innerText = user.name;
+          const avEl = document.getElementById('checkoutAvatar');
+          if (avEl) avEl.innerText = user.name.charAt(0).toUpperCase();
+        }
       }
       loadCheckoutData();
     });
@@ -658,19 +716,34 @@
         const data = await res.json();
 
         if (res.ok && data.success) {
-          if (data.already_unlocked) {
-            showAlert('success', `✓ You already have active premium access to <strong>${data.subject.name}</strong>! <a href="/static/dashboard.html" style="color:#166534; font-weight:700;">Open Dashboard ➔</a>`);
-            document.getElementById('btnVerify').disabled = true;
-          }
+          currentSubjectName = data.subject.name;
+          currentPrice = data.subject.price;
 
           document.getElementById('subjectTitle').innerText = data.subject.name;
+          document.getElementById('summarySubjectName').innerText = data.subject.name;
           document.getElementById('subjectDescription').innerText = data.subject.description || '';
-          currentPrice = data.subject.price;
+          
           document.getElementById('amountDisplay').innerHTML = `&#8377;${currentPrice}`;
-          document.getElementById('instructionAmount').innerHTML = `&#8377;${currentPrice}`;
-          document.getElementById('upiIdText').innerText = data.payment_config.upi_id;
-          if (data.payment_config.qr_image_url) {
+          document.getElementById('totalPayableDisplay').innerHTML = `&#8377;${currentPrice}`;
+          document.getElementById('btnPayText').innerHTML = `⚡ Pay &#8377;${currentPrice} via Razorpay (Instant Unlock)`;
+          
+          if (document.getElementById('upiIdText')) {
+            document.getElementById('upiIdText').innerText = data.payment_config.upi_id;
+          }
+          if (data.payment_config && data.payment_config.qr_image_url && document.getElementById('upiQrImage')) {
             document.getElementById('upiQrImage').src = data.payment_config.qr_image_url;
+          }
+
+          // If user already owns this subject
+          if (data.already_unlocked) {
+            const redirectUrl = getSubjectRedirectUrl(subjectId);
+            showAlert('success', `✓ You already have active premium access to <strong>${data.subject.name}</strong>! <a href="${redirectUrl}" style="color:#166534; font-weight:800; text-decoration:underline; margin-left:8px;">Start Learning Now ➔</a>`);
+            const btnPay = document.getElementById('btnRazorpayPay');
+            btnPay.disabled = true;
+            btnPay.innerHTML = `✓ Already Unlocked (Active)`;
+            btnPay.style.background = '#10B981';
+            btnPay.onclick = () => window.location.href = redirectUrl;
+            return;
           }
 
           // Dynamic icon
@@ -698,20 +771,182 @@
       }
     }
 
-    // Submit payment reference to Backend
+    // 100% Automated Razorpay Checkout Integration
+    async function startRazorpayPayment() {
+      const btn = document.getElementById('btnRazorpayPay');
+      const token = AlgoAuth.getToken();
+
+      if (!token) {
+        showAlert('error', 'Please log in to your AlgoVerse account before initiating payment.');
+        setTimeout(() => window.location.href = `/static/login.html?redirect=checkout.html?subject=${subjectId}`, 1500);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span style="display:inline-flex; align-items:center; gap:8px;">
+        <span class="pulsing-dot" style="color:white;">●</span> Connecting to Razorpay Gateway...
+      </span>`;
+
+      try {
+        // Step 1: Request an Order from AlgoVerse backend
+        const orderRes = await fetch('/api/payment/razorpay/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ subject_id: subjectId })
+        });
+
+        const orderData = await orderRes.json();
+        if (!orderRes.ok || !orderData.success) {
+          throw new Error(orderData.detail || orderData.message || 'Failed to initiate order.');
+        }
+
+        if (orderData.already_unlocked) {
+          showAlert('success', `✓ You already have active premium access to this subject!`);
+          btn.innerHTML = 'Already Unlocked';
+          btn.style.background = '#10B981';
+          return;
+        }
+
+        // Step 2: Open official Razorpay modal
+        const options = {
+          key: orderData.key_id,
+          amount: orderData.amount,
+          currency: orderData.currency || 'INR',
+          name: 'AlgoVerse Learning Platform',
+          description: `Lifetime Access: ${orderData.subject_name}`,
+          image: 'https://cdn-icons-png.flaticon.com/512/8649/8649607.png',
+          order_id: orderData.order_id,
+          handler: async function (response) {
+            // Step 3: Payment succeeded on Razorpay, verify cryptographic signature on backend
+            await verifyPaymentSignature(response, orderData.subject_name);
+          },
+          prefill: {
+            name: orderData.user_name || '',
+            email: orderData.user_email || ''
+          },
+          notes: {
+            subject_id: orderData.subject_id,
+            platform: 'AlgoVerse'
+          },
+          theme: {
+            color: '#2563EB'
+          },
+          modal: {
+            ondismiss: function() {
+              btn.disabled = false;
+              btn.innerHTML = `⚡ Pay &#8377;${currentPrice} via Razorpay (Instant Unlock)`;
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          showAlert('error', `Payment failed: ${response.error.description || 'Transaction could not be completed.'}`);
+          btn.disabled = false;
+          btn.innerHTML = `⚡ Pay &#8377;${currentPrice} via Razorpay (Instant Unlock)`;
+        });
+        rzp.open();
+
+      } catch (err) {
+        console.error('Razorpay Error:', err);
+        showAlert('error', `Payment Error: ${err.message}`);
+        btn.disabled = false;
+        btn.innerHTML = `⚡ Pay &#8377;${currentPrice} via Razorpay (Instant Unlock)`;
+      }
+    }
+
+    // Step 3: Backend signature verification & instant access activation
+    async function verifyPaymentSignature(rzpResponse, subjectName) {
+      const btn = document.getElementById('btnRazorpayPay');
+      btn.disabled = true;
+      btn.innerHTML = `Verifying Payment &amp; Activating Access...`;
+
+      try {
+        const token = AlgoAuth.getToken();
+        const res = await fetch('/api/payment/razorpay/verify-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            razorpay_order_id: rzpResponse.razorpay_order_id,
+            razorpay_payment_id: rzpResponse.razorpay_payment_id,
+            razorpay_signature: rzpResponse.razorpay_signature
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.detail || 'Payment verification failed.');
+        }
+
+        // Render Instant Success Celebration Card
+        renderSuccessCard(rzpResponse.razorpay_payment_id, rzpResponse.razorpay_order_id, subjectName);
+
+      } catch (err) {
+        console.error('Verification error:', err);
+        showAlert('error', `Verification failed: ${err.message}. If money was deducted, it will auto-verify shortly or contact admin.`);
+        btn.disabled = false;
+        btn.innerHTML = `Retry Verification`;
+      }
+    }
+
+    function renderSuccessCard(paymentId, orderId, subjectName) {
+      const card = document.getElementById('rightPaymentCard');
+      const directUrl = getSubjectRedirectUrl(subjectId);
+
+      card.style.background = '#ECFDF5';
+      card.style.border = '2px solid #34D399';
+      card.style.padding = '32px 24px';
+      card.style.textAlign = 'center';
+
+      card.innerHTML = `
+        <div style="width:68px; height:68px; border-radius:50%; background:#10B981; color:#fff; font-size:2.2rem; font-weight:900; display:inline-flex; align-items:center; justify-content:center; margin:0 auto 16px auto; box-shadow:0 6px 18px rgba(16,185,129,0.35);">
+          ✓
+        </div>
+        <h2 style="font-size:1.4rem; font-weight:900; color:#065F46; margin-bottom:8px;">Payment Verified Successfully!</h2>
+        <p style="font-size:0.92rem; color:#047857; margin-bottom:18px; line-height:1.5;">
+          Congratulations! Your payment has been confirmed via Razorpay. Full lifetime access to <strong>${subjectName || currentSubjectName}</strong> is unlocked right now.
+        </p>
+
+        <div style="background:#FFFFFF; border:1px solid #A7F3D0; border-radius:12px; padding:14px; margin-bottom:22px; text-align:left; font-size:0.8rem; font-family:'JetBrains Mono', monospace; color:#334155; line-height:1.6;">
+          <div><strong style="color:#0F172A;">Payment ID:</strong> ${paymentId}</div>
+          <div><strong style="color:#0F172A;">Order ID:</strong> ${orderId}</div>
+          <div><strong style="color:#0F172A;">Access Status:</strong> <span style="color:#059669; font-weight:800;">● ACTIVE &amp; UNLOCKED</span></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="${directUrl}" style="background:linear-gradient(135deg, #10B981, #059669); color:#fff; text-decoration:none; padding:14px 20px; border-radius:10px; font-weight:800; font-size:1rem; box-shadow:0 4px 14px rgba(16,185,129,0.35); text-align:center; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <span>Start Learning Now 🚀</span>
+          </a>
+          <a href="/static/dashboard.html" style="background:#FFFFFF; color:#334155; border:1.5px solid #CBD5E1; text-decoration:none; padding:11px 20px; border-radius:10px; font-weight:700; font-size:0.88rem; text-align:center;">
+            Return to Dashboard
+          </a>
+        </div>
+      `;
+
+      showAlert('success', `🎉 Payment Successful! Full access to <strong>${subjectName || currentSubjectName}</strong> is activated.`);
+    }
+
+    // Fallback manual UPI submission
     async function submitPayment(e) {
       e.preventDefault();
       const upiRef = document.getElementById('upiRefInput').value.trim();
-      const email = document.getElementById('userEmailInput').value.trim();
       const btn = document.getElementById('btnVerify');
+      const token = AlgoAuth.getToken();
+      const user = AlgoAuth.getUser();
 
-      if (!email) {
-        showAlert('error', 'Please sign in to your AlgoVerse account before purchasing.');
+      if (!user || !user.email) {
+        showAlert('error', 'Please sign in before submitting payment.');
         return;
       }
 
       if (!upiRef || upiRef.length < 6) {
-        showAlert('error', 'Please enter your valid 12-digit UPI Reference Number / Transaction ID (UTR) from your payment receipt before submitting.');
+        showAlert('error', 'Please enter your valid UPI Reference Number / Transaction ID (UTR).');
         return;
       }
 
@@ -719,7 +954,6 @@
       btn.innerHTML = 'Submitting Request...';
 
       try {
-        const token = AlgoAuth.getToken();
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
@@ -728,7 +962,7 @@
           headers: headers,
           body: JSON.stringify({
             subject_id: subjectId,
-            user_email: email,
+            user_email: user.email,
             upi_ref_id: upiRef,
             amount: currentPrice
           })
@@ -739,71 +973,25 @@
           throw new Error(data.detail || 'Failed to submit payment reference.');
         }
 
-        // Hide payment form
-        document.getElementById('paymentForm').style.display = 'none';
+        showAlert('warning', `Payment submitted! Order ID: <strong>${data.purchase.order_id}</strong> is pending administrator verification.`);
+        document.getElementById('manualUpiSection').style.display = 'none';
 
-        // Show live pending status box
         const statusBox = document.getElementById('liveStatusContainer');
         statusBox.style.display = 'block';
         statusBox.innerHTML = `
-          <div style="background:#FFFBEB; border:2px solid #FDE68A; border-radius:14px; padding:22px; text-align:center;">
-            <div style="font-size:2rem; margin-bottom:8px;">⏳</div>
-            <h3 style="color:#92400E; font-size:1.2rem; font-weight:800; margin-bottom:6px;">Payment Request Submitted!</h3>
-            <p style="color:#78350F; font-size:0.9rem; margin-bottom:10px;">Order ID: <strong>${data.purchase.order_id}</strong></p>
-            <p style="color:#92400E; font-size:0.85rem; line-height:1.5; margin-bottom:14px;">
-              Your request is now visible in the <strong>Admin Panel</strong> under Pending Payments. As soon as the administrator clicks <strong>Approve</strong>, full access will be automatically unlocked right here!
-            </p>
-            <div style="display:inline-flex; align-items:center; gap:8px; background:#FEF3C7; padding:6px 14px; border-radius:999px; font-size:0.8rem; font-weight:700; color:#B45309;">
-              <span class="pulsing-dot">●</span> Waiting for Admin Approval...
-            </div>
+          <div style="background:#FFFBEB; border:2px solid #FDE68A; border-radius:14px; padding:20px; text-align:center;">
+            <div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>
+            <h3 style="color:#92400E; font-size:1.1rem; font-weight:800; margin-bottom:6px;">Manual Request Submitted</h3>
+            <p style="color:#78350F; font-size:0.85rem; margin-bottom:10px;">Order ID: <strong>${data.purchase.order_id}</strong></p>
+            <p style="color:#92400E; font-size:0.8rem; line-height:1.5;">Waiting for admin verification in the Admin Panel...</p>
           </div>
         `;
-
-        showAlert('warning', `Payment submitted! Order ID: <strong>${data.purchase.order_id}</strong> is pending administrator verification.`);
-
-        // Start live polling to check when admin clicks Approve
-        startStatusPolling(data.purchase.order_id);
-
       } catch (err) {
         showAlert('error', `✗ ${err.message}`);
         btn.disabled = false;
-        btn.innerHTML = 'I Have Made Payment &mdash; Submit for Approval';
+        btn.innerHTML = 'Submit Manual UTR for Approval';
       }
     }
-
-    function startStatusPolling(orderId) {
-      if (pollInterval) clearInterval(pollInterval);
-      pollInterval = setInterval(async () => {
-        try {
-          const resp = await fetch(`/api/payment/order-status/${orderId}`);
-          if (resp.ok) {
-            const result = await resp.json();
-            if (result.success && result.is_approved) {
-              clearInterval(pollInterval);
-              // Transform to approved success screen
-              const statusBox = document.getElementById('liveStatusContainer');
-              statusBox.innerHTML = `
-                <div style="background:#ECFDF5; border:2px solid #A7F3D0; border-radius:14px; padding:24px; text-align:center;">
-                  <div style="width:48px; height:48px; border-radius:50%; background:#10B981; color:white; font-size:1.6rem; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;">✓</div>
-                  <h3 style="color:#065F46; font-size:1.3rem; font-weight:800; margin-bottom:6px;">Payment Approved! Access Granted!</h3>
-                  <p style="color:#047857; font-size:0.9rem; line-height:1.5; margin-bottom:18px;">
-                    The administrator has approved your transaction. Full lifetime access to this subject is now active!
-                  </p>
-                  <a href="/static/dashboard.html" style="background:#10B981; color:white; padding:10px 22px; border-radius:10px; font-weight:700; font-size:0.92rem; text-decoration:none; display:inline-block; box-shadow:0 4px 12px rgba(16,185,129,0.3);">
-                    Open Learning Dashboard ➔
-                  </a>
-                </div>
-              `;
-              showAlert('success', `✓ Transaction verified and approved by admin! Full subject access is now unlocked.`);
-            }
-          }
-        } catch (e) {
-          console.error("Polling error:", e);
-        }
-      }, 2500);
-    }
-
-    loadCheckoutData();
   </script>
 
 </body>

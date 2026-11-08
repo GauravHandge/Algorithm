@@ -1,9 +1,11 @@
+import os
 import uuid
 import datetime
 from typing import Optional
 from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
+import razorpay
 from backend.database.database import get_db
 from backend.auth.models import User
 from backend.payment.models import SubjectPlan, Purchase, SystemSetting, UserSubjectAccess
@@ -17,6 +19,25 @@ from backend.payment.access import (
 from backend.services.email_service import EmailService
 
 router = APIRouter(prefix="/api/payment", tags=["Payment & Checkout"])
+
+def get_razorpay_client():
+    key_id = os.getenv("RAZORPAY_KEY_ID")
+    key_secret = os.getenv("RAZORPAY_KEY_SECRET")
+    if not key_id or not key_secret:
+        raise HTTPException(
+            status_code=500,
+            detail="Razorpay payment gateway is not configured. Missing API keys."
+        )
+    return razorpay.Client(auth=(key_id, key_secret)), key_id
+
+class RazorpayCreateOrderRequest(BaseModel):
+    subject_id: str
+
+class RazorpayVerifyPaymentRequest(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
+
 
 class CreateOrderRequest(BaseModel):
     subject_id: str
@@ -180,6 +201,162 @@ def check_order_status(order_id: str, db: Session = Depends(get_db)):
         "amount": purchase.amount,
         "verified_at": purchase.verified_at.isoformat() if purchase.verified_at else None
     }
+
+@router.post("/razorpay/create-order")
+def create_razorpay_order(
+    req: RazorpayCreateOrderRequest,
+    authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+):
+    """Creates a real Razorpay Order with configured API keys."""
+    user = get_current_user_optional(authorization, db)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required. Please sign in to your AlgoVerse account before purchasing."
+        )
+
+    sid = req.subject_id.lower().strip()
+    plan = db.query(SubjectPlan).filter(SubjectPlan.id == sid).first()
+    if not plan:
+        raise HTTPException(status_code=404, detail="Subject plan not found.")
+
+    # Check if user already has access
+    if check_user_subject_access(db, user, sid):
+        return {
+            "success": True,
+            "already_unlocked": True,
+            "message": f"You already have active premium access to {plan.name}!"
+        }
+
+    client, key_id = get_razorpay_client()
+    amount_in_paise = int(round(plan.price * 100))
+
+    try:
+        rzp_order = client.order.create({
+            "amount": amount_in_paise,
+            "currency": "INR",
+            "receipt": f"rcpt_{user.id}_{int(datetime.datetime.utcnow().timestamp())}",
+            "notes": {
+                "user_id": str(user.id),
+                "user_email": user.email,
+                "subject_id": sid,
+                "subject_name": plan.name
+            }
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create Razorpay order: {str(e)}")
+
+    # Record purchase in PENDING state
+    purchase = Purchase(
+        order_id=rzp_order["id"],
+        user_id=user.id,
+        subject_id=sid,
+        amount=plan.price,
+        upi_ref_id="Awaiting Razorpay Payment",
+        status="PENDING",
+        created_at=datetime.datetime.utcnow()
+    )
+    db.add(purchase)
+    db.commit()
+    db.refresh(purchase)
+
+    return {
+        "success": True,
+        "order_id": rzp_order["id"],
+        "amount": rzp_order["amount"],
+        "currency": rzp_order["currency"],
+        "key_id": key_id,
+        "user_name": user.name or user.email.split("@")[0],
+        "user_email": user.email,
+        "subject_name": plan.name,
+        "subject_id": plan.id,
+        "price": plan.price
+    }
+
+@router.post("/razorpay/verify-payment")
+def verify_razorpay_payment(
+    req: RazorpayVerifyPaymentRequest,
+    authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+):
+    """Verifies Razorpay cryptographic signature and immediately unlocks the subject."""
+    user = get_current_user_optional(authorization, db)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required. Please sign in to verify payment."
+        )
+
+    client, _ = get_razorpay_client()
+
+    # 1. Cryptographically verify signature
+    try:
+        client.utility.verify_payment_signature({
+            "razorpay_order_id": req.razorpay_order_id,
+            "razorpay_payment_id": req.razorpay_payment_id,
+            "razorpay_signature": req.razorpay_signature
+        })
+    except razorpay.errors.SignatureVerificationError:
+        raise HTTPException(
+            status_code=400,
+            detail="Payment signature verification failed. Invalid or fraudulent transaction."
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Signature verification error: {str(e)}"
+        )
+
+    # 2. Find purchase record
+    purchase = db.query(Purchase).filter(Purchase.order_id == req.razorpay_order_id).first()
+    if not purchase:
+        raise HTTPException(status_code=404, detail="Order record not found.")
+
+    # 3. Check if already verified
+    if purchase.status == "VERIFIED":
+        return {
+            "success": True,
+            "message": "Payment already verified and subject is active!",
+            "order_id": purchase.order_id,
+            "payment_id": purchase.upi_ref_id,
+            "subject_id": purchase.subject_id
+        }
+
+    # 4. Mark purchase as VERIFIED
+    purchase.status = "VERIFIED"
+    purchase.upi_ref_id = req.razorpay_payment_id
+    purchase.verified_at = datetime.datetime.utcnow()
+    purchase.admin_notes = f"Auto-verified via Razorpay. Payment ID: {req.razorpay_payment_id}"
+    db.commit()
+
+    # 5. Grant active subject access immediately
+    access_record = grant_user_access(
+        db=db,
+        user_id=purchase.user_id,
+        subject_id=purchase.subject_id,
+        access_source="PURCHASED",
+        purchase_id=purchase.id
+    )
+
+    # 6. Trigger transactional email notifications
+    plan = db.query(SubjectPlan).filter(SubjectPlan.id == purchase.subject_id).first()
+    subject_title = plan.name if plan else purchase.subject_id.upper()
+    try:
+        EmailService.notify_user_payment_approved(db, user.name, user.email, subject_title, purchase.amount)
+        EmailService.notify_admin_payment_verified(db, user.name, user.email, subject_title, purchase.amount, req.razorpay_payment_id)
+    except Exception as mail_err:
+        print("Payment notification email non-fatal error:", mail_err)
+
+    return {
+        "success": True,
+        "message": f"Payment of ₹{purchase.amount} successfully verified! Access to {subject_title} is now active.",
+        "order_id": purchase.order_id,
+        "payment_id": req.razorpay_payment_id,
+        "subject_id": purchase.subject_id,
+        "subject_name": subject_title
+    }
+
 
 @router.get("/my-access")
 def get_my_access(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)):
