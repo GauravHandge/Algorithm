@@ -552,8 +552,8 @@
         </div>
 
         <!-- Logged-in User Account Card -->
-        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:12px 14px; margin-bottom:16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:12px 14px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <div style="display:flex; align-items:center; gap:10px;">
               <div style="width:34px; height:34px; border-radius:50%; background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:0.85rem;" id="checkoutAvatar">U</div>
               <div>
@@ -562,6 +562,19 @@
               </div>
             </div>
             <span style="font-size:0.72rem; color:#059669; background:#D1FAE5; padding:3px 8px; border-radius:6px; font-weight:700;">✓ Verified</span>
+          </div>
+
+          <!-- Phone Number for Instant UPI / SMS Receipt -->
+          <div style="border-top:1px dashed #CBD5E1; padding-top:8px;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px;">Mobile Number (for UPI &amp; Invoice):</label>
+            <input 
+              type="tel" 
+              id="checkoutUserPhone" 
+              class="custom-input" 
+              placeholder="Enter 10-digit mobile number (e.g. 9876543210)" 
+              maxlength="10" 
+              style="padding:7px 10px; font-size:0.82rem;"
+            />
           </div>
         </div>
 
@@ -810,6 +823,8 @@
           return;
         }
 
+        const userPhone = document.getElementById('checkoutUserPhone') ? document.getElementById('checkoutUserPhone').value.trim() : '';
+
         // Step 2: Open official Razorpay modal
         const options = {
           key: orderData.key_id,
@@ -825,7 +840,8 @@
           },
           prefill: {
             name: orderData.user_name || '',
-            email: orderData.user_email || ''
+            email: orderData.user_email || '',
+            contact: userPhone || ''
           },
           notes: {
             subject_id: orderData.subject_id,
