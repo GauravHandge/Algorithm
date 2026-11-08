@@ -21,8 +21,8 @@ from backend.services.email_service import EmailService
 router = APIRouter(prefix="/api/payment", tags=["Payment & Checkout"])
 
 def get_razorpay_client():
-    key_id = os.getenv("RAZORPAY_KEY_ID")
-    key_secret = os.getenv("RAZORPAY_KEY_SECRET")
+    key_id = os.getenv("RAZORPAY_KEY_ID") or "rzp_test_Txe4CggYljNqCg"
+    key_secret = os.getenv("RAZORPAY_KEY_SECRET") or "S5mzNu8S6KK26mt2kroPKCuL"
     if not key_id or not key_secret:
         raise HTTPException(
             status_code=500,
